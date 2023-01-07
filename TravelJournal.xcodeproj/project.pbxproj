@@ -13,6 +13,7 @@
 		075E21182968829200899FC1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 075E21162968829200899FC1 /* Main.storyboard */; };
 		075E211A2968829400899FC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 075E21192968829400899FC1 /* Assets.xcassets */; };
 		075E211D2968829400899FC1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 075E211B2968829400899FC1 /* LaunchScreen.storyboard */; };
+		075E2125296886E000899FC1 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075E2124296886E000899FC1 /* Trip.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		075E21192968829400899FC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		075E211C2968829400899FC1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		075E211E2968829400899FC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		075E2124296886E000899FC1 /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		075E210F2968829200899FC1 /* TravelJournal */ = {
 			isa = PBXGroup;
 			children = (
+				075E2124296886E000899FC1 /* Trip.swift */,
 				075E21102968829200899FC1 /* AppDelegate.swift */,
 				075E21122968829200899FC1 /* SceneDelegate.swift */,
 				075E21142968829200899FC1 /* ViewController.swift */,
@@ -138,6 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				075E2125296886E000899FC1 /* Trip.swift in Sources */,
 				075E21152968829200899FC1 /* ViewController.swift in Sources */,
 				075E21112968829200899FC1 /* AppDelegate.swift in Sources */,
 				075E21132968829200899FC1 /* SceneDelegate.swift in Sources */,
@@ -295,6 +299,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -323,6 +328,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
