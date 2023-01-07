@@ -8,12 +8,27 @@
 import UIKit
 
 class ViewController: UITableViewController {
+    var trips = [Trip]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        let newTrip = Trip(departureDate: Date(timeIntervalSinceNow: 1), returnDate: Date(timeIntervalSinceNow: 2), destination: "USA", reason: "Shopping")
+        trips.append(newTrip)
     }
 
-
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return trips.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Trip", for: indexPath)
+        let trip = trips[indexPath.row]
+        
+        cell.textLabel?.text = trip.destination
+        cell.detailTextLabel?.text = trip.reason
+        
+        return cell
+    }
 }
 
