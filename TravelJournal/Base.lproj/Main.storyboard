@@ -74,7 +74,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="0fq-Xi-xRe">
-                                                <rect key="frame" x="114.66666666666667" y="0.0" width="254.33333333333331" height="50"/>
+                                                <rect key="frame" x="115" y="0.0" width="254" height="50"/>
                                             </datePicker>
                                         </subviews>
                                     </stackView>
@@ -115,6 +115,13 @@
                             <constraint firstItem="Bom-Gm-OT8" firstAttribute="top" secondItem="PjN-Ni-H9X" secondAttribute="top" constant="20" id="a7G-IL-0zt"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="countryPicker" destination="rr8-wX-kG9" id="VnR-E2-Ona"/>
+                        <outlet property="departurePicker" destination="mJU-GA-gRt" id="e06-TS-KVP"/>
+                        <outlet property="reasonField" destination="8Mr-PB-ATd" id="qJv-eO-KsA"/>
+                        <outlet property="returnPicker" destination="mJU-GA-gRt" id="awA-fH-RC6"/>
+                        <outlet property="saveButton" destination="yac-Af-Nsi" id="YyI-w4-ebs"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mdt-9x-KdG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
