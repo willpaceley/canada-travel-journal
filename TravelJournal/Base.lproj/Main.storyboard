@@ -18,22 +18,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Trip" textLabel="Rgw-zL-ZJc" detailTextLabel="yyv-zc-JTl" style="IBUITableViewCellStyleValue1" id="UF6-Sn-afZ">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Trip" editingAccessoryType="disclosureIndicator" textLabel="Nop-FD-9Hl" detailTextLabel="hSG-nb-QyO" style="IBUITableViewCellStyleSubtitle" id="UF6-Sn-afZ">
                                 <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UF6-Sn-afZ" id="bod-hA-w9Y">
-                                    <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="362.66666666666669" height="43.666667938232422"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Rgw-zL-ZJc">
-                                            <rect key="frame" x="20" y="15" width="25" height="14.333333333333334"/>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Nop-FD-9Hl">
+                                            <rect key="frame" x="20" y="6.0000000000000009" width="25" height="14.333333333333334"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yyv-zc-JTl">
-                                            <rect key="frame" x="340.33333333333331" y="15" width="32.666666666666664" height="14.333333333333334"/>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hSG-nb-QyO">
+                                            <rect key="frame" x="19.999999999999996" y="22.333333333333336" width="32.666666666666664" height="14.333333333333334"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
                                             <nil key="textColor"/>
@@ -123,9 +123,12 @@
                                             </pickerView>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yac-Af-Nsi">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yac-Af-Nsi" userLabel="Add Trip Button">
                                         <rect key="frame" x="0.0" y="476" width="369" height="34.333333333333314"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Add Trip"/>
+                                        <connections>
+                                            <action selector="addTripButtonPressed:" destination="xbR-Ma-G6D" eventType="touchUpInside" id="6Vi-BN-F9W"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -140,7 +143,7 @@
                     </view>
                     <connections>
                         <outlet property="countryPicker" destination="rr8-wX-kG9" id="VnR-E2-Ona"/>
-                        <outlet property="departurePicker" destination="mJU-GA-gRt" id="e06-TS-KVP"/>
+                        <outlet property="departurePicker" destination="0fq-Xi-xRe" id="S63-J4-RTp"/>
                         <outlet property="reasonField" destination="8Mr-PB-ATd" id="qJv-eO-KsA"/>
                         <outlet property="returnPicker" destination="mJU-GA-gRt" id="awA-fH-RC6"/>
                         <outlet property="saveButton" destination="yac-Af-Nsi" id="YyI-w4-ebs"/>

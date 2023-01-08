@@ -8,8 +8,10 @@
 import UIKit
 
 class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
-    var isNewTrip = false
+    var tripToEdit: Trip?
     var countries = [String]()
+    
+    weak var delegate: ViewController!
 
     @IBOutlet var saveButton: UIButton!
     @IBOutlet var countryPicker: UIPickerView!
@@ -19,9 +21,19 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = isNewTrip ? "Add New Trip" : "Edit Trip"
         
+        title = tripToEdit != nil ? "Edit Trip" : "Add New Trip"
+        navigationItem.largeTitleDisplayMode = .never
+        
+        populateCountries()
+        
+        // Set the view controller delegates
+        countryPicker.delegate = self
+        countryPicker.dataSource = self
+        reasonField.delegate = self
+    }
+    
+    func populateCountries() {
         // Populate countries array
         for code in NSLocale.isoCountryCodes  {
             let id = NSLocale.localeIdentifier(fromComponents: [NSLocale.Key.countryCode.rawValue: code])
@@ -31,11 +43,6 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         
         // Sort the countries alphabetically
         countries.sort()
-        
-        // Set the view controller delegates
-        countryPicker.delegate = self
-        countryPicker.dataSource = self
-        reasonField.delegate = self
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -53,5 +60,27 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         reasonField.resignFirstResponder()
         return true
+    }
+    
+    @IBAction func addTripButtonPressed(_ sender: Any) {
+        let departureDate = departurePicker.date
+        let returnDate = returnPicker.date
+        
+        print(departureDate, returnDate)
+        
+        if returnDate < departureDate {
+            let ac = UIAlertController(title: "Invalid Dates", message: "Your departure date must be on the same day or before your return date.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+            
+            return
+        }
+        
+        if reasonField.text! == "" {
+            // TODO: present alert controller
+            print("empty reason TextField")
+        }
+        
+        delegate.addTrip()
     }
 }
