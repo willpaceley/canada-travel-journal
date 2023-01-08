@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     var isNewTrip = false
     var countries = [String]()
 
@@ -32,9 +32,10 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         // Sort the countries alphabetically
         countries.sort()
         
-        // Set the view controller as delegate of the UIPickerView
+        // Set the view controller delegates
         countryPicker.delegate = self
         countryPicker.dataSource = self
+        reasonField.delegate = self
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -47,5 +48,10 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return countries[row]
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        reasonField.resignFirstResponder()
+        return true
     }
 }
