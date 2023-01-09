@@ -30,7 +30,6 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         // Set the view controller delegates
         countryPicker.delegate = self
         countryPicker.dataSource = self
-        reasonField.delegate = self
     }
     
     func populateCountries() {
@@ -63,24 +62,31 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }
     
     @IBAction func addTripButtonPressed(_ sender: Any) {
+        if tripIsValid() {
+            delegate.addTrip()
+        }
+    }
+    
+    func tripIsValid() -> Bool {
         let departureDate = departurePicker.date
         let returnDate = returnPicker.date
         
-        print(departureDate, returnDate)
-        
         if returnDate < departureDate {
-            let ac = UIAlertController(title: "Invalid Dates", message: "Your departure date must be on the same day or before your return date.", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            present(ac, animated: true)
-            
-            return
+            presentAlert(title: "Invalid Trip Dates", message: "Your departure date must be on the same day or before your return date.")
+            return false
         }
         
-        if reasonField.text! == "" {
-            // TODO: present alert controller
-            print("empty reason TextField")
+        if reasonField.text == nil || reasonField.text! == "" {
+            presentAlert(title: "No Reason Entered", message: "Please enter a reason for your travel outside of the country.")
+            return false
         }
         
-        delegate.addTrip()
+        return true
+    }
+    
+    func presentAlert(title: String?, message: String?) {
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
 }
