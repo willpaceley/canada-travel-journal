@@ -63,7 +63,14 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     
     @IBAction func addTripButtonPressed(_ sender: Any) {
         if tripIsValid() {
-            delegate.addTrip()
+            let countryIndex = countryPicker.selectedRow(inComponent: 0)
+            let country = countries[countryIndex]
+            let reason = reasonField.text ?? "Unknown reason"
+            
+            let newTrip = Trip(departureDate: departurePicker.date, returnDate: returnPicker.date, destination: country, reason: reason)
+            delegate.addTrip(newTrip)
+            
+            navigationController?.popViewController(animated: true)
         }
     }
     

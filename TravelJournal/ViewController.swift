@@ -44,8 +44,9 @@ class ViewController: UITableViewController {
         }
     }
     
-    func addTrip() {
-        print("we're inside addTrip!")
+    func addTrip(_ trip: Trip) {
+        trips.append(trip)
+        tableView.reloadData()
     }
 }
 
