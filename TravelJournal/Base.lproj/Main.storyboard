@@ -18,29 +18,53 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Trip" editingAccessoryType="disclosureIndicator" textLabel="Nop-FD-9Hl" detailTextLabel="hSG-nb-QyO" style="IBUITableViewCellStyleValue1" id="UF6-Sn-afZ">
-                                <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Trip" editingAccessoryType="disclosureIndicator" id="UF6-Sn-afZ" customClass="TripViewCell" customModule="TravelJournal" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="50" width="393" height="53.333332061767578"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UF6-Sn-afZ" id="bod-hA-w9Y">
-                                    <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="362.66666666666669" height="53.333332061767578"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Nop-FD-9Hl">
-                                            <rect key="frame" x="20" y="15" width="25" height="14.333333333333334"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Country" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQx-gv-Y9T">
+                                            <rect key="frame" x="20" y="5" width="180" height="19"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="19" id="RYQ-sa-A5Q"/>
+                                                <constraint firstAttribute="width" constant="180" id="Yp5-0L-8sq"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hSG-nb-QyO">
-                                            <rect key="frame" x="340.33333333333331" y="15" width="32.666666666666664" height="14.333333333333334"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="je9-T4-AhC">
+                                            <rect key="frame" x="20" y="29.333333333333336" width="31" height="17.333333333333336"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Days" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAV-vb-H6h">
+                                            <rect key="frame" x="322" y="18" width="32" height="17.333333333333329"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="jQx-gv-Y9T" firstAttribute="top" secondItem="bod-hA-w9Y" secondAttribute="topMargin" constant="-11" id="6WB-5y-GJy"/>
+                                        <constraint firstItem="jQx-gv-Y9T" firstAttribute="leading" secondItem="je9-T4-AhC" secondAttribute="leading" id="In9-qC-rFb"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="HAV-vb-H6h" secondAttribute="trailing" constant="0.66666666666668561" id="K0t-Ad-ctV"/>
+                                        <constraint firstItem="jQx-gv-Y9T" firstAttribute="leading" secondItem="bod-hA-w9Y" secondAttribute="leadingMargin" id="KxH-v6-KgZ"/>
+                                        <constraint firstItem="HAV-vb-H6h" firstAttribute="centerY" secondItem="bod-hA-w9Y" secondAttribute="centerY" id="d2t-4n-9b3"/>
+                                        <constraint firstItem="je9-T4-AhC" firstAttribute="top" secondItem="jQx-gv-Y9T" secondAttribute="bottom" constant="5.3333333333333321" id="wAM-ah-57T"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="je9-T4-AhC" secondAttribute="bottom" constant="-9.3333346048990933" id="we4-zO-G1t"/>
+                                        <constraint firstItem="HAV-vb-H6h" firstAttribute="top" secondItem="bod-hA-w9Y" secondAttribute="topMargin" constant="2" id="z4e-h2-xbB"/>
+                                    </constraints>
+                                    <edgeInsets key="layoutMargins" top="16" left="8" bottom="16" right="8"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="countryLabel" destination="jQx-gv-Y9T" id="MwP-Yt-Zri"/>
+                                    <outlet property="dateLabel" destination="je9-T4-AhC" id="uOR-3n-asD"/>
+                                    <outlet property="daysLabel" destination="HAV-vb-H6h" id="JLm-ex-Xbp"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

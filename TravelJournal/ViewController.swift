@@ -17,7 +17,7 @@ class ViewController: UITableViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Canada Travel Journal"
         
-        let newTrip = Trip(departureDate: Date(timeIntervalSinceNow: 1), returnDate: Date(timeIntervalSinceNow: 2), destination: "USA", reason: "Shopping")
+        let newTrip = Trip(departureDate: Date(timeIntervalSinceNow: 1), returnDate: Date(timeIntervalSinceNow: 2), destination: "United States", reason: "Shopping")
         trips.append(newTrip)
         
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(openAddTripView))
@@ -29,21 +29,19 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Trip", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Trip", for: indexPath) as! TripViewCell
         let trip = trips[indexPath.row]
         
-        let departureDate = format(date: trip.departureDate)
-        let returnDate = format(date: trip.returnDate)
-        
-        cell.textLabel?.text = trip.destination
-        cell.detailTextLabel?.text = "\(trip.days) \(trip.days > 1 ? "Days" : "Day")"
+        cell.countryLabel.text = trip.destination
+        cell.dateLabel.text = format(date: trip.departureDate)
+        cell.daysLabel.text = "\(trip.days) \(trip.days > 1 ? "Days" : "Day")"
         
         return cell
     }
     
     func format(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "MMM. dd, yyyy"
         let formattedDate = dateFormatter.string(from: date)
         
         return formattedDate
