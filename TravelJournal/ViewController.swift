@@ -5,6 +5,7 @@
 //  Created by Will Paceley on 2023-01-06.
 //
 
+import Foundation
 import UIKit
 
 class ViewController: UITableViewController {
@@ -31,10 +32,33 @@ class ViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Trip", for: indexPath)
         let trip = trips[indexPath.row]
         
+        let departureDate = format(date: trip.departureDate)
+        let returnDate = format(date: trip.returnDate)
+        
+        print(calculateDaysTraveled(departDate: trip.departureDate, returnDate: trip.returnDate))
+        
         cell.textLabel?.text = trip.destination
-        cell.detailTextLabel?.text = trip.reason
+        cell.detailTextLabel?.text = "\(departureDate) to \(returnDate)"
         
         return cell
+    }
+    
+    func format(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let formattedDate = dateFormatter.string(from: date)
+        
+        return formattedDate
+    }
+    
+    func calculateDaysTraveled(departDate: Date, returnDate: Date) -> Int {
+        let components = Calendar.current.dateComponents([.day], from: departDate, to: returnDate)
+        
+        if let day = components.day {
+            return day + 1
+        }
+        
+        return 0
     }
     
     @objc func openAddTripView() {
