@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Trip {
+struct Trip: Encodable, Decodable {
     var departureDate: Date
     var returnDate: Date
     var destination: String
