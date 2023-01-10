@@ -35,10 +35,8 @@ class ViewController: UITableViewController {
         let departureDate = format(date: trip.departureDate)
         let returnDate = format(date: trip.returnDate)
         
-        print(calculateDaysTraveled(departDate: trip.departureDate, returnDate: trip.returnDate))
-        
         cell.textLabel?.text = trip.destination
-        cell.detailTextLabel?.text = "\(departureDate) to \(returnDate)"
+        cell.detailTextLabel?.text = "\(trip.days) \(trip.days > 1 ? "Days" : "Day")"
         
         return cell
     }
@@ -49,16 +47,6 @@ class ViewController: UITableViewController {
         let formattedDate = dateFormatter.string(from: date)
         
         return formattedDate
-    }
-    
-    func calculateDaysTraveled(departDate: Date, returnDate: Date) -> Int {
-        let components = Calendar.current.dateComponents([.day], from: departDate, to: returnDate)
-        
-        if let day = components.day {
-            return day + 1
-        }
-        
-        return 0
     }
     
     @objc func openAddTripView() {

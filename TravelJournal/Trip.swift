@@ -12,4 +12,14 @@ struct Trip {
     var returnDate: Date
     var destination: String
     var reason: String
+    
+    var days: Int {
+        let components = Calendar.current.dateComponents([.day], from: departureDate, to: returnDate)
+        
+        if let day = components.day {
+            return day + 1
+        } else {
+            return 0
+        }
+    }
 }
