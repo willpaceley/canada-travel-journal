@@ -72,12 +72,12 @@ class ViewController: UITableViewController {
     }
     
     func deleteTrip(_ trip: Trip) {
-        if let index = trips.firstIndex(where: {$0.departureDate == trip.departureDate}) {
+        if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)
             tableView.reloadData()
             saveTrips()
         } else {
-            print("There was a problem ")
+            print("There was a problem deleting the selected trip")
         }
     }
     
@@ -89,7 +89,7 @@ class ViewController: UITableViewController {
             let defaults = UserDefaults.standard
             defaults.set(encodedData, forKey: "travelJournalTrips")
         } else {
-            print("there was a problem saving trips")
+            print("There was a problem saving trips")
         }
     }
     

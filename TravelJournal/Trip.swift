@@ -8,6 +8,8 @@
 import Foundation
 
 struct Trip: Encodable, Decodable {
+    let id: String
+    
     var departureDate: Date
     var returnDate: Date
     var destination: String
