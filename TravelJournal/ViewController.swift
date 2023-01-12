@@ -17,7 +17,7 @@ class ViewController: UITableViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Canada Travel Journal"
         
-        let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(openAddTripView))
+        let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonPressed))
         navigationItem.rightBarButtonItems = [addBarButton]
         
         loadTrips()
@@ -39,6 +39,10 @@ class ViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        openTripDetailView(for: trips[indexPath.row])
+    }
+    
     func format(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM. dd, yyyy"
@@ -47,10 +51,17 @@ class ViewController: UITableViewController {
         return formattedDate
     }
     
-    @objc func openAddTripView() {
+    @objc func addBarButtonPressed() {
+        openTripDetailView(for: nil)
+    }
+    
+    func openTripDetailView(for trip: Trip?) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "TripEditor") as? TripEditorViewController {
+            if let trip { vc.tripToEdit = trip }
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
+        } else {
+            print("A problem occurred initializing TripEditorViewController")
         }
     }
     
