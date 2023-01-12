@@ -72,7 +72,13 @@ class ViewController: UITableViewController {
     }
     
     func deleteTrip(_ trip: Trip) {
-        print("inside delete trip")
+        if let index = trips.firstIndex(where: {$0.departureDate == trip.departureDate}) {
+            trips.remove(at: index)
+            tableView.reloadData()
+            saveTrips()
+        } else {
+            print("There was a problem ")
+        }
     }
     
     // MARK: User Defaults
