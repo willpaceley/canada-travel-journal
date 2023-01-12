@@ -46,7 +46,6 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
             }
             
             let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(trashButtonPressed))
-            deleteButton.tintColor = .red
             let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
             doneButton.isEnabled = false
             
@@ -80,22 +79,29 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         return countries[row]
     }
     
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        // TODO: Determine if a different country has been selected than the original trip
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         reasonField.resignFirstResponder()
         return true
     }
     
-    @IBAction func addTripButtonPressed(_ sender: Any) {
-        if tripIsValid() {
-            let countryIndex = countryPicker.selectedRow(inComponent: 0)
-            let country = countries[countryIndex]
-            let reason = reasonField.text ?? "Unknown reason"
-            
-            let newTrip = Trip(departureDate: departurePicker.date, returnDate: returnPicker.date, destination: country, reason: reason)
-            delegate.addTrip(newTrip)
-            
-            navigationController?.popViewController(animated: true)
-        }
+    @objc func trashButtonPressed() {
+        let ac = UIAlertController(title: "Delete Trip", message: "Are you sure you want to delete this trip?", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+            let trip = self?.tripToEdit
+            self?.delegate.deleteTrip(trip!)
+            self?.navigationController?.popViewController(animated: true)
+        }))
+        
+        present(ac, animated: true)
+    }
+    
+    @objc func doneButtonPressed() {
+        
     }
     
     func tripIsValid() -> Bool {
@@ -121,11 +127,25 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         present(ac, animated: true)
     }
     
-    @objc func trashButtonPressed() {
-        
+    @IBAction func addTripButtonPressed(_ sender: Any) {
+        if tripIsValid() {
+            let countryIndex = countryPicker.selectedRow(inComponent: 0)
+            let country = countries[countryIndex]
+            let reason = reasonField.text ?? "Unknown reason"
+            
+            let newTrip = Trip(departureDate: departurePicker.date, returnDate: returnPicker.date, destination: country, reason: reason)
+            delegate.addTrip(newTrip)
+            
+            navigationController?.popViewController(animated: true)
+        }
     }
     
-    @objc func doneButtonPressed() {
-        
+    @IBAction func departurePickerValueChanged(_ sender: Any) {
+    }
+    
+    @IBAction func returnPickerValueChanged(_ sender: Any) {
+    }
+    
+    @IBAction func reasonPickerValueChanged(_ sender: Any) {
     }
 }

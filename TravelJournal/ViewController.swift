@@ -71,6 +71,10 @@ class ViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    func deleteTrip(_ trip: Trip) {
+        print("inside delete trip")
+    }
+    
     // MARK: User Defaults
     func saveTrips() {
         let encoder = JSONEncoder()
