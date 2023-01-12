@@ -22,7 +22,6 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = tripToEdit != nil ? "Edit Trip" : "Add New Trip"
         navigationItem.largeTitleDisplayMode = .never
         
         populateCountries()
@@ -30,6 +29,31 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         // Set the view controller delegates
         countryPicker.delegate = self
         countryPicker.dataSource = self
+        reasonField.delegate = self
+        
+        if let trip = tripToEdit {
+            title = "Edit Trip"
+            saveButton.isHidden = true
+            
+            departurePicker.date = trip.departureDate
+            returnPicker.date = trip.returnDate
+            reasonField.text = trip.reason
+            
+            if let countryIndex = countries.firstIndex(of: trip.destination) {
+                countryPicker.selectRow(countryIndex, inComponent: 0, animated: true)
+            } else {
+                print("Could not find specified country from tripToEdit in countries array.")
+            }
+            
+            let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(trashButtonPressed))
+            deleteButton.tintColor = .red
+            let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
+            doneButton.isEnabled = false
+            
+            navigationItem.rightBarButtonItems = [doneButton, deleteButton]
+        } else {
+            title = "Add New Trip"
+        }
     }
     
     func populateCountries() {
@@ -95,5 +119,13 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
+    }
+    
+    @objc func trashButtonPressed() {
+        
+    }
+    
+    @objc func doneButtonPressed() {
+        
     }
 }
