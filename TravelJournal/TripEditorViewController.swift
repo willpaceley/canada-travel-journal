@@ -81,12 +81,7 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let selectedCountry = countries[row]
-        if selectedCountry != tripToEdit?.destination {
-            doneButton?.isEnabled = true
-        } else {
-            doneButton?.isEnabled = false
-        }
+        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -127,6 +122,17 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         return true
     }
     
+    func dataChanged(for trip: Trip) -> Bool {
+        let departureChanged = departurePicker.date != trip.departureDate
+        let returnChanged = returnPicker.date != trip.returnDate
+        let reasonChanged = reasonField.text! != trip.reason
+        let destinationChanged = countries[countryPicker.selectedRow(inComponent: 0)] != trip.destination
+        
+        print(returnChanged, departureChanged, reasonChanged, destinationChanged)
+        
+        return departureChanged || returnChanged || reasonChanged || destinationChanged
+    }
+    
     func presentAlert(title: String?, message: String?) {
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
@@ -148,28 +154,14 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }
     
     @IBAction func departurePickerValueChanged(_ sender: UIDatePicker) {
-        if sender.date != tripToEdit?.departureDate {
-            doneButton?.isEnabled = true
-        } else {
-            doneButton?.isEnabled = false
-        }
+        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
     }
     
     @IBAction func returnPickerValueChanged(_ sender: UIDatePicker) {
-        if sender.date != tripToEdit?.returnDate {
-            doneButton?.isEnabled = true
-        } else {
-            doneButton?.isEnabled = false
-        }
+        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
     }
     
     @IBAction func reasonPickerValueChanged(_ sender: UITextField) {
-        if let text = sender.text {
-            if text != tripToEdit?.reason {
-                doneButton?.isEnabled = true
-            } else {
-                doneButton?.isEnabled = false
-            }
-        }
+        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
     }
 }
