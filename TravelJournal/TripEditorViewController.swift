@@ -12,7 +12,8 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     var countries = [String]()
     
     weak var delegate: ViewController!
-
+    
+    var doneButton: UIBarButtonItem?
     @IBOutlet var saveButton: UIButton!
     @IBOutlet var countryPicker: UIPickerView!
     @IBOutlet var reasonField: UITextField!
@@ -45,11 +46,11 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
                 print("Could not find specified country from tripToEdit in countries array.")
             }
             
+            // Add navigation bar buttons for update and delete operations
+            doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
+            doneButton?.isEnabled = false
             let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(trashButtonPressed))
-            let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
-            doneButton.isEnabled = false
-            
-            navigationItem.rightBarButtonItems = [doneButton, deleteButton]
+            navigationItem.rightBarButtonItems = [doneButton!, deleteButton]
         } else {
             title = "Add New Trip"
         }
@@ -80,7 +81,12 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        // TODO: Determine if a different country has been selected than the original trip
+        let selectedCountry = countries[row]
+        if selectedCountry != tripToEdit?.destination {
+            doneButton?.isEnabled = true
+        } else {
+            doneButton?.isEnabled = false
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
