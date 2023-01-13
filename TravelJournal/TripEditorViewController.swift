@@ -147,12 +147,29 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         }
     }
     
-    @IBAction func departurePickerValueChanged(_ sender: Any) {
+    @IBAction func departurePickerValueChanged(_ sender: UIDatePicker) {
+        if sender.date != tripToEdit?.departureDate {
+            doneButton?.isEnabled = true
+        } else {
+            doneButton?.isEnabled = false
+        }
     }
     
-    @IBAction func returnPickerValueChanged(_ sender: Any) {
+    @IBAction func returnPickerValueChanged(_ sender: UIDatePicker) {
+        if sender.date != tripToEdit?.returnDate {
+            doneButton?.isEnabled = true
+        } else {
+            doneButton?.isEnabled = false
+        }
     }
     
-    @IBAction func reasonPickerValueChanged(_ sender: Any) {
+    @IBAction func reasonPickerValueChanged(_ sender: UITextField) {
+        if let text = sender.text {
+            if text != tripToEdit?.reason {
+                doneButton?.isEnabled = true
+            } else {
+                doneButton?.isEnabled = false
+            }
+        }
     }
 }

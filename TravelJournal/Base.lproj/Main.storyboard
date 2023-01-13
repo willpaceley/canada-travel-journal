@@ -26,7 +26,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Country" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQx-gv-Y9T">
-                                            <rect key="frame" x="20" y="5" width="180" height="19"/>
+                                            <rect key="frame" x="20" y="6" width="180" height="19"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="19" id="RYQ-sa-A5Q"/>
                                                 <constraint firstAttribute="width" constant="180" id="Yp5-0L-8sq"/>
@@ -36,7 +36,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="je9-T4-AhC">
-                                            <rect key="frame" x="20" y="29.333333333333336" width="31" height="17.333333333333336"/>
+                                            <rect key="frame" x="20" y="28.333333333333336" width="31" height="18.333333333333336"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -49,12 +49,12 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="jQx-gv-Y9T" firstAttribute="top" secondItem="bod-hA-w9Y" secondAttribute="topMargin" constant="-11" id="6WB-5y-GJy"/>
+                                        <constraint firstItem="jQx-gv-Y9T" firstAttribute="top" secondItem="bod-hA-w9Y" secondAttribute="topMargin" constant="-10" id="6WB-5y-GJy"/>
                                         <constraint firstItem="jQx-gv-Y9T" firstAttribute="leading" secondItem="je9-T4-AhC" secondAttribute="leading" id="In9-qC-rFb"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="HAV-vb-H6h" secondAttribute="trailing" constant="0.66666666666668561" id="K0t-Ad-ctV"/>
                                         <constraint firstItem="jQx-gv-Y9T" firstAttribute="leading" secondItem="bod-hA-w9Y" secondAttribute="leadingMargin" id="KxH-v6-KgZ"/>
                                         <constraint firstItem="HAV-vb-H6h" firstAttribute="centerY" secondItem="bod-hA-w9Y" secondAttribute="centerY" id="d2t-4n-9b3"/>
-                                        <constraint firstItem="je9-T4-AhC" firstAttribute="top" secondItem="jQx-gv-Y9T" secondAttribute="bottom" constant="5.3333333333333321" id="wAM-ah-57T"/>
+                                        <constraint firstItem="je9-T4-AhC" firstAttribute="top" secondItem="jQx-gv-Y9T" secondAttribute="bottom" constant="3.3333333333333712" id="wAM-ah-57T"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="je9-T4-AhC" secondAttribute="bottom" constant="-9.3333346048990933" id="we4-zO-G1t"/>
                                         <constraint firstItem="HAV-vb-H6h" firstAttribute="top" secondItem="bod-hA-w9Y" secondAttribute="topMargin" constant="2" id="z4e-h2-xbB"/>
                                     </constraints>
@@ -135,7 +135,7 @@
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Vacation, work, family, etc." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="8Mr-PB-ATd">
                                                 <rect key="frame" x="0.0" y="28.333333333333314" width="369" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                                                 <connections>
                                                     <action selector="reasonPickerValueChanged:" destination="xbR-Ma-G6D" eventType="editingDidEnd" id="UvM-S1-rNa"/>
                                                 </connections>
