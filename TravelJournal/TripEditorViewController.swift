@@ -129,8 +129,6 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         let reasonChanged = reasonField.text! != trip.reason
         let destinationChanged = countries[countryPicker.selectedRow(inComponent: 0)] != trip.destination
         
-        print(returnChanged, departureChanged, reasonChanged, destinationChanged)
-        
         return departureChanged || returnChanged || reasonChanged || destinationChanged
     }
     
@@ -155,10 +153,18 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }
     
     @IBAction func departurePickerValueChanged(_ sender: UIDatePicker) {
+        if departurePicker.date > returnPicker.date {
+            returnPicker.setDate(departurePicker.date, animated: true)
+        }
+        
         doneButton?.isEnabled = dataChanged(for: tripToEdit!)
     }
     
     @IBAction func returnPickerValueChanged(_ sender: UIDatePicker) {
+        if returnPicker.date < departurePicker.date {
+            departurePicker.setDate(returnPicker.date, animated: true)
+        }
+        
         doneButton?.isEnabled = dataChanged(for: tripToEdit!)
     }
     
