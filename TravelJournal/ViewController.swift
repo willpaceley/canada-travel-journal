@@ -43,6 +43,12 @@ class ViewController: UITableViewController {
         openTripDetailView(for: trips[indexPath.row])
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            deleteTrip(trips[indexPath.row])
+        }
+    }
+    
     func format(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM. dd, yyyy"
