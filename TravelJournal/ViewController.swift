@@ -45,7 +45,13 @@ class ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            deleteTrip(trips[indexPath.row])
+            let ac = UIAlertController(title: "Delete Trip", message: "Are you sure you want to delete this trip?", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+                self?.deleteTrip((self?.trips[indexPath.row])!)
+            }))
+            
+            present(ac, animated: true)
         }
     }
     
