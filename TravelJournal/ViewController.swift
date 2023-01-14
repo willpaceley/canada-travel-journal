@@ -74,7 +74,10 @@ class ViewController: UITableViewController {
     func deleteTrip(_ trip: Trip) {
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)
-            tableView.reloadData()
+            
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
             saveTrips()
         } else {
             print("There was a problem deleting the selected trip")

@@ -93,9 +93,10 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         let ac = UIAlertController(title: "Delete Trip", message: "Are you sure you want to delete this trip?", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+            self?.navigationController?.popViewController(animated: true)
+        
             let trip = self?.tripToEdit
             self?.delegate.deleteTrip(trip!)
-            self?.navigationController?.popViewController(animated: true)
         }))
         
         present(ac, animated: true)
