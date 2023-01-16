@@ -21,6 +21,7 @@ class ViewController: UITableViewController {
         navigationItem.rightBarButtonItems = [addBarButton]
         
         loadTrips()
+        sortByReverseChronological()
         tableView.reloadData()
     }
 
@@ -63,6 +64,10 @@ class ViewController: UITableViewController {
         return formattedDate
     }
     
+    func sortByReverseChronological() {
+        trips.sort { $0.departureDate > $1.departureDate }
+    }
+    
     @objc func addBarButtonPressed() {
         openTripDetailView(for: nil)
     }
@@ -80,6 +85,7 @@ class ViewController: UITableViewController {
     func addTrip(_ trip: Trip) {
         trips.append(trip)
         saveTrips()
+        sortByReverseChronological()
         tableView.reloadData()
     }
     
