@@ -98,7 +98,20 @@ class ViewController: UITableViewController {
             
             saveTrips()
         } else {
-            print("There was a problem deleting the selected trip")
+            print("There was a problem finding the index of the trip to delete")
+        }
+    }
+    
+    func updateTrip(_ trip: Trip) {
+        if let index = trips.firstIndex(where: {$0.id == trip.id}) {
+            trips[index] = trip
+            
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+            
+            saveTrips()
+        } else {
+            print("There was a problem finding the index of the trip to update")
         }
     }
     

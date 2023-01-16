@@ -103,7 +103,13 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }
     
     @objc func doneButtonPressed() {
+        tripToEdit?.departureDate = departurePicker.date
+        tripToEdit?.returnDate = returnPicker.date
+        tripToEdit?.reason = reasonField.text!
+        tripToEdit?.destination = countries[countryPicker.selectedRow(inComponent: 0)]
         
+        delegate.updateTrip(tripToEdit!)
+        navigationController?.popViewController(animated: true)
     }
     
     func tripIsValid() -> Bool {
