@@ -10,6 +10,9 @@ import UIKit
 
 class ViewController: UITableViewController {
     var trips = [Trip]()
+    var totalDays: Int {
+        return trips.reduce(0) { $0 + $1.days }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +59,32 @@ class ViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        if !trips.isEmpty {
+            return "Total days outside of Canada: \(totalDays)"
+        }
+        
+        return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if trips.isEmpty {
+            return "Start tracking your trips outside of Canada by clicking the ＋ button in the top-right corner."
+        }
+        
+        return nil
+    }
+    
+    func reloadFooter() {
+        tableView.beginUpdates()
+        
+        var contentConfig = tableView.footerView(forSection: 0)?.defaultContentConfiguration()
+        contentConfig?.text = !trips.isEmpty ? "Total days outside of Canada: \(totalDays)" : nil
+        tableView.footerView(forSection: 0)?.contentConfiguration = contentConfig
+        
+        tableView.endUpdates()
+    }
+    
     func format(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM. dd, yyyy"
@@ -95,6 +124,7 @@ class ViewController: UITableViewController {
             
             let indexPath = IndexPath(row: index, section: 0)
             tableView.deleteRows(at: [indexPath], with: .automatic)
+            reloadFooter()
             
             saveTrips()
         } else {
@@ -108,6 +138,7 @@ class ViewController: UITableViewController {
             
             let indexPath = IndexPath(row: index, section: 0)
             tableView.reloadRows(at: [indexPath], with: .automatic)
+            reloadFooter()
             
             saveTrips()
         } else {
