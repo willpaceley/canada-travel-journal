@@ -68,11 +68,21 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if trips.isEmpty {
-            return "Start tracking your trips outside of Canada by clicking the ＋ button in the top-right corner."
+        return trips.isEmpty ? "Click the ＋ button to add a new trip!" : nil
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let headerView = view as? UITableViewHeaderFooterView {
+            var config = headerView.defaultContentConfiguration()
+            
+            // Must set header text here, otherwise defaultContentConfiguration overrides the current title
+            config.text = "Welcome! Start tracking your trips outside of Canada by clicking the ＋ button in the top-right corner."
+            config.textProperties.alignment = .center
+            
+            headerView.contentConfiguration = config
+        } else {
+            print("A problem occurred casting view parameter to UITableHeaderFooterView.")
         }
-        
-        return nil
     }
     
     func reloadFooter() {
