@@ -21,7 +21,10 @@ class ViewController: UITableViewController {
         title = "Canada Travel Journal"
         
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonPressed))
-        navigationItem.rightBarButtonItems = [addBarButton]
+        navigationItem.rightBarButtonItem = addBarButton
+        
+        let shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonPressed))
+        navigationItem.leftBarButtonItem = shareButton
         
         loadTrips()
         sortByReverseChronological()
@@ -76,7 +79,7 @@ class ViewController: UITableViewController {
             var config = headerView.defaultContentConfiguration()
             
             // Must set header text here, otherwise defaultContentConfiguration overrides the current title
-            config.text = "Welcome! Start tracking your trips outside of Canada by clicking the ＋ button in the top-right corner."
+            config.text = "Start tracking your trips outside of Canada by clicking the ＋ button in the top-right."
             config.textProperties.alignment = .center
             
             headerView.contentConfiguration = config
@@ -119,6 +122,24 @@ class ViewController: UITableViewController {
         } else {
             print("A problem occurred initializing TripEditorViewController")
         }
+    }
+    
+    @objc func shareBarButtonPressed() {
+        let contents = createCSVContents(with: trips)
+        print(contents)
+    }
+    
+    func createCSVContents(with trips: [Trip]) -> String {
+        var contents = "Destination,Departure Date,Return Date,Days,Reason\n"
+        
+        for trip in trips {
+            let departureDate = format(date: trip.departureDate)
+            let returnDate = format(date: trip.returnDate)
+            
+            contents += "\"\(trip.destination)\",\"\(departureDate)\",\"\(returnDate)\",\"\(trip.days)\",\"\(trip.reason)\"\n"
+        }
+        
+        return contents
     }
     
     func addTrip(_ trip: Trip) {
