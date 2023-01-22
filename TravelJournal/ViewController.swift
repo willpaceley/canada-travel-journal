@@ -7,8 +7,9 @@
 
 import Foundation
 import UIKit
+import MessageUI
 
-class ViewController: UITableViewController {
+class ViewController: UITableViewController, MFMailComposeViewControllerDelegate {
     var trips = [Trip]()
     var totalDays: Int {
         return trips.reduce(0) { $0 + $1.days }
@@ -125,8 +126,26 @@ class ViewController: UITableViewController {
     }
     
     @objc func shareBarButtonPressed() {
-        let contents = createCSVContents(with: trips)
-        print(contents)
+        if !MFMailComposeViewController.canSendMail() {
+            let ac = UIAlertController(title: "Can't Send Email", message: "Mail services are not available on this device.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+            return
+        }
+        
+        let composeVC = MFMailComposeViewController()
+        composeVC.mailComposeDelegate = self
+         
+        // Configure the fields of the interface.
+        composeVC.setSubject("Travel Journal CSV")
+        composeVC.setMessageBody("Attached is a CSV file containing all of my international trips.", isHTML: false)
+         
+        // Present the view controller modally.
+        self.present(composeVC, animated: true, completion: nil)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
     }
     
     func createCSVContents(with trips: [Trip]) -> String {
