@@ -137,8 +137,13 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         composeVC.mailComposeDelegate = self
          
         // Configure the fields of the interface.
-        composeVC.setSubject("Travel Journal CSV")
+        composeVC.setSubject("Travel Journal Spreadsheet")
         composeVC.setMessageBody("Attached is a CSV file containing all of my international trips.", isHTML: false)
+        
+        let csvString = createCSVContents(with: trips)
+        let csvData = csvString.data(using: .utf8)
+        
+        composeVC.addAttachmentData(csvData!, mimeType: "text/csv", fileName: "travel-journal.csv")
          
         // Present the view controller modally.
         self.present(composeVC, animated: true, completion: nil)
