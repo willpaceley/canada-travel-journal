@@ -57,7 +57,9 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }
     
     func populateCountries() {
-        // Populate countries array
+        // Method to populate country array using NSLocale.isoCountryCodes by Amir Sk on Stack Overflow
+        // Link: https://stackoverflow.com/questions/27875463/how-do-i-get-a-list-of-countries-in-swift-ios
+        
         for code in NSLocale.isoCountryCodes  {
             let id = NSLocale.localeIdentifier(fromComponents: [NSLocale.Key.countryCode.rawValue: code])
             let name = NSLocale(localeIdentifier: "en_CA").displayName(forKey: NSLocale.Key.identifier, value: id) ?? "Country not found for code: \(code)"
