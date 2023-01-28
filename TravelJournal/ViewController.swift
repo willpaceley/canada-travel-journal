@@ -8,8 +8,11 @@
 import Foundation
 import UIKit
 import MessageUI
+import CloudKit
 
 class ViewController: UITableViewController, MFMailComposeViewControllerDelegate {
+    
+    var userLoggedInToiCloud = false
     var trips = [Trip]()
     var totalDays: Int {
         return trips.reduce(0) { $0 + $1.days }
@@ -17,6 +20,8 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        getiCloudStatus()
         
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Canada Travel Journal"
@@ -31,7 +36,9 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         sortByReverseChronological()
         tableView.reloadData()
     }
-
+    
+    // TODO: Make an extension with all of the delegated methods (overriden)
+    // Google "how to put delegated methods into an extension swift"
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return trips.count
     }
@@ -78,11 +85,11 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
             var config = headerView.defaultContentConfiguration()
-            
+
             // Must set header text here, otherwise defaultContentConfiguration overrides the current title
             config.text = "Start tracking your trips outside of Canada by clicking the ＋ button in the top-right."
             config.textProperties.alignment = .center
-            
+
             headerView.contentConfiguration = config
         } else {
             print("A problem occurred casting view parameter to UITableHeaderFooterView.")
@@ -222,6 +229,23 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
                 try trips = decoder.decode([Trip].self, from: savedTrips)
             } catch {
                 print("An error occurred decoding the trip data")
+            }
+        }
+    }
+    
+    // MARK: CloudKit
+    func getiCloudStatus() {
+        CKContainer.default().accountStatus { [weak self] status, error in
+            DispatchQueue.main.async {
+                if error != nil { print(error!) }
+                
+                if status == .available {
+                    self?.userLoggedInToiCloud = true
+                    return
+                }
+
+                // TODO: Present an alert
+                print("User is not logged in to iCloud")
             }
         }
     }
