@@ -175,7 +175,8 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
     
     func addTrip(_ trip: Trip) {
         trips.append(trip)
-        saveTrips()
+//        saveTrips()
+        saveToiCloud()
         sortByReverseChronological()
         tableView.reloadData()
     }
@@ -257,7 +258,22 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
     
     func saveToiCloud()
     {
+        let encoder = JSONEncoder()
         
+        if let tripData = try? encoder.encode(trips) {
+            let newTrips = CKRecord(recordType: "Trips")
+            newTrips["travelJournalTrips"] = tripData
+            
+            CKContainer.default().privateCloudDatabase.save(newTrips) { returnedRecord, error in
+                guard let returnedRecord else {
+                    print("An error occurred: \(error!)")
+                    return
+                }
+                
+                print("Record saved!")
+                print(returnedRecord)
+            }
+        }
     }
 }
 
