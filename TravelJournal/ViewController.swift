@@ -134,7 +134,7 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
     
     @objc func shareBarButtonPressed() {
         if !MFMailComposeViewController.canSendMail() {
-            let ac = UIAlertController(title: "Can't Send Email", message: "Mail services are not available on this device.", preferredStyle: .alert)
+            let ac = UIAlertController(title: "Can't Send Email", message: "Email services are not enabled on your device.", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "OK", style: .default))
             present(ac, animated: true)
             return
@@ -236,18 +236,28 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
     // MARK: CloudKit
     func getiCloudStatus() {
         CKContainer.default().accountStatus { [weak self] status, error in
+            if let error {
+                print(error)
+                return
+            }
+            
+            if status == .available {
+                self?.userLoggedInToiCloud = true
+                return
+            }
+            
             DispatchQueue.main.async {
-                if error != nil { print(error!) }
-                
-                if status == .available {
-                    self?.userLoggedInToiCloud = true
-                    return
-                }
-
-                // TODO: Present an alert
-                print("User is not logged in to iCloud")
+                let ac = UIAlertController(title: "Not Logged In To iCloud", message: "Please log in to your iCloud account from your device's settings. Your trips will not be saved across devices.", preferredStyle: .alert)
+                // TODO: Button action open the URL that openSettingsURLString constant provides
+                ac.addAction(UIAlertAction(title: "I Understand", style: .default))
+                self?.present(ac, animated: true)
             }
         }
+    }
+    
+    func saveToiCloud()
+    {
+        
     }
 }
 
