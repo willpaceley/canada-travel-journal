@@ -12,7 +12,6 @@ import CloudKit
 
 class ViewController: UITableViewController, MFMailComposeViewControllerDelegate {
     
-    var userLoggedInToiCloud = false
     var trips = [Trip]()
     var totalDays: Int {
         return trips.reduce(0) { $0 + $1.days }
@@ -22,6 +21,7 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         super.viewDidLoad()
         
         getiCloudStatus()
+        // TODO: Add a ProgressView during initial fetch from iCloud
         
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Canada Travel Journal"
@@ -32,8 +32,6 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         let shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonPressed))
         navigationItem.leftBarButtonItem = shareButton
         
-//        loadTrips()
-//        sortByReverseChronological()
         tableView.reloadData()
     }
     
@@ -175,8 +173,7 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
     
     func addTrip(_ trip: Trip) {
         trips.append(trip)
-//        saveTrips()
-        saveToiCloud()
+        saveTripsToiCloud()
         sortByReverseChronological()
         tableView.reloadData()
     }
@@ -189,7 +186,7 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
             tableView.deleteRows(at: [indexPath], with: .automatic)
             reloadFooter()
             
-            saveTrips()
+            saveTripsToiCloud()
         } else {
             print("There was a problem finding the index of the trip to delete")
         }
@@ -203,14 +200,14 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
             tableView.reloadRows(at: [indexPath], with: .automatic)
             reloadFooter()
             
-            saveTrips()
+            saveTripsToiCloud()
         } else {
             print("There was a problem finding the index of the trip to update")
         }
     }
     
     // MARK: User Defaults
-    func saveTrips() {
+    func saveTripsToUserDefaults() {
         let encoder = JSONEncoder()
         
         if let encodedData = try? encoder.encode(trips) {
@@ -221,7 +218,7 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         }
     }
     
-    func loadTrips() {
+    func loadTripsFromUserDefaults() {
         let defaults = UserDefaults.standard
         
         if let savedTrips = defaults.object(forKey: "travelJournalTrips") as? Data {
@@ -243,8 +240,7 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
             }
             
             if status == .available {
-                self?.userLoggedInToiCloud = true
-                self?.fetchTrips()
+                self?.loadTripsFromiCloud()
                 return
             }
             
@@ -257,29 +253,39 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         }
     }
     
-    func saveToiCloud()
-    {
+    func createNewTripsRecord() {
         let encoder = JSONEncoder()
         
         if let tripData = try? encoder.encode(trips) {
             let newTrips = CKRecord(recordType: "Trips")
             newTrips["tripData"] = tripData
             
-            CKContainer.default().privateCloudDatabase.save(newTrips) { returnedRecord, error in
-                guard let returnedRecord else {
-                    print("An error occurred: \(error!)")
-                    return
+            CKContainer.default().privateCloudDatabase.save(newTrips) { _, error in
+                if let error {
+                    print("An error occurred: \(error)")
+                } else {
+                    print("Record saved!")
                 }
-                
-                print("Record saved!")
-                print(returnedRecord)
+            }
+        }
+    }
+    
+    func updateExistingTripsRecord(recordToDelete: CKRecord.ID) {
+        let encoder = JSONEncoder()
+        
+        if let tripData = try? encoder.encode(trips) {
+            let newTrips = CKRecord(recordType: "Trips")
+            newTrips["tripData"] = tripData
+            
+            CKContainer.default().privateCloudDatabase.modifyRecords(saving: [newTrips], deleting: [recordToDelete]) { result in
+                print("Pre-existing record successfully updated.")
             }
         }
     }
     
     // TODO: Fix bug where recently added trips aren't saved properly to DB (or loaded properly)
-    // The problem is I'm making multiple Trips with tripData keys, I need to properly update IF the record already exists
-    func fetchTrips() {
+    // The problem is I'm making multiple Trips with tripData keys, I need to properly "update" IF the record already exists
+    func loadTripsFromiCloud() {
         let query = CKQuery(recordType: "Trips", predicate: NSPredicate(value: true))
         
         CKContainer.default().privateCloudDatabase.fetch(withQuery: query) { [weak self] result in
@@ -297,6 +303,34 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
                                 self?.decodeTripData(data)
                             }
                         }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func saveTripsToiCloud() {
+        let query = CKQuery(recordType: "Trips", predicate: NSPredicate(value: true))
+        
+        CKContainer.default().privateCloudDatabase.fetch(withQuery: query) { [weak self] result in
+            switch result {
+            case .success((let matchResults, _)):
+                // Create a new Record in DB if one doesn't exist yet
+                if matchResults.count == 0 {
+                    print("No records found while saving, creating new Record")
+                    self?.createNewTripsRecord()
+                }
+                
+                for (_, matchResult) in matchResults {
+                    switch matchResult {
+                    case .success(let record):
+                        // Update an existing record
+                        print("Found a successful match result while saving trips")
+                        self?.updateExistingTripsRecord(recordToDelete: record.recordID)
                     case .failure(let error):
                         print(error)
                     }
