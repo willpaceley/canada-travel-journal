@@ -32,8 +32,8 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         let shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonPressed))
         navigationItem.leftBarButtonItem = shareButton
         
-        loadTrips()
-        sortByReverseChronological()
+//        loadTrips()
+//        sortByReverseChronological()
         tableView.reloadData()
     }
     
@@ -244,6 +244,7 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
             
             if status == .available {
                 self?.userLoggedInToiCloud = true
+                self?.fetchTrips()
                 return
             }
             
@@ -262,7 +263,7 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         
         if let tripData = try? encoder.encode(trips) {
             let newTrips = CKRecord(recordType: "Trips")
-            newTrips["travelJournalTrips"] = tripData
+            newTrips["tripData"] = tripData
             
             CKContainer.default().privateCloudDatabase.save(newTrips) { returnedRecord, error in
                 guard let returnedRecord else {
@@ -275,5 +276,46 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
             }
         }
     }
+    
+    // TODO: Fix bug where recently added trips aren't saved properly to DB (or loaded properly)
+    // The problem is I'm making multiple Trips with tripData keys, I need to properly update IF the record already exists
+    func fetchTrips() {
+        let query = CKQuery(recordType: "Trips", predicate: NSPredicate(value: true))
+        
+        CKContainer.default().privateCloudDatabase.fetch(withQuery: query) { [weak self] result in
+            switch result {
+            case .success((let matchResults, _)):
+                if matchResults.count == 0 {
+                    print("No records found for Trips recordType in private database.")
+                }
+                
+                for (_, matchResult) in matchResults {
+                    switch matchResult {
+                    case .success(let record):
+                        if let data = record.value(forKey: "tripData") as? Data {
+                            DispatchQueue.main.async {
+                                self?.decodeTripData(data)
+                            }
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func decodeTripData(_ tripData: Data) {
+        let decoder = JSONDecoder()
+        do {
+            try trips = decoder.decode([Trip].self, from: tripData)
+            tableView.reloadData()
+        } catch {
+            print("An error occurred decoding the trip data")
+        }
+    }
+    
 }
 
