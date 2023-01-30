@@ -16,14 +16,21 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
     var totalDays: Int {
         return trips.reduce(0) { $0 + $1.days }
     }
-
+    var isLoading = false {
+        didSet {
+            isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
+        }
+    }
+    
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         getiCloudStatus()
-        // TODO: Add a ProgressView during initial fetch from iCloud
         
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.sizeToFit()
         title = "Canada Travel Journal"
         
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonPressed))
@@ -233,9 +240,12 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
     
     // MARK: CloudKit
     func getiCloudStatus() {
+        isLoading = true
+        
         CKContainer.default().accountStatus { [weak self] status, error in
             if let error {
                 print(error)
+                self?.isLoading = false
                 return
             }
             
@@ -260,11 +270,14 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
             let newTrips = CKRecord(recordType: "Trips")
             newTrips["tripData"] = tripData
             
-            CKContainer.default().privateCloudDatabase.save(newTrips) { _, error in
+            CKContainer.default().privateCloudDatabase.save(newTrips) { [weak self] _, error in
                 if let error {
                     print("An error occurred: \(error)")
                 } else {
                     print("Record saved!")
+                }
+                DispatchQueue.main.async {
+                    self?.isLoading = false
                 }
             }
         }
@@ -277,14 +290,15 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
             let newTrips = CKRecord(recordType: "Trips")
             newTrips["tripData"] = tripData
             
-            CKContainer.default().privateCloudDatabase.modifyRecords(saving: [newTrips], deleting: [recordToDelete]) { result in
+            CKContainer.default().privateCloudDatabase.modifyRecords(saving: [newTrips], deleting: [recordToDelete]) { [weak self] result in
                 print("Pre-existing record successfully updated.")
+                DispatchQueue.main.async {
+                    self?.isLoading = false
+                }
             }
         }
     }
     
-    // TODO: Fix bug where recently added trips aren't saved properly to DB (or loaded properly)
-    // The problem is I'm making multiple Trips with tripData keys, I need to properly "update" IF the record already exists
     func loadTripsFromiCloud() {
         let query = CKQuery(recordType: "Trips", predicate: NSPredicate(value: true))
         
@@ -300,20 +314,24 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
                     case .success(let record):
                         if let data = record.value(forKey: "tripData") as? Data {
                             DispatchQueue.main.async {
+                                self?.isLoading = false
                                 self?.decodeTripData(data)
                             }
                         }
                     case .failure(let error):
+                        self?.isLoading = false
                         print(error)
                     }
                 }
             case .failure(let error):
+                self?.isLoading = false
                 print(error)
             }
         }
     }
     
     func saveTripsToiCloud() {
+        isLoading = true
         let query = CKQuery(recordType: "Trips", predicate: NSPredicate(value: true))
         
         CKContainer.default().privateCloudDatabase.fetch(withQuery: query) { [weak self] result in
