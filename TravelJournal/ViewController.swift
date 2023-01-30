@@ -314,18 +314,19 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
                     case .success(let record):
                         if let data = record.value(forKey: "tripData") as? Data {
                             DispatchQueue.main.async {
-                                self?.isLoading = false
                                 self?.decodeTripData(data)
                             }
                         }
                     case .failure(let error):
-                        self?.isLoading = false
                         print(error)
                     }
                 }
             case .failure(let error):
-                self?.isLoading = false
                 print(error)
+            }
+            
+            DispatchQueue.main.async {
+                self?.isLoading = false
             }
         }
     }
