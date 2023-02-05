@@ -146,7 +146,6 @@ class TripEditorViewController: UIViewController {
         }
         
         doneButton?.isEnabled = dataChanged(for: tripToEdit!)
-        dismiss(animated: false)
     }
     
     @IBAction func returnPickerValueChanged(_ sender: UIDatePicker) {
@@ -155,7 +154,6 @@ class TripEditorViewController: UIViewController {
         }
         
         doneButton?.isEnabled = dataChanged(for: tripToEdit!)
-        dismiss(animated: false)
     }
     
     @IBAction func reasonPickerValueChanged(_ sender: UITextField) {
