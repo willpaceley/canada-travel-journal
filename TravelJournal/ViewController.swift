@@ -33,6 +33,9 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         navigationController?.navigationBar.sizeToFit()
         title = "Canada Travel Journal"
         
+        // Fetch most recent data from iCloud when user pulls down on UITableView
+        self.refreshControl?.addTarget(self, action: #selector(refreshTable), for: UIControl.Event.valueChanged)
+        
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonPressed))
         navigationItem.rightBarButtonItem = addBarButton
         
@@ -99,6 +102,10 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         } else {
             print("A problem occurred casting view parameter to UITableHeaderFooterView.")
         }
+    }
+    
+    @objc func refreshTable() {
+        loadTripsFromiCloud()
     }
     
     func reloadFooter() {
@@ -185,6 +192,7 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         tableView.reloadData()
     }
     
+    // TODO: Fix bug that deletes entire Trip record in iCloud DB after deleteTrip is called
     func deleteTrip(_ trip: Trip) {
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)
@@ -257,9 +265,10 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
             }
             
             DispatchQueue.main.async {
-                let ac = UIAlertController(title: "Not Logged In To iCloud", message: "Please log in to your iCloud account from your device's settings. Your trips will not be saved across devices.", preferredStyle: .alert)
+                let ac = UIAlertController(title: "Not Logged In To iCloud", message: "Please log in to your iCloud account from your device's settings. Your trips will not be saved.", preferredStyle: .alert)
                 // TODO: Button action open the URL that openSettingsURLString constant provides
                 ac.addAction(UIAlertAction(title: "I Understand", style: .default))
+                self?.isLoading = false
                 self?.present(ac, animated: true)
             }
         }
@@ -335,6 +344,7 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
             
             DispatchQueue.main.async {
                 self?.isLoading = false
+                self?.refreshControl?.endRefreshing()
             }
         }
     }

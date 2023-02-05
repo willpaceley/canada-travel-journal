@@ -77,6 +77,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Canada Travel Journal" largeTitleDisplayMode="always" id="CQK-J5-w3B"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="n8i-wm-09z">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                     <connections>
                         <outlet property="activityIndicator" destination="wWi-Nq-Deu" id="n1D-sn-T0w"/>
                     </connections>
