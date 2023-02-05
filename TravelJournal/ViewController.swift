@@ -192,7 +192,6 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         tableView.reloadData()
     }
     
-    // TODO: Fix bug that deletes entire Trip record in iCloud DB after deleteTrip is called
     func deleteTrip(_ trip: Trip) {
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)
@@ -266,8 +265,11 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
             
             DispatchQueue.main.async {
                 let ac = UIAlertController(title: "Not Logged In To iCloud", message: "Please log in to your iCloud account from your device's settings. Your trips will not be saved.", preferredStyle: .alert)
-                // TODO: Button action open the URL that openSettingsURLString constant provides
-                ac.addAction(UIAlertAction(title: "I Understand", style: .default))
+                ac.addAction(UIAlertAction(title: "Go To Settings", style: .default, handler: { _ in
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }))
                 self?.isLoading = false
                 self?.present(ac, animated: true)
             }

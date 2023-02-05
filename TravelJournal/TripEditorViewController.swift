@@ -159,7 +159,7 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
             navigationController?.popViewController(animated: true)
         }
     }
-    
+    // TODO: Dismiss picker after user selects a date
     @IBAction func departurePickerValueChanged(_ sender: UIDatePicker) {
         if departurePicker.date > returnPicker.date {
             returnPicker.setDate(departurePicker.date, animated: true)
