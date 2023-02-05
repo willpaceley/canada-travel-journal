@@ -244,8 +244,10 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         
         CKContainer.default().accountStatus { [weak self] status, error in
             if let error {
-                print(error)
-                self?.isLoading = false
+                DispatchQueue.main.async {
+                    self?.displayAlert(title: "iCloud Status Error", message: error.localizedDescription)
+                    self?.isLoading = false
+                }
                 return
             }
             
@@ -317,12 +319,18 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
                                 self?.decodeTripData(data)
                             }
                         }
+                        
                     case .failure(let error):
-                        print(error)
+                        DispatchQueue.main.async {
+                            self?.displayAlert(title: "iCloud Load Error", message: error.localizedDescription)
+                        }
                     }
                 }
+                
             case .failure(let error):
-                print(error)
+                DispatchQueue.main.async {
+                    self?.displayAlert(title: "iCloud Load Error", message: error.localizedDescription)
+                }
             }
             
             DispatchQueue.main.async {
@@ -350,12 +358,18 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
                         // Update an existing record
                         print("Found a successful match result while saving trips")
                         self?.updateExistingTripsRecord(recordToDelete: record.recordID)
+                        
                     case .failure(let error):
-                        print(error)
+                        DispatchQueue.main.async {
+                            self?.displayAlert(title: "iCloud Save Error", message: error.localizedDescription)
+                        }
                     }
                 }
+                
             case .failure(let error):
-                print(error)
+                DispatchQueue.main.async {
+                    self?.displayAlert(title: "iCloud Save Error", message: error.localizedDescription)
+                }
             }
         }
     }
@@ -370,5 +384,12 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         }
     }
     
+    func displayAlert(title: String, message: String) {
+        let ac = UIAlertController(title: title,
+                                   message: message,
+                                   preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
 }
 
