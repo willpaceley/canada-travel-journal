@@ -10,7 +10,7 @@ import UIKit
 import MessageUI
 import CloudKit
 
-class ViewController: UITableViewController, MFMailComposeViewControllerDelegate {
+class ViewController: UITableViewController {
     
     var trips = [Trip]()
     var totalDays: Int {
@@ -43,65 +43,6 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
         navigationItem.leftBarButtonItem = shareButton
         
         tableView.reloadData()
-    }
-    
-    // TODO: Make an extension with all of the delegated methods (overriden)
-    // Google "how to put delegated methods into an extension swift"
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return trips.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Trip", for: indexPath) as! TripViewCell
-        let trip = trips[indexPath.row]
-        
-        cell.countryLabel.text = trip.destination
-        cell.dateLabel.text = format(date: trip.departureDate)
-        cell.daysLabel.text = "\(trip.days) \(trip.days > 1 ? "Days" : "Day")"
-        
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        openTripDetailView(for: trips[indexPath.row])
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let ac = UIAlertController(title: "Delete Trip", message: "Are you sure you want to delete this trip?", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-            ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-                self?.deleteTrip((self?.trips[indexPath.row])!)
-            }))
-            
-            present(ac, animated: true)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if !trips.isEmpty {
-            return "Total days outside of Canada: \(totalDays)"
-        }
-        
-        return nil
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return trips.isEmpty ? "Click the ＋ button to add a new trip!" : nil
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let headerView = view as? UITableViewHeaderFooterView {
-            var config = headerView.defaultContentConfiguration()
-
-            // Must set header text here, otherwise defaultContentConfiguration overrides the current title
-            config.text = "Start tracking your trips outside of Canada by clicking the ＋ button in the top-right."
-            config.textProperties.alignment = .center
-
-            headerView.contentConfiguration = config
-        } else {
-            print("A problem occurred casting view parameter to UITableHeaderFooterView.")
-        }
     }
     
     @objc func refreshTable() {
@@ -166,10 +107,6 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
          
         // Present the view controller modally.
         self.present(composeVC, animated: true, completion: nil)
-    }
-    
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        controller.dismiss(animated: true)
     }
     
     func createCSVContents(with trips: [Trip]) -> String {
@@ -405,3 +342,68 @@ class ViewController: UITableViewController, MFMailComposeViewControllerDelegate
     }
 }
 
+// MARK: Extensions
+extension ViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return trips.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Trip", for: indexPath) as! TripViewCell
+        let trip = trips[indexPath.row]
+        
+        cell.countryLabel.text = trip.destination
+        cell.dateLabel.text = format(date: trip.departureDate)
+        cell.daysLabel.text = "\(trip.days) \(trip.days > 1 ? "Days" : "Day")"
+        
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        openTripDetailView(for: trips[indexPath.row])
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let ac = UIAlertController(title: "Delete Trip", message: "Are you sure you want to delete this trip?", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+                self?.deleteTrip((self?.trips[indexPath.row])!)
+            }))
+            
+            present(ac, animated: true)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        if !trips.isEmpty {
+            return "Total days outside of Canada: \(totalDays)"
+        }
+        
+        return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return trips.isEmpty ? "Click the ＋ button to add a new trip!" : nil
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let headerView = view as? UITableViewHeaderFooterView {
+            var config = headerView.defaultContentConfiguration()
+
+            // Must set header text here, otherwise defaultContentConfiguration overrides the current title
+            config.text = "Start tracking your trips outside of Canada by clicking the ＋ button in the top-right."
+            config.textProperties.alignment = .center
+
+            headerView.contentConfiguration = config
+        } else {
+            print("A problem occurred casting view parameter to UITableHeaderFooterView.")
+        }
+    }
+}
+
+extension ViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+    }
+}

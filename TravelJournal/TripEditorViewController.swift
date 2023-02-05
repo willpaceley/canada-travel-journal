@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+class TripEditorViewController: UIViewController {
     var tripToEdit: Trip?
     var countries = [String]()
     
@@ -70,27 +70,6 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         countries.sort()
     }
     
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return countries.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return countries[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        reasonField.resignFirstResponder()
-        return true
-    }
-    
     @objc func trashButtonPressed() {
         let ac = UIAlertController(title: "Delete Trip", message: "Are you sure you want to delete this trip?", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -146,6 +125,7 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         present(ac, animated: true)
     }
     
+    // MARK: IBActions
     @IBAction func addTripButtonPressed(_ sender: Any) {
         if tripIsValid() {
             let id = UUID().uuidString
@@ -159,13 +139,14 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
             navigationController?.popViewController(animated: true)
         }
     }
-    // TODO: Dismiss picker after user selects a date
+    
     @IBAction func departurePickerValueChanged(_ sender: UIDatePicker) {
         if departurePicker.date > returnPicker.date {
             returnPicker.setDate(departurePicker.date, animated: true)
         }
         
         doneButton?.isEnabled = dataChanged(for: tripToEdit!)
+        dismiss(animated: false)
     }
     
     @IBAction func returnPickerValueChanged(_ sender: UIDatePicker) {
@@ -174,9 +155,36 @@ class TripEditorViewController: UIViewController, UIPickerViewDelegate, UIPicker
         }
         
         doneButton?.isEnabled = dataChanged(for: tripToEdit!)
+        dismiss(animated: false)
     }
     
     @IBAction func reasonPickerValueChanged(_ sender: UITextField) {
         doneButton?.isEnabled = dataChanged(for: tripToEdit!)
+    }
+}
+
+// MARK: Extensions
+extension TripEditorViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return countries.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return countries[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
+    }
+}
+
+extension TripEditorViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        reasonField.resignFirstResponder()
+        return true
     }
 }
