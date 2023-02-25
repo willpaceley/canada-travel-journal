@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import MessageUI
 import CloudKit
 
 class ViewController: UITableViewController {
@@ -151,31 +150,6 @@ class ViewController: UITableViewController {
             saveTripsToiCloud()
         } else {
             print("There was a problem finding the index of the trip to update")
-        }
-    }
-    
-    // MARK: User Defaults
-    func saveTripsToUserDefaults() {
-        let encoder = JSONEncoder()
-        
-        if let encodedData = try? encoder.encode(trips) {
-            let defaults = UserDefaults.standard
-            defaults.set(encodedData, forKey: "travelJournalTrips")
-        } else {
-            print("There was a problem saving trips")
-        }
-    }
-    
-    func loadTripsFromUserDefaults() {
-        let defaults = UserDefaults.standard
-        
-        if let savedTrips = defaults.object(forKey: "travelJournalTrips") as? Data {
-            let decoder = JSONDecoder()
-            do {
-                try trips = decoder.decode([Trip].self, from: savedTrips)
-            } catch {
-                print("An error occurred decoding the trip data")
-            }
         }
     }
     
@@ -396,11 +370,5 @@ extension ViewController {
         } else {
             print("A problem occurred casting view parameter to UITableHeaderFooterView.")
         }
-    }
-}
-
-extension ViewController: MFMailComposeViewControllerDelegate {
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        controller.dismiss(animated: true)
     }
 }
