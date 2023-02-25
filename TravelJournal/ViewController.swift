@@ -86,27 +86,8 @@ class ViewController: UITableViewController {
     }
     
     @objc func shareBarButtonPressed() {
-        if !MFMailComposeViewController.canSendMail() {
-            let ac = UIAlertController(title: "Can't Send Email", message: "Email services are not enabled on your device.", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            present(ac, animated: true)
-            return
-        }
-        
-        let composeVC = MFMailComposeViewController()
-        composeVC.mailComposeDelegate = self
-         
-        // Configure the fields of the interface.
-        composeVC.setSubject("Travel Journal Spreadsheet")
-        composeVC.setMessageBody("Attached is a CSV file containing all of my international trips.", isHTML: false)
-        
-        let csvString = createCSVContents(with: trips)
-        let csvData = csvString.data(using: .utf8)
-        
-        composeVC.addAttachmentData(csvData!, mimeType: "text/csv", fileName: "travel-journal.csv")
-         
-        // Present the view controller modally.
-        self.present(composeVC, animated: true, completion: nil)
+        let contents = createCSVContents(with: trips)
+        shareCSV(using: contents)
     }
     
     func createCSVContents(with trips: [Trip]) -> String {
@@ -120,6 +101,21 @@ class ViewController: UITableViewController {
         }
         
         return contents
+    }
+    
+    func shareCSV(using contents: String) {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileName = documentsDirectory.appendingPathComponent("TravelJournalTrips.csv")
+        
+        do {
+            try contents.write(to: fileName, atomically: true, encoding: .utf8)
+        } catch {
+            print("An error occurred while creating the CSV file.")
+            return
+        }
+        
+        let vc = UIActivityViewController(activityItems: [fileName], applicationActivities: nil)
+        present(vc, animated: true)
     }
     
     func addTrip(_ trip: Trip) {
