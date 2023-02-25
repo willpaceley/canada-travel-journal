@@ -115,6 +115,7 @@ class ViewController: UITableViewController {
         }
         
         let vc = UIActivityViewController(activityItems: [fileName], applicationActivities: nil)
+        vc.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
         present(vc, animated: true)
     }
     
