@@ -17,16 +17,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PSu-OF-9Vo">
-                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <items>
-                                    <navigationItem id="Tdq-e1-wgX"/>
-                                </items>
-                            </navigationBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="tx3-5G-1QT">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="tx3-5G-1QT">
                                 <rect key="frame" x="0.0" y="103" width="393" height="749"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="4u3-Tl-glf">
@@ -39,9 +31,31 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PSu-OF-9Vo">
+                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                                <items>
+                                    <navigationItem id="Tdq-e1-wgX">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="action" id="Jt0-oH-VCU">
+                                            <color key="tintColor" systemColor="systemGray2Color"/>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="NZX-hd-f3S">
+                                            <color key="tintColor" systemColor="systemGray2Color"/>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="PSu-OF-9Vo" firstAttribute="leading" secondItem="tx3-5G-1QT" secondAttribute="leading" id="0CN-IQ-lyB"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="tx3-5G-1QT" secondAttribute="bottom" constant="-34" id="Bjc-0l-CjX"/>
+                            <constraint firstItem="PSu-OF-9Vo" firstAttribute="trailing" secondItem="tx3-5G-1QT" secondAttribute="trailing" id="CiV-t2-Pvk"/>
+                            <constraint firstItem="PSu-OF-9Vo" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Jh7-fo-0ok"/>
+                            <constraint firstItem="tx3-5G-1QT" firstAttribute="top" secondItem="PSu-OF-9Vo" secondAttribute="bottom" id="LyJ-kj-go5"/>
+                            <constraint firstItem="PSu-OF-9Vo" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="QPg-zf-Qxl"/>
+                            <constraint firstItem="PSu-OF-9Vo" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="QfQ-FB-WCB"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -52,6 +66,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
