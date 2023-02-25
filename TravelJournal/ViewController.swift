@@ -248,6 +248,12 @@ class ViewController: UITableViewController {
                 
             case .failure(let error):
                 DispatchQueue.main.async {
+                    if let ckError = error as? CKError {
+                        if ckError.code == .networkUnavailable {
+                            self?.displayAlert(title: "Network Unavailable", message: "The Internet connection appears to be offline.")
+                            return
+                        }
+                    }
                     self?.displayAlert(title: "iCloud Load Error", message: error.localizedDescription)
                 }
             }
@@ -288,6 +294,12 @@ class ViewController: UITableViewController {
                 
             case .failure(let error):
                 DispatchQueue.main.async {
+                    if let ckError = error as? CKError {
+                        if ckError.code == .networkUnavailable {
+                            self?.displayAlert(title: "Network Unavailable", message: "The Internet connection appears to be offline.")
+                            return
+                        }
+                    }
                     self?.displayAlert(title: "iCloud Save Error", message: error.localizedDescription)
                 }
             }
