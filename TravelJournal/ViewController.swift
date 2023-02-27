@@ -11,7 +11,11 @@ import CloudKit
 
 class ViewController: UITableViewController {
     
-    var trips = [Trip]()
+    var trips = [Trip]() {
+        didSet {
+            navigationItem.leftBarButtonItem?.isEnabled = !trips.isEmpty
+        }
+    }
     var totalDays: Int {
         return trips.reduce(0) { $0 + $1.days }
     }
@@ -40,6 +44,7 @@ class ViewController: UITableViewController {
         
         let shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonPressed))
         navigationItem.leftBarButtonItem = shareButton
+        navigationItem.leftBarButtonItem?.isEnabled = false
         
         tableView.reloadData()
     }
