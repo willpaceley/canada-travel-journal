@@ -24,6 +24,7 @@ class ViewController: UITableViewController {
             isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
         }
     }
+    var isLoggedInToiCloud = false
     
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
@@ -50,6 +51,10 @@ class ViewController: UITableViewController {
     }
     
     @objc func refreshTable() {
+        if !isLoggedInToiCloud {
+            getiCloudStatus()
+            return
+        }
         loadTripsFromiCloud()
     }
     
@@ -124,6 +129,11 @@ class ViewController: UITableViewController {
     }
     
     func addTrip(_ trip: Trip) {
+        if !isLoggedInToiCloud {
+            getiCloudStatus()
+            return
+        }
+        
         trips.append(trip)
         saveTripsToiCloud()
         sortByReverseChronological()
@@ -131,6 +141,11 @@ class ViewController: UITableViewController {
     }
     
     func deleteTrip(_ trip: Trip) {
+        if !isLoggedInToiCloud {
+            getiCloudStatus()
+            return
+        }
+        
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)
             
@@ -145,6 +160,11 @@ class ViewController: UITableViewController {
     }
     
     func updateTrip(_ trip: Trip) {
+        if !isLoggedInToiCloud {
+            getiCloudStatus()
+            return
+        }
+        
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips[index] = trip
             
@@ -164,6 +184,8 @@ class ViewController: UITableViewController {
         
         CKContainer.default().accountStatus { [weak self] status, error in
             if let error {
+                self?.isLoggedInToiCloud = false
+                
                 DispatchQueue.main.async {
                     self?.displayAlert(title: "iCloud Status Error", message: error.localizedDescription)
                     self?.isLoading = false
@@ -176,6 +198,7 @@ class ViewController: UITableViewController {
             
             switch status {
             case .available:
+                self?.isLoggedInToiCloud = true
                 self?.loadTripsFromiCloud()
                 return
             case .noAccount:
@@ -186,6 +209,7 @@ class ViewController: UITableViewController {
                 message = "Please ensure you have logged into iCloud and enabled iCloud Drive."
             }
             
+            self?.isLoggedInToiCloud = false
             DispatchQueue.main.async {
                 let ac = UIAlertController(title: title,
                                            message: "\(message) Your trips will not be saved.",
@@ -198,6 +222,7 @@ class ViewController: UITableViewController {
                 ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
                 
                 self?.isLoading = false
+                self?.refreshControl?.endRefreshing()
                 self?.present(ac, animated: true)
             }
         }
@@ -314,8 +339,17 @@ class ViewController: UITableViewController {
             case .failure(let error):
                 DispatchQueue.main.async {
                     if let ckError = error as? CKError {
-                        if ckError.code == .networkUnavailable {
-                            self?.displayAlert(title: "Network Unavailable", message: "The Internet connection appears to be offline.")
+                        switch ckError.code {
+                        case .networkUnavailable:
+                            self?.displayAlert(title: "Network Unavailable",
+                                               message: "The Internet connection appears to be offline.")
+                            return
+                        case .notAuthenticated:
+                            self?.displayAlert(title: "iCloud Drive Not Enabled",
+                                               message: "Please turn on iCloud Drive in the Settings for your device. Your trips will not be saved.")
+                        default:
+                            self?.displayAlert(title: "iCloud Save Error",
+                                               message: "\(error.localizedDescription). CKError Code: \(ckError.code.rawValue)")
                             return
                         }
                     }
