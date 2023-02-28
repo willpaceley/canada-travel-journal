@@ -171,18 +171,32 @@ class ViewController: UITableViewController {
                 return
             }
             
-            if status == .available {
+            var title: String
+            var message: String
+            
+            switch status {
+            case .available:
                 self?.loadTripsFromiCloud()
                 return
+            case .noAccount:
+                title = "No iCloud Account"
+                message = "Please turn on iCloud Drive in the Settings for your device."
+            default:
+                title = "iCloud Status Error"
+                message = "Please ensure you have logged into iCloud and enabled iCloud Drive."
             }
             
             DispatchQueue.main.async {
-                let ac = UIAlertController(title: "Not Logged In To iCloud", message: "Please log in to your iCloud account from your device's settings. Your trips will not be saved.", preferredStyle: .alert)
+                let ac = UIAlertController(title: title,
+                                           message: "\(message) Your trips will not be saved.",
+                                           preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Go To Settings", style: .default, handler: { _ in
                     if let url = URL(string: UIApplication.openSettingsURLString) {
                         UIApplication.shared.open(url)
                     }
                 }))
+                ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                
                 self?.isLoading = false
                 self?.present(ac, animated: true)
             }
