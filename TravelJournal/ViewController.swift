@@ -385,7 +385,17 @@ extension ViewController {
 
             headerView.contentConfiguration = config
         } else {
-            print("A problem occurred casting view parameter to UITableHeaderFooterView.")
+            print("A problem occurred casting header view parameter to UITableHeaderFooterView.")
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        if let footerView = view as? UITableViewHeaderFooterView {
+            var config = footerView.defaultContentConfiguration()
+            config.text = "Total days outside of Canada: \(totalDays)"
+            footerView.contentConfiguration = config
+        } else {
+            print("A problem occurred casting footer view parameter to UITableHeaderFooterView.")
         }
     }
 }
