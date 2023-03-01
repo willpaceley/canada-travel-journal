@@ -66,8 +66,8 @@ class TripEditorViewController: UIViewController {
             countries.append(name)
         }
         
-        // Sort the countries alphabetically
-        countries.sort()
+        // Sort the countries alphabetically, accounting for diacritics in our locale
+        countries.sort { $0.compare($1, locale: NSLocale.current) == .orderedAscending }
     }
     
     @objc func trashButtonPressed() {
