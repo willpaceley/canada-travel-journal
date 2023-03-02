@@ -423,6 +423,10 @@ extension ViewController {
         return trips.isEmpty ? "Click the ＋ button to add a new trip!" : nil
     }
     
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50.0
+    }
+    
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
             var config = headerView.defaultContentConfiguration()
