@@ -434,6 +434,7 @@ extension ViewController {
             // Must set header text here, otherwise defaultContentConfiguration overrides the current title
             config.text = "Start tracking your trips outside of Canada by clicking the ＋ button in the top-right."
             config.textProperties.alignment = .center
+            config.textProperties.numberOfLines = 0
 
             headerView.contentConfiguration = config
         } else {

@@ -16,7 +16,36 @@
 		075E2125296886E000899FC1 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075E2124296886E000899FC1 /* Trip.swift */; };
 		075E212B296A1F3C00899FC1 /* TripEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075E212A296A1F3C00899FC1 /* TripEditorViewController.swift */; };
 		07E828F3296DFDDD0092BF3C /* TripViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E828F2296DFDDD0092BF3C /* TripViewCell.swift */; };
+		BE1729802A82854000D6DBD7 /* WatchTravelJournalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE17297F2A82854000D6DBD7 /* WatchTravelJournalApp.swift */; };
+		BE1729822A82854000D6DBD7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1729812A82854000D6DBD7 /* ContentView.swift */; };
+		BE1729842A82854200D6DBD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE1729832A82854200D6DBD7 /* Assets.xcassets */; };
+		BE1729872A82854200D6DBD7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE1729862A82854200D6DBD7 /* Preview Assets.xcassets */; };
+		BE17298A2A82854200D6DBD7 /* WatchTravelJournal Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = BE17297D2A82853F00D6DBD7 /* WatchTravelJournal Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BE1729882A82854200D6DBD7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 075E21052968829200899FC1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BE17297C2A82853F00D6DBD7;
+			remoteInfo = "WatchTravelJournal Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BE17298B2A82854200D6DBD7 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				BE17298A2A82854200D6DBD7 /* WatchTravelJournal Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0704D3622985C9FA00C5D07A /* TravelJournal.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TravelJournal.entitlements; sourceTree = "<group>"; };
@@ -31,10 +60,22 @@
 		075E2124296886E000899FC1 /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		075E212A296A1F3C00899FC1 /* TripEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripEditorViewController.swift; sourceTree = "<group>"; };
 		07E828F2296DFDDD0092BF3C /* TripViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewCell.swift; sourceTree = "<group>"; };
+		BE17297D2A82853F00D6DBD7 /* WatchTravelJournal Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WatchTravelJournal Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE17297F2A82854000D6DBD7 /* WatchTravelJournalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTravelJournalApp.swift; sourceTree = "<group>"; };
+		BE1729812A82854000D6DBD7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BE1729832A82854200D6DBD7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BE1729862A82854200D6DBD7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		075E210A2968829200899FC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BE17297A2A82853F00D6DBD7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -48,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				075E210F2968829200899FC1 /* TravelJournal */,
+				BE17297E2A82854000D6DBD7 /* WatchTravelJournal Watch App */,
 				075E210E2968829200899FC1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				075E210D2968829200899FC1 /* TravelJournal.app */,
+				BE17297D2A82853F00D6DBD7 /* WatchTravelJournal Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -78,6 +121,25 @@
 			path = TravelJournal;
 			sourceTree = "<group>";
 		};
+		BE17297E2A82854000D6DBD7 /* WatchTravelJournal Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				BE17297F2A82854000D6DBD7 /* WatchTravelJournalApp.swift */,
+				BE1729812A82854000D6DBD7 /* ContentView.swift */,
+				BE1729832A82854200D6DBD7 /* Assets.xcassets */,
+				BE1729852A82854200D6DBD7 /* Preview Content */,
+			);
+			path = "WatchTravelJournal Watch App";
+			sourceTree = "<group>";
+		};
+		BE1729852A82854200D6DBD7 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				BE1729862A82854200D6DBD7 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -88,14 +150,33 @@
 				075E21092968829200899FC1 /* Sources */,
 				075E210A2968829200899FC1 /* Frameworks */,
 				075E210B2968829200899FC1 /* Resources */,
+				BE17298B2A82854200D6DBD7 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BE1729892A82854200D6DBD7 /* PBXTargetDependency */,
+			);
+			name = TravelJournal;
+			productName = TravelJournal;
+			productReference = 075E210D2968829200899FC1 /* TravelJournal.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BE17297C2A82853F00D6DBD7 /* WatchTravelJournal Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BE17298E2A82854200D6DBD7 /* Build configuration list for PBXNativeTarget "WatchTravelJournal Watch App" */;
+			buildPhases = (
+				BE1729792A82853F00D6DBD7 /* Sources */,
+				BE17297A2A82853F00D6DBD7 /* Frameworks */,
+				BE17297B2A82853F00D6DBD7 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = TravelJournal;
-			productName = TravelJournal;
-			productReference = 075E210D2968829200899FC1 /* TravelJournal.app */;
+			name = "WatchTravelJournal Watch App";
+			productName = "WatchTravelJournal Watch App";
+			productReference = BE17297D2A82853F00D6DBD7 /* WatchTravelJournal Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -105,11 +186,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1420;
+				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					075E210C2968829200899FC1 = {
 						CreatedOnToolsVersion = 14.2;
+					};
+					BE17297C2A82853F00D6DBD7 = {
+						CreatedOnToolsVersion = 15.0;
 					};
 				};
 			};
@@ -127,6 +211,7 @@
 			projectRoot = "";
 			targets = (
 				075E210C2968829200899FC1 /* TravelJournal */,
+				BE17297C2A82853F00D6DBD7 /* WatchTravelJournal Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -139,6 +224,15 @@
 				075E211D2968829400899FC1 /* LaunchScreen.storyboard in Resources */,
 				075E211A2968829400899FC1 /* Assets.xcassets in Resources */,
 				075E21182968829200899FC1 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BE17297B2A82853F00D6DBD7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE1729872A82854200D6DBD7 /* Preview Assets.xcassets in Resources */,
+				BE1729842A82854200D6DBD7 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,7 +252,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BE1729792A82853F00D6DBD7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE1729822A82854000D6DBD7 /* ContentView.swift in Sources */,
+				BE1729802A82854000D6DBD7 /* WatchTravelJournalApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BE1729892A82854200D6DBD7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BE17297C2A82853F00D6DBD7 /* WatchTravelJournal Watch App */;
+			targetProxy = BE1729882A82854200D6DBD7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		075E21162968829200899FC1 /* Main.storyboard */ = {
@@ -297,6 +408,7 @@
 		075E21222968829400899FC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TravelJournal/TravelJournal.entitlements;
@@ -332,6 +444,7 @@
 		075E21232968829400899FC1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TravelJournal/TravelJournal.entitlements;
@@ -364,6 +477,77 @@
 			};
 			name = Release;
 		};
+		BE17298C2A82854200D6DBD7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"WatchTravelJournal Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = 64H6U72Q6B;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchTravelJournal;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.willpaceley.TravelJournal;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.willpaceley.TravelJournal.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		BE17298D2A82854200D6DBD7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"WatchTravelJournal Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = 64H6U72Q6B;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchTravelJournal;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.willpaceley.TravelJournal;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.willpaceley.TravelJournal.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -381,6 +565,15 @@
 			buildConfigurations = (
 				075E21222968829400899FC1 /* Debug */,
 				075E21232968829400899FC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BE17298E2A82854200D6DBD7 /* Build configuration list for PBXNativeTarget "WatchTravelJournal Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE17298C2A82854200D6DBD7 /* Debug */,
+				BE17298D2A82854200D6DBD7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
