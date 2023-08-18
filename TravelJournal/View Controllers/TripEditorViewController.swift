@@ -7,18 +7,24 @@
 
 import UIKit
 
+protocol TripEditorViewControllerDelegate: AnyObject {
+    func tripEditorViewControllerDidAdd(_ trip: Trip)
+    func tripEditorViewControllerDidUpdate(_ trip: Trip)
+    func tripEditorViewControllerDidDelete(_ trip: Trip)
+}
+
 class TripEditorViewController: UIViewController {
-    var tripToEdit: Trip?
-    var countries = [String]()
-    
-    weak var delegate: ViewController!
-    
-    var doneButton: UIBarButtonItem?
     @IBOutlet var saveButton: UIButton!
     @IBOutlet var countryPicker: UIPickerView!
     @IBOutlet var reasonField: UITextField!
     @IBOutlet var returnPicker: UIDatePicker!
     @IBOutlet var departurePicker: UIDatePicker!
+    var doneButton: UIBarButtonItem?
+    
+    weak var delegate: TripEditorViewControllerDelegate!
+    
+    var tripToEdit: Trip?
+    var countries = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +83,7 @@ class TripEditorViewController: UIViewController {
             self?.navigationController?.popViewController(animated: true)
         
             let trip = self?.tripToEdit
-            self?.delegate.deleteTrip(trip!)
+            self?.delegate.tripEditorViewControllerDidDelete(trip!)
         }))
         
         present(ac, animated: true)
@@ -89,7 +95,7 @@ class TripEditorViewController: UIViewController {
         tripToEdit?.reason = reasonField.text!
         tripToEdit?.destination = countries[countryPicker.selectedRow(inComponent: 0)]
         
-        delegate.updateTrip(tripToEdit!)
+        delegate.tripEditorViewControllerDidUpdate(tripToEdit!)
         navigationController?.popViewController(animated: true)
     }
     
@@ -134,7 +140,7 @@ class TripEditorViewController: UIViewController {
             let reason = reasonField.text ?? "Unknown reason"
             
             let newTrip = Trip(id: id, departureDate: departurePicker.date, returnDate: returnPicker.date, destination: country, reason: reason)
-            delegate.addTrip(newTrip)
+            delegate.tripEditorViewControllerDidAdd(newTrip)
             
             navigationController?.popViewController(animated: true)
         }

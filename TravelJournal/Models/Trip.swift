@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Trip: Encodable, Decodable {
+struct Trip: Codable {
     let id: String
     
     var departureDate: Date
@@ -15,6 +15,7 @@ struct Trip: Encodable, Decodable {
     var destination: String
     var reason: String
     
+    // TODO: - Check business logic matches IRCC calculator
     var days: Int {
         let components = Calendar.current.dateComponents([.day], from: departureDate, to: returnDate)
         
