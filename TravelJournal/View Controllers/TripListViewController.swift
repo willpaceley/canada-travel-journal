@@ -10,6 +10,7 @@ import CloudKit
 
 class TripListViewController: UITableViewController {
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet var shareButton: UIBarButtonItem!
     
     private let cloudKitManager = CloudKitManager()
     
@@ -32,18 +33,21 @@ class TripListViewController: UITableViewController {
         navigationController?.navigationBar.sizeToFit()
         title = "Canada Travel Journal"
         
-        // Fetch most recent data from iCloud when user pulls down on UITableView
+        // Fetch most recent data when user pulls down on UITableView
         self.refreshControl?.addTarget(self, action: #selector(refreshTable), for: UIControl.Event.valueChanged)
-        
-        let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonPressed))
-        navigationItem.rightBarButtonItem = addBarButton
-        
-        let shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareBarButtonPressed))
-        navigationItem.leftBarButtonItem = shareButton
-        navigationItem.leftBarButtonItem?.isEnabled = false
         
         isLoading = true
         dataModel.loadTrips()
+    }
+    
+    // MARK: - @IBAction and @objc
+    @IBAction func addButtonPressed() {
+        openTripDetailView(for: nil)
+    }
+    
+    @IBAction func shareButtonPressed() {
+        let csv = dataModel.createCSV()
+        shareCSV(csv)
     }
     
     @objc func refreshTable() {
@@ -60,23 +64,16 @@ class TripListViewController: UITableViewController {
         tableView.endUpdates()
     }
     
-    @objc func addBarButtonPressed() {
-        openTripDetailView(for: nil)
-    }
-    
     func openTripDetailView(for trip: Trip?) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "TripEditor") as? TripEditorViewController {
-            if let trip { vc.tripToEdit = trip }
+            if let trip {
+                vc.tripToEdit = trip
+            }
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
         } else {
             print("A problem occurred initializing TripEditorViewController")
         }
-    }
-    
-    @objc func shareBarButtonPressed() {
-        let csv = dataModel.createCSV()
-        shareCSV(csv)
     }
     
     func shareCSV(_ csv: String) {
@@ -91,7 +88,7 @@ class TripListViewController: UITableViewController {
         }
         
         let vc = UIActivityViewController(activityItems: [fileName], applicationActivities: nil)
-        vc.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
+        vc.popoverPresentationController?.barButtonItem = shareButton
         present(vc, animated: true)
     }
     
@@ -191,13 +188,13 @@ extension TripListViewController {
 extension TripListViewController: DataModelDelegate {
     func dataModelDidSaveTrips() {
         // TODO: Update iCloud bar button indicator with complete status
-        navigationItem.leftBarButtonItem?.isEnabled = !dataModel.trips.isEmpty
+        shareButton.isEnabled = !dataModel.trips.isEmpty
         print("dataModelDidSaveTrips() was called.")
     }
     
     func dataModelDidLoadTrips() {
         isLoading = false
-        navigationItem.leftBarButtonItem?.isEnabled = !dataModel.trips.isEmpty
+        shareButton.isEnabled = !dataModel.trips.isEmpty
         tableView.reloadData()
     }
     

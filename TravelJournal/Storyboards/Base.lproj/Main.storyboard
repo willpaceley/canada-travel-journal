@@ -76,13 +76,25 @@
                             <outlet property="delegate" destination="Ovz-4b-Pf9" id="c8q-v8-36V"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Canada Travel Journal" largeTitleDisplayMode="always" id="CQK-J5-w3B"/>
+                    <navigationItem key="navigationItem" title="Canada Travel Journal" id="CQK-J5-w3B">
+                        <barButtonItem key="leftBarButtonItem" enabled="NO" title="Item" image="square.and.arrow.up" catalog="system" id="nQa-BR-Uo7">
+                            <connections>
+                                <action selector="shareButtonPressed" destination="Ovz-4b-Pf9" id="3dZ-RY-1Cc"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="a7h-0E-rRF">
+                            <connections>
+                                <action selector="addButtonPressed" destination="Ovz-4b-Pf9" id="kQz-wg-uEy"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="n8i-wm-09z">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
                     <connections>
                         <outlet property="activityIndicator" destination="wWi-Nq-Deu" id="n1D-sn-T0w"/>
+                        <outlet property="shareButton" destination="nQa-BR-Uo7" id="CPd-hT-J8g"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kdq-DX-MXm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -217,6 +229,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
