@@ -1,5 +1,5 @@
 //
-//  TripEditorViewController.swift
+//  TripDetailViewController.swift
 //  TravelJournal
 //
 //  Created by Will Paceley on 2023-01-07.
@@ -7,13 +7,13 @@
 
 import UIKit
 
-protocol TripEditorViewControllerDelegate: AnyObject {
-    func tripEditorViewControllerDidAdd(_ trip: Trip)
-    func tripEditorViewControllerDidUpdate(_ trip: Trip)
-    func tripEditorViewControllerDidDelete(_ trip: Trip)
+protocol TripDetailViewControllerDelegate: AnyObject {
+    func tripDetailViewControllerDidAdd(_ trip: Trip)
+    func tripDetailViewControllerDidUpdate(_ trip: Trip)
+    func tripDetailViewControllerDidDelete(_ trip: Trip)
 }
 
-class TripEditorViewController: UIViewController {
+class TripDetailViewController: UIViewController {
     @IBOutlet var saveButton: UIButton!
     @IBOutlet var countryPicker: UIPickerView!
     @IBOutlet var reasonField: UITextField!
@@ -21,7 +21,7 @@ class TripEditorViewController: UIViewController {
     @IBOutlet var departurePicker: UIDatePicker!
     var doneButton: UIBarButtonItem?
     
-    weak var delegate: TripEditorViewControllerDelegate!
+    weak var delegate: TripDetailViewControllerDelegate!
     
     var tripToEdit: Trip?
     var countries = [String]()
@@ -80,10 +80,11 @@ class TripEditorViewController: UIViewController {
         let ac = UIAlertController(title: "Delete Trip", message: "Are you sure you want to delete this trip?", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-            self?.navigationController?.popViewController(animated: true)
-        
-            let trip = self?.tripToEdit
-            self?.delegate.tripEditorViewControllerDidDelete(trip!)
+            guard let self else { return }
+            let trip = self.tripToEdit
+            self.delegate.tripDetailViewControllerDidDelete(trip!)
+            
+            self.navigationController?.popViewController(animated: true)
         }))
         
         present(ac, animated: true)
@@ -95,7 +96,7 @@ class TripEditorViewController: UIViewController {
         tripToEdit?.reason = reasonField.text!
         tripToEdit?.destination = countries[countryPicker.selectedRow(inComponent: 0)]
         
-        delegate.tripEditorViewControllerDidUpdate(tripToEdit!)
+        delegate.tripDetailViewControllerDidUpdate(tripToEdit!)
         navigationController?.popViewController(animated: true)
     }
     
@@ -140,7 +141,7 @@ class TripEditorViewController: UIViewController {
             let reason = reasonField.text ?? "Unknown reason"
             
             let newTrip = Trip(id: id, departureDate: departurePicker.date, returnDate: returnPicker.date, destination: country, reason: reason)
-            delegate.tripEditorViewControllerDidAdd(newTrip)
+            delegate.tripDetailViewControllerDidAdd(newTrip)
             
             navigationController?.popViewController(animated: true)
         }
@@ -168,7 +169,7 @@ class TripEditorViewController: UIViewController {
 }
 
 // MARK: Extensions
-extension TripEditorViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension TripDetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -186,7 +187,7 @@ extension TripEditorViewController: UIPickerViewDelegate, UIPickerViewDataSource
     }
 }
 
-extension TripEditorViewController: UITextFieldDelegate {
+extension TripDetailViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         reasonField.resignFirstResponder()
         return true

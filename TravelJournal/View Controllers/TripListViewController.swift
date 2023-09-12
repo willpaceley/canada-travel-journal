@@ -65,14 +65,14 @@ class TripListViewController: UITableViewController {
     }
     
     func openTripDetailView(for trip: Trip?) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "TripEditor") as? TripEditorViewController {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "TripEditor") as? TripDetailViewController {
             if let trip {
                 vc.tripToEdit = trip
             }
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
         } else {
-            print("A problem occurred initializing TripEditorViewController")
+            print("A problem occurred initializing TripDetailViewController")
         }
     }
     
@@ -281,14 +281,14 @@ extension TripListViewController: CloudKitManagerDelegate {
     }
 }
 
-// MARK: - TripEditorViewControllerDelegate
-extension TripListViewController: TripEditorViewControllerDelegate {
-    func tripEditorViewControllerDidAdd(_ trip: Trip) {
+// MARK: - TripDetailViewControllerDelegate
+extension TripListViewController: TripDetailViewControllerDelegate {
+    func tripDetailViewControllerDidAdd(_ trip: Trip) {
         dataModel.add(trip: trip)
         tableView.reloadData()
     }
     
-    func tripEditorViewControllerDidUpdate(_ trip: Trip) {
+    func tripDetailViewControllerDidUpdate(_ trip: Trip) {
         if let index = dataModel.trips.firstIndex(where: {$0.id == trip.id}) {
             dataModel.update(trip: trip)
             let indexPath = IndexPath(row: index, section: 0)
@@ -297,7 +297,7 @@ extension TripListViewController: TripEditorViewControllerDelegate {
         }
     }
     
-    func tripEditorViewControllerDidDelete(_ trip: Trip) {
+    func tripDetailViewControllerDidDelete(_ trip: Trip) {
         if let index = dataModel.trips.firstIndex(where: {$0.id == trip.id}) {
             dataModel.delete(trip: trip)
             let indexPath = IndexPath(row: index, section: 0)
