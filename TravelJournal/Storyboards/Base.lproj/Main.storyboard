@@ -5,15 +5,32 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Image references" minToolsVersion="12.0"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Canada Travel Journal-->
+        <!--Navigation Controller-->
+        <scene sceneID="T1T-35-hXY">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Dg6-F9-obo" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="IKV-VD-POO">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Ovz-4b-Pf9" kind="relationship" relationship="rootViewController" id="BW9-Qn-zHa"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tcQ-Yp-Uc8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="116.79389312977099" y="-38.028169014084511"/>
+        </scene>
+        <!--Trip List-->
         <scene sceneID="SWr-Xm-P1V">
             <objects>
-                <tableViewController id="Ovz-4b-Pf9" customClass="TripListViewController" customModule="TravelJournal" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Ovz-4b-Pf9" userLabel="Trip List" customClass="TripListViewController" customModule="TravelJournal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="4Ng-zQ-GK1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -85,7 +102,6 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="a7h-0E-rRF">
                             <connections>
-                                <action selector="addButtonPressed" destination="Ovz-4b-Pf9" id="kQz-wg-uEy"/>
                                 <segue destination="mer-2w-ESy" kind="show" id="LUv-IY-JWL"/>
                             </connections>
                         </barButtonItem>
@@ -97,124 +113,17 @@
                     <connections>
                         <outlet property="activityIndicator" destination="wWi-Nq-Deu" id="n1D-sn-T0w"/>
                         <outlet property="shareButton" destination="nQa-BR-Uo7" id="CPd-hT-J8g"/>
+                        <segue destination="mer-2w-ESy" kind="show" identifier="EditTrip" id="7VW-NE-1od"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kdq-DX-MXm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="969" y="-38"/>
         </scene>
-        <!--Trip Detail View Controller-->
-        <scene sceneID="4sy-b4-F08">
-            <objects>
-                <viewController storyboardIdentifier="TripEditor" id="xbR-Ma-G6D" customClass="TripDetailViewController" customModule="TravelJournal" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="xcB-Kp-WcL">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Bom-Gm-OT8">
-                                <rect key="frame" x="12" y="40" width="351" height="511"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MAm-W8-Rvb">
-                                        <rect key="frame" x="0.0" y="0.0" width="351" height="50"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Depart Canada" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OCB-hW-fv5">
-                                                <rect key="frame" x="0.0" y="0.0" width="114.5" height="50"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="0fq-Xi-xRe">
-                                                <rect key="frame" x="114.5" y="0.0" width="236.5" height="50"/>
-                                                <connections>
-                                                    <action selector="departurePickerValueChanged:" destination="xbR-Ma-G6D" eventType="valueChanged" id="Ejh-Dh-5WY"/>
-                                                </connections>
-                                            </datePicker>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K9N-Fp-vaD">
-                                        <rect key="frame" x="0.0" y="65" width="351" height="59.5"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Return to Canada" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DYb-rw-CQz">
-                                                <rect key="frame" x="0.0" y="0.0" width="133" height="59.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="mJU-GA-gRt">
-                                                <rect key="frame" x="133" y="0.0" width="218" height="59.5"/>
-                                                <connections>
-                                                    <action selector="returnPickerValueChanged:" destination="xbR-Ma-G6D" eventType="valueChanged" id="3bv-Yb-faF"/>
-                                                </connections>
-                                            </datePicker>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="dxo-9P-FI6">
-                                        <rect key="frame" x="0.0" y="139.5" width="351" height="62.5"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reason" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Mz-rL-NOn">
-                                                <rect key="frame" x="0.0" y="0.0" width="351" height="20.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Vacation, work, family, etc." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="8Mr-PB-ATd">
-                                                <rect key="frame" x="0.0" y="28.5" width="351" height="34"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
-                                                <connections>
-                                                    <action selector="reasonPickerValueChanged:" destination="xbR-Ma-G6D" eventType="editingDidEnd" id="UvM-S1-rNa"/>
-                                                </connections>
-                                            </textField>
-                                        </subviews>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="zhC-al-hSo">
-                                        <rect key="frame" x="0.0" y="217" width="351" height="244.5"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Destination" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="osB-NL-Gq8">
-                                                <rect key="frame" x="0.0" y="0.0" width="351" height="20.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rr8-wX-kG9">
-                                                <rect key="frame" x="0.0" y="28.5" width="351" height="216"/>
-                                            </pickerView>
-                                        </subviews>
-                                    </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yac-Af-Nsi" userLabel="Add Trip Button">
-                                        <rect key="frame" x="0.0" y="476.5" width="351" height="34.5"/>
-                                        <buttonConfiguration key="configuration" style="filled" title="Add Trip"/>
-                                        <connections>
-                                            <action selector="addTripButtonPressed:" destination="xbR-Ma-G6D" eventType="touchUpInside" id="6Vi-BN-F9W"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="PjN-Ni-H9X"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="Bom-Gm-OT8" firstAttribute="leading" secondItem="PjN-Ni-H9X" secondAttribute="leading" constant="12" id="7QN-FY-hVU"/>
-                            <constraint firstItem="Bom-Gm-OT8" firstAttribute="centerX" secondItem="PjN-Ni-H9X" secondAttribute="centerX" id="XpI-ah-Ryu"/>
-                            <constraint firstItem="Bom-Gm-OT8" firstAttribute="top" secondItem="PjN-Ni-H9X" secondAttribute="top" constant="20" id="a7G-IL-0zt"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="countryPicker" destination="rr8-wX-kG9" id="VnR-E2-Ona"/>
-                        <outlet property="departurePicker" destination="0fq-Xi-xRe" id="S63-J4-RTp"/>
-                        <outlet property="reasonField" destination="8Mr-PB-ATd" id="qJv-eO-KsA"/>
-                        <outlet property="returnPicker" destination="mJU-GA-gRt" id="awA-fH-RC6"/>
-                        <outlet property="saveButton" destination="yac-Af-Nsi" id="YyI-w4-ebs"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mdt-9x-KdG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1822" y="675"/>
-        </scene>
-        <!--Add Trip-->
+        <!--Trip Detail-->
         <scene sceneID="Vpk-eu-ujY">
             <objects>
-                <tableViewController id="mer-2w-ESy" sceneMemberID="viewController">
+                <tableViewController id="mer-2w-ESy" userLabel="Trip Detail" customClass="TripDetailViewController" customModule="TravelJournal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="2rc-6W-tah">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -234,6 +143,9 @@
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="150" id="CoA-ww-zEp"/>
                                                     </constraints>
+                                                    <connections>
+                                                        <action selector="departurePickerValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="zWQ-D2-I8g"/>
+                                                    </connections>
                                                 </datePicker>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Depart Canada" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4NL-Ao-8Te">
                                                     <rect key="frame" x="16" y="19" width="150" height="21"/>
@@ -268,6 +180,9 @@
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="150" id="qF9-yJ-iAl"/>
                                                     </constraints>
+                                                    <connections>
+                                                        <action selector="returnPickerValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="My0-NY-Mpl"/>
+                                                    </connections>
                                                 </datePicker>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Return to Canada" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bpd-94-L7K">
                                                     <rect key="frame" x="16" y="19" width="150" height="21"/>
@@ -305,6 +220,9 @@
                                                     <rect key="frame" x="16" y="16" width="343" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="reasonPickerValueChanged:" destination="mer-2w-ESy" eventType="editingDidEnd" id="Rh3-YD-Ucc"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -359,6 +277,9 @@
                                                     </constraints>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="tinted" title="Add Trip"/>
+                                                    <connections>
+                                                        <action selector="addTripButtonPressed:" destination="mer-2w-ESy" eventType="touchUpInside" id="42H-Z1-cgs"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -380,30 +301,22 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Add Trip" id="xdp-j0-lZF"/>
+                    <connections>
+                        <outlet property="countryField" destination="LFG-A0-sDB" id="qPn-jb-PbP"/>
+                        <outlet property="departurePicker" destination="b1o-78-IN0" id="rMV-gd-ToK"/>
+                        <outlet property="reasonField" destination="Eh9-je-tzA" id="2Pt-1u-lyb"/>
+                        <outlet property="returnPicker" destination="iFV-Ze-C0X" id="Jn0-L4-6pY"/>
+                        <outlet property="saveButton" destination="TvU-1A-4Ja" id="EeV-eI-uzJ"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fWa-zB-uZD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1800.8" y="-38.23088455772114"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="T1T-35-hXY">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Dg6-F9-obo" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="IKV-VD-POO">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Ovz-4b-Pf9" kind="relationship" relationship="rootViewController" id="BW9-Qn-zHa"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tcQ-Yp-Uc8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="116.79389312977099" y="-38.028169014084511"/>
-        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="7VW-NE-1od"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>

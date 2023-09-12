@@ -13,9 +13,9 @@ protocol TripDetailViewControllerDelegate: AnyObject {
     func tripDetailViewControllerDidDelete(_ trip: Trip)
 }
 
-class TripDetailViewController: UIViewController {
+class TripDetailViewController: UITableViewController {
     @IBOutlet var saveButton: UIButton!
-    @IBOutlet var countryPicker: UIPickerView!
+    @IBOutlet var countryField: UITextField!
     @IBOutlet var reasonField: UITextField!
     @IBOutlet var returnPicker: UIDatePicker!
     @IBOutlet var departurePicker: UIDatePicker!
@@ -34,8 +34,6 @@ class TripDetailViewController: UIViewController {
         populateCountries()
         
         // Set the view controller delegates
-        countryPicker.delegate = self
-        countryPicker.dataSource = self
         reasonField.delegate = self
         
         if let trip = tripToEdit {
@@ -45,12 +43,7 @@ class TripDetailViewController: UIViewController {
             departurePicker.date = trip.departureDate
             returnPicker.date = trip.returnDate
             reasonField.text = trip.reason
-            
-            if let countryIndex = countries.firstIndex(of: trip.destination) {
-                countryPicker.selectRow(countryIndex, inComponent: 0, animated: true)
-            } else {
-                print("Could not find specified country from tripToEdit in countries array.")
-            }
+            countryField.text = trip.destination
             
             // Add navigation bar buttons for update and delete operations
             doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
@@ -94,7 +87,7 @@ class TripDetailViewController: UIViewController {
         tripToEdit?.departureDate = departurePicker.date
         tripToEdit?.returnDate = returnPicker.date
         tripToEdit?.reason = reasonField.text!
-        tripToEdit?.destination = countries[countryPicker.selectedRow(inComponent: 0)]
+        tripToEdit?.destination = countryField.text!
         
         delegate.tripDetailViewControllerDidUpdate(tripToEdit!)
         navigationController?.popViewController(animated: true)
@@ -121,7 +114,7 @@ class TripDetailViewController: UIViewController {
         let departureChanged = departurePicker.date != trip.departureDate
         let returnChanged = returnPicker.date != trip.returnDate
         let reasonChanged = reasonField.text! != trip.reason
-        let destinationChanged = countries[countryPicker.selectedRow(inComponent: 0)] != trip.destination
+        let destinationChanged = countryField.text! != trip.destination
         
         return departureChanged || returnChanged || reasonChanged || destinationChanged
     }
@@ -136,8 +129,8 @@ class TripDetailViewController: UIViewController {
     @IBAction func addTripButtonPressed(_ sender: Any) {
         if tripIsValid() {
             let id = UUID().uuidString
-            let countryIndex = countryPicker.selectedRow(inComponent: 0)
-            let country = countries[countryIndex]
+            // TODO: Improve type safety
+            let country = countryField.text ?? "Unknown country"
             let reason = reasonField.text ?? "Unknown reason"
             
             let newTrip = Trip(id: id, departureDate: departurePicker.date, returnDate: returnPicker.date, destination: country, reason: reason)
@@ -168,28 +161,10 @@ class TripDetailViewController: UIViewController {
     }
 }
 
-// MARK: Extensions
-extension TripDetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return countries.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return countries[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
-    }
-}
-
+// MARK: - UITextFieldDelegate
 extension TripDetailViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        reasonField.resignFirstResponder()
+        textField.resignFirstResponder()
         return true
     }
 }

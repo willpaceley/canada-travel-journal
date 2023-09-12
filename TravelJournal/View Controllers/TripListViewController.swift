@@ -41,10 +41,6 @@ class TripListViewController: UITableViewController {
     }
     
     // MARK: - @IBAction and @objc
-    @IBAction func addButtonPressed() {
-        openTripDetailView(for: nil)
-    }
-    
     @IBAction func shareButtonPressed() {
         let csv = dataModel.createCSV()
         shareCSV(csv)
@@ -54,6 +50,18 @@ class TripListViewController: UITableViewController {
         dataModel.loadTrips()
     }
     
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! TripDetailViewController
+        vc.delegate = self
+        
+        if segue.identifier == editTripSegueId {
+            let tripToEdit = sender as? Trip
+            vc.tripToEdit = tripToEdit
+        }
+    }
+    
+    // MARK: - UI Updates
     func reloadFooter() {
         tableView.beginUpdates()
         
@@ -62,18 +70,6 @@ class TripListViewController: UITableViewController {
         tableView.footerView(forSection: 0)?.contentConfiguration = contentConfig
         
         tableView.endUpdates()
-    }
-    
-    func openTripDetailView(for trip: Trip?) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "TripEditor") as? TripDetailViewController {
-            if let trip {
-                vc.tripToEdit = trip
-            }
-            vc.delegate = self
-            navigationController?.pushViewController(vc, animated: true)
-        } else {
-            print("A problem occurred initializing TripDetailViewController")
-        }
     }
     
     func shareCSV(_ csv: String) {
@@ -123,7 +119,8 @@ extension TripListViewController {
 extension TripListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let trip = dataModel.trips[indexPath.row]
-        openTripDetailView(for: trip)
+        performSegue(withIdentifier: editTripSegueId, sender: trip)
+//        openTripDetailView(for: trip)
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

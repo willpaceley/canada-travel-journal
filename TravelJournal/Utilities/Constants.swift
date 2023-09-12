@@ -7,6 +7,10 @@
 
 import Foundation
 
+// MARK: CloudKit
 let tripsRecordType = "Trips"
 let tripDataKey = "tripData"
 
+// MARK: Segues
+let addTripSegueId = "AddTrip"
+let editTripSegueId = "EditTrip"
