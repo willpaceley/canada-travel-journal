@@ -36,6 +36,11 @@ class CloudKitManager {
                 return
             }
             
+            // Return if the CKAccountStatus hasn't changed
+            guard self.accountStatus != status else {
+                return
+            }
+            
             self.accountStatus = status
             DispatchQueue.main.async {
                 self.delegate.cloudKitManager(accountStatusChanged: status)
