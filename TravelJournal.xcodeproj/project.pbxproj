@@ -19,6 +19,8 @@
 		BE5A2E652AA75B2F0064CDDC /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E642AA75B2F0064CDDC /* DataModel.swift */; };
 		BE5A2E692AAA47BA0064CDDC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E682AAA47BA0064CDDC /* Constants.swift */; };
 		BE5A2E6E2AAEA1990064CDDC /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */; };
+		BE90DA242AB347AC005D3450 /* CountrySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */; };
+		BE90DA262AB3490D005D3450 /* Countries.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA252AB3490D005D3450 /* Countries.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +52,8 @@
 		BE5A2E642AA75B2F0064CDDC /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		BE5A2E682AAA47BA0064CDDC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
+		BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountrySearchViewController.swift; sourceTree = "<group>"; };
+		BE90DA252AB3490D005D3450 /* Countries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Countries.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,7 @@
 				BE5A2E6F2AAEA5F80064CDDC /* Managers */,
 				BE5A2E6C2AAEA1850064CDDC /* Extensions */,
 				BE5A2E682AAA47BA0064CDDC /* Constants.swift */,
+				BE90DA252AB3490D005D3450 /* Countries.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			children = (
 				075E21142968829200899FC1 /* TripListViewController.swift */,
 				075E212A296A1F3C00899FC1 /* TripDetailViewController.swift */,
+				BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -234,8 +240,10 @@
 				BE1729912A828CAA00D6DBD7 /* CloudKitManager.swift in Sources */,
 				BE5A2E652AA75B2F0064CDDC /* DataModel.swift in Sources */,
 				075E212B296A1F3C00899FC1 /* TripDetailViewController.swift in Sources */,
+				BE90DA242AB347AC005D3450 /* CountrySearchViewController.swift in Sources */,
 				07E828F3296DFDDD0092BF3C /* TripViewCell.swift in Sources */,
 				BE5A2E692AAA47BA0064CDDC /* Constants.swift in Sources */,
+				BE90DA262AB3490D005D3450 /* Countries.swift in Sources */,
 				BE5A2E6E2AAEA1990064CDDC /* Date+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -4,7 +4,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -207,10 +206,34 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="Destination" id="t5L-AC-H8g">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="PJ6-pv-wav" style="IBUITableViewCellStyleDefault" id="dA9-HE-41b">
+                                        <rect key="frame" x="0.0" y="229.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dA9-HE-41b" id="3kF-tJ-kVf">
+                                            <rect key="frame" x="0.0" y="0.0" width="348.5" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Country" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PJ6-pv-wav">
+                                                    <rect key="frame" x="16" y="0.0" width="324.5" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="XGU-de-hWX" kind="show" identifier="PickCountry" id="D24-b7-AmS"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                             <tableViewSection headerTitle="Reason For Travel" id="X2S-oh-LOw">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="bai-Nz-Cuy">
-                                        <rect key="frame" x="0.0" y="229.5" width="375" height="66"/>
+                                        <rect key="frame" x="0.0" y="329.5" width="375" height="66"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bai-Nz-Cuy" id="gAc-BY-IWu">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="66"/>
@@ -235,36 +258,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Destination" id="t5L-AC-H8g">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="dA9-HE-41b">
-                                        <rect key="frame" x="0.0" y="351.5" width="375" height="66"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dA9-HE-41b" id="3kF-tJ-kVf">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="66"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter a country" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LFG-A0-sDB">
-                                                    <rect key="frame" x="16" y="16" width="343" height="34"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                    <imageReference key="background" image="magnifyingglass" catalog="system" symbolScale="large"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="LFG-A0-sDB" firstAttribute="top" secondItem="3kF-tJ-kVf" secondAttribute="top" constant="16" id="LOT-Vy-zEO"/>
-                                                <constraint firstItem="LFG-A0-sDB" firstAttribute="leading" secondItem="3kF-tJ-kVf" secondAttribute="leading" constant="16" id="TT3-uG-Tex"/>
-                                                <constraint firstAttribute="trailing" secondItem="LFG-A0-sDB" secondAttribute="trailing" constant="16" id="XBO-s1-d7V"/>
-                                                <constraint firstAttribute="bottom" secondItem="LFG-A0-sDB" secondAttribute="bottom" constant="16" id="jOw-uo-Rnv"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                            <tableViewSection id="RpT-Rw-B9c">
+                            <tableViewSection id="RpT-Rw-B9c" userLabel="Add Trip">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="PVX-u4-NFi">
-                                        <rect key="frame" x="0.0" y="453.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="431.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PVX-u4-NFi" id="cc8-wf-EQg">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -302,7 +299,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Add Trip" id="xdp-j0-lZF"/>
                     <connections>
-                        <outlet property="countryField" destination="LFG-A0-sDB" id="qPn-jb-PbP"/>
+                        <outlet property="countryLabel" destination="PJ6-pv-wav" id="GkL-3P-D3y"/>
                         <outlet property="departurePicker" destination="b1o-78-IN0" id="rMV-gd-ToK"/>
                         <outlet property="reasonField" destination="Eh9-je-tzA" id="2Pt-1u-lyb"/>
                         <outlet property="returnPicker" destination="iFV-Ze-C0X" id="Jn0-L4-6pY"/>
@@ -313,12 +310,49 @@
             </objects>
             <point key="canvasLocation" x="1800.8" y="-38.23088455772114"/>
         </scene>
+        <!--Country Search-->
+        <scene sceneID="lbC-c6-8Fz">
+            <objects>
+                <tableViewController id="XGU-de-hWX" userLabel="Country Search" customClass="CountrySearchViewController" customModule="TravelJournal" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="fSD-KJ-tWb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CountryCell" textLabel="10z-mi-Hu6" style="IBUITableViewCellStyleDefault" id="oI5-U8-pPy">
+                                <rect key="frame" x="0.0" y="50" width="375" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oI5-U8-pPy" id="4Kg-lC-5LX">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Country" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="10z-mi-Hu6">
+                                            <rect key="frame" x="16" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="XGU-de-hWX" id="tUv-lv-28J"/>
+                            <outlet property="delegate" destination="XGU-de-hWX" id="bJK-K8-add"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="vhr-zQ-2Aw"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bdJ-gZ-Rqj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2617" y="-38"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="7VW-NE-1od"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

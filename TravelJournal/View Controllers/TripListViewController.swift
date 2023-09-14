@@ -247,10 +247,7 @@ extension TripListViewController: CloudKitManagerDelegate {
         switch accountStatus {
         case .available:
             print("iCloud account is available. User is logged in.")
-            // Don't send another request if already querying CloudKit
-            if !isLoading {
-                dataModel.loadTrips()
-            }
+            dataModel.loadTrips()
             return
         case .noAccount:
             alert = (

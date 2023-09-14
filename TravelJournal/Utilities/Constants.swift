@@ -14,3 +14,7 @@ let tripDataKey = "tripData"
 // MARK: Segues
 let addTripSegueId = "AddTrip"
 let editTripSegueId = "EditTrip"
+let pickCountrySegueId = "PickCountry"
+
+// MARK: Prototype Cells
+let countryCell = "CountryCell"
