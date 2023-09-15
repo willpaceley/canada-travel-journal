@@ -182,6 +182,7 @@ extension TripDetailViewController: CountrySearchViewControllerDelegate {
     func countrySearchViewController(didPick country: String) {
         countryLabel.text = country
         selectedCountry = country
+        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
         navigationController?.popViewController(animated: true)
     }
 }
