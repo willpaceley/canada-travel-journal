@@ -24,14 +24,12 @@ class TripDetailViewController: UITableViewController {
     weak var delegate: TripDetailViewControllerDelegate!
     
     var tripToEdit: Trip?
-    var countries = [String]()
+    var selectedCountry: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.largeTitleDisplayMode = .never
-        
-        populateCountries()
         
         // Set the view controller delegates
         reasonField.delegate = self
@@ -44,6 +42,7 @@ class TripDetailViewController: UITableViewController {
             returnPicker.date = trip.returnDate
             reasonField.text = trip.reason
             countryLabel.text = trip.destination
+            selectedCountry = trip.destination
             
             // Add navigation bar buttons for update and delete operations
             doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
@@ -53,20 +52,6 @@ class TripDetailViewController: UITableViewController {
         } else {
             title = "Add New Trip"
         }
-    }
-    
-    func populateCountries() {
-        // Method to populate country array using NSLocale.isoCountryCodes by Amir Sk on Stack Overflow
-        // Link: https://stackoverflow.com/questions/27875463/how-do-i-get-a-list-of-countries-in-swift-ios
-        
-        for code in NSLocale.isoCountryCodes  {
-            let id = NSLocale.localeIdentifier(fromComponents: [NSLocale.Key.countryCode.rawValue: code])
-            let name = NSLocale(localeIdentifier: "en_CA").displayName(forKey: NSLocale.Key.identifier, value: id) ?? "Country not found for code: \(code)"
-            countries.append(name)
-        }
-        
-        // Sort the countries alphabetically, accounting for diacritics in our locale
-        countries.sort { $0.compare($1, locale: NSLocale.current) == .orderedAscending }
     }
     
     @objc func trashButtonPressed() {
@@ -130,7 +115,10 @@ class TripDetailViewController: UITableViewController {
         if segue.identifier == pickCountrySegueId {
             let vc = segue.destination as! CountrySearchViewController
             vc.delegate = self
-            // TODO: If there's a country selected, select it here?
+            
+            if let selectedCountry {
+                vc.selectedCountry = selectedCountry
+            }
         }
     }
     
@@ -193,6 +181,7 @@ extension TripDetailViewController: UITextFieldDelegate {
 extension TripDetailViewController: CountrySearchViewControllerDelegate {
     func countrySearchViewController(didPick country: String) {
         countryLabel.text = country
+        selectedCountry = country
         navigationController?.popViewController(animated: true)
     }
 }

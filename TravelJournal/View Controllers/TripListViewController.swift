@@ -35,9 +35,6 @@ class TripListViewController: UITableViewController {
         
         // Fetch most recent data when user pulls down on UITableView
         self.refreshControl?.addTarget(self, action: #selector(refreshTable), for: UIControl.Event.valueChanged)
-        
-        isLoading = true
-        dataModel.loadTrips()
     }
     
     // MARK: - @IBAction and @objc
@@ -247,6 +244,7 @@ extension TripListViewController: CloudKitManagerDelegate {
         switch accountStatus {
         case .available:
             print("iCloud account is available. User is logged in.")
+            isLoading = true
             dataModel.loadTrips()
             return
         case .noAccount:

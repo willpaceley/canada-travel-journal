@@ -14,8 +14,9 @@ protocol CountrySearchViewControllerDelegate: AnyObject {
 class CountrySearchViewController: UITableViewController {
     weak var delegate: CountrySearchViewControllerDelegate!
     
-    let countries = Countries.all()
+    var countries = Countries.all()
     var selectedCountry: String?
+    var searchString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +27,16 @@ class CountrySearchViewController: UITableViewController {
         searchController.searchBar.placeholder = "Search for a country"
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
+        
+        // If a country is selected, automatically scroll to that row on load
+        if let selectedCountry, let index = countries.firstIndex(of: selectedCountry) {
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
     }
 }
 
-// MARK: UITableView Delegate
+// MARK: UITableView Data Source
 extension CountrySearchViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return countries.count
@@ -39,14 +46,18 @@ extension CountrySearchViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: countryCell, for: indexPath)
         
         var contentConfiguration = cell.defaultContentConfiguration()
-        contentConfiguration.text = countries[indexPath.row]
+        let country = countries[indexPath.row]
+        let attributedCountry = country.boldFirstNCharacters(n: searchString.count)
+        contentConfiguration.attributedText = attributedCountry
         cell.contentConfiguration = contentConfiguration
+        cell.accessibilityLabel = country
+        cell.accessoryType = selectedCountry == country ? .checkmark : .none
         
         return cell
     }
 }
 
-// MARK: UITableView Data Source
+// MARK: UITableViewDelegate
 extension CountrySearchViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let country = countries[indexPath.row]
@@ -58,6 +69,18 @@ extension CountrySearchViewController {
 extension CountrySearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else { return }
-        print(text)
+        searchString = text
+        
+        let allCountries = Countries.all()
+        if !text.isEmpty {
+            let matchedCountries = allCountries.filter {
+                $0.localizedLowercase.starts(with: text.localizedLowercase)
+            }
+            countries = matchedCountries
+        } else {
+            countries = allCountries
+        }
+        
+        tableView.reloadData()
     }
 }
