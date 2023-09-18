@@ -34,6 +34,20 @@ class TripDetailViewController: UITableViewController {
         // Set the view controller delegates
         reasonField.delegate = self
         
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(adjustForKeyboard),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(adjustForKeyboard),
+            name: UIResponder.keyboardWillChangeFrameNotification,
+            object: nil
+        )
+        
         if let trip = tripToEdit {
             title = "Edit Trip"
             saveButton.isHidden = true
@@ -76,6 +90,28 @@ class TripDetailViewController: UITableViewController {
         
         delegate.tripDetailViewControllerDidUpdate(tripToEdit!)
         navigationController?.popViewController(animated: true)
+    }
+    
+    // adjustForKeyboard(notification:) code authored by Paul Hudson
+    // https://www.hackingwithswift.com/example-code/uikit/how-to-adjust-a-uiscrollview-to-fit-the-keyboard
+    @objc func adjustForKeyboard(notification: Notification) {
+        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+        let keyboardScreenEndFrame = keyboardValue.cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+
+        if notification.name == UIResponder.keyboardWillHideNotification {
+            tableView.contentInset = .zero
+        } else {
+            tableView.contentInset = UIEdgeInsets(
+                top: 0,
+                left: 0,
+                bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom,
+                right: 0
+            )
+        }
+
+        tableView.scrollIndicatorInsets = tableView.contentInset
     }
     
     func tripIsValid() -> Bool {

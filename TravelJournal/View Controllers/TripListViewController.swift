@@ -117,7 +117,6 @@ extension TripListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let trip = dataModel.trips[indexPath.row]
         performSegue(withIdentifier: editTripSegueId, sender: trip)
-//        openTripDetailView(for: trip)
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
