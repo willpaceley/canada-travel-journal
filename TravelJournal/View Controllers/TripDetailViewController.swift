@@ -19,7 +19,7 @@ class TripDetailViewController: UITableViewController {
     @IBOutlet var reasonField: UITextField!
     @IBOutlet var returnPicker: UIDatePicker!
     @IBOutlet var departurePicker: UIDatePicker!
-    var doneButton: UIBarButtonItem?
+    @IBOutlet var doneButton: UIBarButtonItem!
     
     weak var delegate: TripDetailViewControllerDelegate!
     
@@ -57,39 +57,10 @@ class TripDetailViewController: UITableViewController {
             reasonField.text = trip.reason
             countryLabel.text = trip.destination
             selectedCountry = trip.destination
-            
-            // Add navigation bar buttons for update and delete operations
-            doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
-            doneButton?.isEnabled = false
-            let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(trashButtonPressed))
-            navigationItem.rightBarButtonItems = [doneButton!, deleteButton]
         } else {
             title = "Add New Trip"
+            navigationItem.rightBarButtonItems = nil
         }
-    }
-    
-    @objc func trashButtonPressed() {
-        let ac = UIAlertController(title: "Delete Trip", message: "Are you sure you want to delete this trip?", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-            guard let self else { return }
-            let trip = self.tripToEdit
-            self.delegate.tripDetailViewControllerDidDelete(trip!)
-            
-            self.navigationController?.popViewController(animated: true)
-        }))
-        
-        present(ac, animated: true)
-    }
-    
-    @objc func doneButtonPressed() {
-        tripToEdit?.departureDate = departurePicker.date
-        tripToEdit?.returnDate = returnPicker.date
-        tripToEdit?.reason = reasonField.text!
-        tripToEdit?.destination = countryLabel.text!
-        
-        delegate.tripDetailViewControllerDidUpdate(tripToEdit!)
-        navigationController?.popViewController(animated: true)
     }
     
     // adjustForKeyboard(notification:) code authored by Paul Hudson
@@ -171,6 +142,30 @@ class TripDetailViewController: UITableViewController {
             
             navigationController?.popViewController(animated: true)
         }
+    }
+    
+    @IBAction func doneButtonPressed() {
+        tripToEdit?.departureDate = departurePicker.date
+        tripToEdit?.returnDate = returnPicker.date
+        tripToEdit?.reason = reasonField.text!
+        tripToEdit?.destination = countryLabel.text!
+        
+        delegate.tripDetailViewControllerDidUpdate(tripToEdit!)
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func trashButtonPressed() {
+        let ac = UIAlertController(title: "Delete Trip", message: "Are you sure you want to delete this trip?", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+            guard let self else { return }
+            let trip = self.tripToEdit
+            self.delegate.tripDetailViewControllerDidDelete(trip!)
+            
+            self.navigationController?.popViewController(animated: true)
+        }))
+        
+        present(ac, animated: true)
     }
     
     @IBAction func departurePickerValueChanged(_ sender: UIDatePicker) {

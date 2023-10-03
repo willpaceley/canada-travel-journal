@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Dg6-F9-obo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Dg6-F9-obo">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -297,10 +297,24 @@
                             <outlet property="delegate" destination="mer-2w-ESy" id="5Dm-Al-G5v"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Add Trip" id="xdp-j0-lZF"/>
+                    <navigationItem key="navigationItem" title="Add Trip" id="xdp-j0-lZF">
+                        <rightBarButtonItems>
+                            <barButtonItem enabled="NO" systemItem="done" id="ggf-fH-Rvi">
+                                <connections>
+                                    <action selector="doneButtonPressed" destination="mer-2w-ESy" id="LuB-uH-6xq"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="trash" id="0Wa-yq-wju">
+                                <connections>
+                                    <action selector="trashButtonPressed" destination="mer-2w-ESy" id="k2S-qO-P86"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
                     <connections>
                         <outlet property="countryLabel" destination="PJ6-pv-wav" id="GkL-3P-D3y"/>
                         <outlet property="departurePicker" destination="b1o-78-IN0" id="rMV-gd-ToK"/>
+                        <outlet property="doneButton" destination="ggf-fH-Rvi" id="qFI-bZ-E4z"/>
                         <outlet property="reasonField" destination="Eh9-je-tzA" id="2Pt-1u-lyb"/>
                         <outlet property="returnPicker" destination="iFV-Ze-C0X" id="Jn0-L4-6pY"/>
                         <outlet property="saveButton" destination="TvU-1A-4Ja" id="EeV-eI-uzJ"/>
@@ -353,7 +367,7 @@
         <segue reference="7VW-NE-1od"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
+        <image name="square.and.arrow.up" catalog="system" width="108" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
