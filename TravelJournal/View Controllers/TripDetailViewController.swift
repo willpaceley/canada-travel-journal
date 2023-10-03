@@ -24,7 +24,6 @@ class TripDetailViewController: UITableViewController {
     weak var delegate: TripDetailViewControllerDelegate!
     
     var tripToEdit: Trip?
-    var selectedCountry: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +40,6 @@ class TripDetailViewController: UITableViewController {
             returnPicker.date = trip.returnDate
             reasonField.text = trip.reason
             countryLabel.text = trip.destination
-            selectedCountry = trip.destination
         } else {
             title = "Add New Trip"
             navigationItem.rightBarButtonItems = nil
@@ -52,13 +50,20 @@ class TripDetailViewController: UITableViewController {
         let departureDate = departurePicker.date
         let returnDate = returnPicker.date
         
+        // Departure date must occur after return date
         if returnDate < departureDate {
-            presentAlert(title: "Invalid Trip Dates", message: "Your departure date must be on the same day or before your return date.")
+//            presentAlert(title: "Invalid Trip Dates", message: "Your departure date must be on the same day or before your return date.")
             return false
         }
         
+        // Reason for travel can't be empty
         if reasonField.text == nil || reasonField.text! == "" {
-            presentAlert(title: "No Reason Entered", message: "Please enter a reason for your travel outside of the country.")
+//            presentAlert(title: "No Reason Entered", message: "Please enter a reason for your travel outside of the country.")
+            return false
+        }
+        
+        // User must select a country
+        if countryLabel.text == nil || reasonField.text! == "" {
             return false
         }
         
@@ -86,8 +91,8 @@ class TripDetailViewController: UITableViewController {
             let vc = segue.destination as! CountrySearchViewController
             vc.delegate = self
             
-            if let selectedCountry {
-                vc.selectedCountry = selectedCountry
+            if let country = countryLabel.text, !country.isEmpty {
+                vc.selectedCountry = country
             }
         }
     }
@@ -131,24 +136,24 @@ class TripDetailViewController: UITableViewController {
         present(ac, animated: true)
     }
     
+    @IBAction func inputValueChanged(_ sender: Any) {
+        if let tripToEdit {
+            doneButton.isEnabled = dataChanged(for: tripToEdit)
+        } else {
+            addTripButton.isEnabled = tripIsValid()
+        }
+    }
+    
     @IBAction func departurePickerValueChanged(_ sender: UIDatePicker) {
         if departurePicker.date > returnPicker.date {
             returnPicker.setDate(departurePicker.date, animated: true)
         }
-        
-        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
     }
     
     @IBAction func returnPickerValueChanged(_ sender: UIDatePicker) {
         if returnPicker.date < departurePicker.date {
             departurePicker.setDate(returnPicker.date, animated: true)
         }
-        
-        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
-    }
-    
-    @IBAction func reasonPickerValueChanged(_ sender: UITextField) {
-        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
     }
     
     // MARK: - Keyboard Layout
@@ -214,8 +219,8 @@ extension TripDetailViewController: UITextFieldDelegate {
 extension TripDetailViewController: CountrySearchViewControllerDelegate {
     func countrySearchViewController(didPick country: String) {
         countryLabel.text = country
-        selectedCountry = country
-        doneButton?.isEnabled = dataChanged(for: tripToEdit!)
+        inputValueChanged(country)
+        
         navigationController?.popViewController(animated: true)
     }
 }

@@ -144,6 +144,7 @@
                                                     </constraints>
                                                     <connections>
                                                         <action selector="departurePickerValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="zWQ-D2-I8g"/>
+                                                        <action selector="inputValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="pA5-u1-sST"/>
                                                     </connections>
                                                 </datePicker>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Depart Canada" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4NL-Ao-8Te">
@@ -180,6 +181,7 @@
                                                         <constraint firstAttribute="width" constant="150" id="qF9-yJ-iAl"/>
                                                     </constraints>
                                                     <connections>
+                                                        <action selector="inputValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="8eN-QB-YPf"/>
                                                         <action selector="returnPickerValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="My0-NY-Mpl"/>
                                                     </connections>
                                                 </datePicker>
@@ -244,7 +246,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
-                                                        <action selector="reasonPickerValueChanged:" destination="mer-2w-ESy" eventType="editingDidEnd" id="Rh3-YD-Ucc"/>
+                                                        <action selector="inputValueChanged:" destination="mer-2w-ESy" eventType="editingDidEnd" id="D1V-XX-enI"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -267,7 +269,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TvU-1A-4Ja">
+                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TvU-1A-4Ja">
                                                     <rect key="frame" x="16" y="0.0" width="343" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="44" id="WMp-ma-rRd"/>
