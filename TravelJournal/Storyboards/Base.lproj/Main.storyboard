@@ -312,12 +312,12 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="addTripButton" destination="TvU-1A-4Ja" id="EeV-eI-uzJ"/>
                         <outlet property="countryLabel" destination="PJ6-pv-wav" id="GkL-3P-D3y"/>
                         <outlet property="departurePicker" destination="b1o-78-IN0" id="rMV-gd-ToK"/>
                         <outlet property="doneButton" destination="ggf-fH-Rvi" id="qFI-bZ-E4z"/>
                         <outlet property="reasonField" destination="Eh9-je-tzA" id="2Pt-1u-lyb"/>
                         <outlet property="returnPicker" destination="iFV-Ze-C0X" id="Jn0-L4-6pY"/>
-                        <outlet property="saveButton" destination="TvU-1A-4Ja" id="EeV-eI-uzJ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fWa-zB-uZD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
