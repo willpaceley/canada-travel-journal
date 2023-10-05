@@ -28,8 +28,9 @@ class TripDetailViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.largeTitleDisplayMode = .never
         reasonField.delegate = self
+        
+        navigationItem.largeTitleDisplayMode = .never
         setupKeyboardNotifications()
         
         if let trip = tripToEdit {
@@ -50,20 +51,15 @@ class TripDetailViewController: UITableViewController {
         let departureDate = departurePicker.date
         let returnDate = returnPicker.date
         
-        // Departure date must occur after return date
-        if returnDate < departureDate {
-//            presentAlert(title: "Invalid Trip Dates", message: "Your departure date must be on the same day or before your return date.")
+        guard returnDate.occursOnOrAfter(departureDate) else {
             return false
         }
         
-        // Reason for travel can't be empty
-        if reasonField.text == nil || reasonField.text! == "" {
-//            presentAlert(title: "No Reason Entered", message: "Please enter a reason for your travel outside of the country.")
+        guard let reason = reasonField.text, !reason.isEmpty else {
             return false
         }
         
-        // User must select a country
-        if countryLabel.text == nil || reasonField.text! == "" {
+        guard let country = countryLabel.text, !country.isEmpty else {
             return false
         }
         
@@ -85,7 +81,7 @@ class TripDetailViewController: UITableViewController {
         present(ac, animated: true)
     }
     
-    // MARK: Navigation
+    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == pickCountrySegueId {
             let vc = segue.destination as! CountrySearchViewController
@@ -97,15 +93,19 @@ class TripDetailViewController: UITableViewController {
         }
     }
     
-    // MARK: IBActions
-    @IBAction func addTripButtonPressed(_ sender: Any) {
+    // MARK: - @IBActions
+    @IBAction func addTripButtonPressed(_ sender: UIButton) {
+        guard let country = countryLabel.text else { return }
+        guard let reason = reasonField.text else { return }
+        
         if tripIsValid() {
-            let id = UUID().uuidString
-            // TODO: Improve type safety
-            let country = countryLabel.text ?? "Unknown country"
-            let reason = reasonField.text ?? "Unknown reason"
-            
-            let newTrip = Trip(id: id, departureDate: departurePicker.date, returnDate: returnPicker.date, destination: country, reason: reason)
+            let newTrip = Trip(
+                id: UUID().uuidString,
+                departureDate: departurePicker.date,
+                returnDate: returnPicker.date,
+                destination: country,
+                reason: reason
+            )
             delegate.tripDetailViewControllerDidAdd(newTrip)
             
             navigationController?.popViewController(animated: true)
@@ -145,14 +145,20 @@ class TripDetailViewController: UITableViewController {
     }
     
     @IBAction func departurePickerValueChanged(_ sender: UIDatePicker) {
-        if departurePicker.date > returnPicker.date {
-            returnPicker.setDate(departurePicker.date, animated: true)
+        let departureDate = sender.date
+        let returnDate = returnPicker.date
+        
+        if departureDate.occursAfter(returnDate) {
+            returnPicker.setDate(departureDate, animated: true)
         }
     }
     
     @IBAction func returnPickerValueChanged(_ sender: UIDatePicker) {
-        if returnPicker.date < departurePicker.date {
-            departurePicker.setDate(returnPicker.date, animated: true)
+        let departureDate = departurePicker.date
+        let returnDate = sender.date
+        
+        if !returnDate.occursAfter(departureDate) {
+            departurePicker.setDate(returnDate, animated: true)
         }
     }
     
