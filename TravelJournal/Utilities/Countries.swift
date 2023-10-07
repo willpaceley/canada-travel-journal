@@ -10,11 +10,11 @@ import Foundation
 struct Countries {
     // Method to populate country array using NSLocale.isoCountryCodes by Amir Sk on Stack Overflow
     // Link: https://stackoverflow.com/questions/27875463/how-do-i-get-a-list-of-countries-in-swift-ios
-    static func all() -> [String] {
+    static func all(excluding countryCodes: [String] = []) -> [String] {
         var countries = [String]()
         let userLocaleId = Locale.current.identifier
         
-        for code in NSLocale.isoCountryCodes  {
+        for code in NSLocale.isoCountryCodes where !countryCodes.contains(code)  {
             let id = NSLocale.localeIdentifier(fromComponents: [NSLocale.Key.countryCode.rawValue: code])
             if let name = NSLocale(localeIdentifier: userLocaleId).displayName(forKey: NSLocale.Key.identifier, value: id) {
                 countries.append(name)
