@@ -7,13 +7,26 @@
 
 import Foundation
 
-struct Trip: Codable {
-    let id: String
-    
+class Trip: Codable {
+    var id: String
     var departureDate: Date
     var returnDate: Date
     var destination: String
     var reason: String
+    
+    init(
+        id: String = UUID().uuidString,
+        departureDate: Date,
+        returnDate: Date,
+        destination: String,
+        reason: String
+    ) {
+        self.id = id
+        self.departureDate = departureDate
+        self.returnDate = returnDate
+        self.destination = destination
+        self.reason = reason
+    }
     
     // TODO: - Check business logic matches IRCC calculator
     var days: Int {

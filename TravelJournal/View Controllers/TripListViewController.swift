@@ -283,7 +283,6 @@ extension TripListViewController: TripDetailViewControllerDelegate {
     
     func tripDetailViewControllerDidUpdate(_ trip: Trip) {
         if let index = dataModel.trips.firstIndex(where: {$0.id == trip.id}) {
-            dataModel.update(trip: trip)
             let indexPath = IndexPath(row: index, section: 0)
             tableView.reloadRows(at: [indexPath], with: .automatic)
             reloadFooter()

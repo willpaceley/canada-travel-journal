@@ -31,15 +31,6 @@ class DataModel {
         saveTrips()
     }
     
-    func update(trip: Trip) {
-        if let index = trips.firstIndex(where: {$0.id == trip.id}) {
-            trips[index] = trip
-            saveTrips()
-        } else {
-            print("There was a problem finding the index of the trip to update")
-        }
-    }
-    
     func delete(trip: Trip) {
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)

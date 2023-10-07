@@ -66,7 +66,6 @@ class TripDetailViewController: UITableViewController {
         
         if tripIsValid() {
             let newTrip = Trip(
-                id: UUID().uuidString,
                 departureDate: departurePicker.date,
                 returnDate: returnPicker.date,
                 destination: country,
@@ -79,10 +78,12 @@ class TripDetailViewController: UITableViewController {
     }
     
     @IBAction func doneButtonPressed() {
-        tripToEdit?.departureDate = departurePicker.date
-        tripToEdit?.returnDate = returnPicker.date
-        tripToEdit?.reason = reasonField.text!
-        tripToEdit?.destination = countryLabel.text!
+        guard tripToEdit != nil else { return }
+        
+        tripToEdit!.departureDate = departurePicker.date
+        tripToEdit!.returnDate = returnPicker.date
+        tripToEdit!.reason = reasonField.text!
+        tripToEdit!.destination = countryLabel.text!
         
         delegate.tripDetailViewControllerDidUpdate(tripToEdit!)
         navigationController?.popViewController(animated: true)
