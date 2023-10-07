@@ -137,14 +137,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="b1o-78-IN0">
+                                                <datePicker tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="b1o-78-IN0">
                                                     <rect key="frame" x="215" y="8" width="150" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="150" id="CoA-ww-zEp"/>
                                                     </constraints>
                                                     <connections>
-                                                        <action selector="departurePickerValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="zWQ-D2-I8g"/>
-                                                        <action selector="inputValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="pA5-u1-sST"/>
+                                                        <action selector="datePickerValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="M7K-Je-gpN"/>
                                                     </connections>
                                                 </datePicker>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Depart Canada" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4NL-Ao-8Te">
@@ -175,14 +174,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="iFV-Ze-C0X">
+                                                <datePicker tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="iFV-Ze-C0X">
                                                     <rect key="frame" x="215" y="8" width="150" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="150" id="qF9-yJ-iAl"/>
                                                     </constraints>
                                                     <connections>
-                                                        <action selector="inputValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="8eN-QB-YPf"/>
-                                                        <action selector="returnPickerValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="My0-NY-Mpl"/>
+                                                        <action selector="datePickerValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="hIZ-QB-sNV"/>
                                                     </connections>
                                                 </datePicker>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Return to Canada" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bpd-94-L7K">
@@ -246,7 +244,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
-                                                        <action selector="inputValueChanged:" destination="mer-2w-ESy" eventType="editingDidEnd" id="D1V-XX-enI"/>
+                                                        <action selector="inputValueChanged:" destination="mer-2w-ESy" eventType="editingChanged" id="hkF-UC-cGe"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>

@@ -18,3 +18,7 @@ let pickCountrySegueId = "PickCountry"
 
 // MARK: Prototype Cells
 let countryCell = "CountryCell"
+
+// MARK: Tags
+let departurePickerTag = 100
+let returnPickerTag = 101

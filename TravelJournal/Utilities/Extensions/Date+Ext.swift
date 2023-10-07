@@ -16,20 +16,7 @@ extension Date {
         return formattedDate
     }
     
-    func occursAfter(_ date: Date) -> Bool {
-        if self.isTheSameDate(as: date) {
-            return false
-        }
-        return self > date
-    }
-    
-    func occursOnOrAfter(_ date: Date) -> Bool {
-        return self.isTheSameDate(as: date) || self > date
-    }
-    
-    // MARK: - Private Methods
-    // Compare two dates, ignoring time of day
-    private func isTheSameDate(as date: Date) -> Bool {
+    func isTheSameDate(as date: Date) -> Bool {
         let components1 = Calendar.current.dateComponents([.year, .month, .day], from: self)
         let components2 = Calendar.current.dateComponents([.year, .month, .day], from: date)
         
@@ -44,5 +31,16 @@ extension Date {
         }
         
         return true
+    }
+    
+    func occursOnOrAfter(_ date: Date) -> Bool {
+        return self.isTheSameDate(as: date) || self > date
+    }
+    
+    func occursAfter(_ date: Date) -> Bool {
+        if self.isTheSameDate(as: date) {
+            return false
+        }
+        return self > date
     }
 }

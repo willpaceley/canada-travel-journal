@@ -46,41 +46,7 @@ class TripDetailViewController: UITableViewController {
             navigationItem.rightBarButtonItems = nil
         }
     }
-    
-    func tripIsValid() -> Bool {
-        let departureDate = departurePicker.date
-        let returnDate = returnPicker.date
-        
-        guard returnDate.occursOnOrAfter(departureDate) else {
-            return false
-        }
-        
-        guard let reason = reasonField.text, !reason.isEmpty else {
-            return false
-        }
-        
-        guard let country = countryLabel.text, !country.isEmpty else {
-            return false
-        }
-        
-        return true
-    }
-    
-    func dataChanged(for trip: Trip) -> Bool {
-        let departureChanged = departurePicker.date != trip.departureDate
-        let returnChanged = returnPicker.date != trip.returnDate
-        let reasonChanged = reasonField.text! != trip.reason
-        let destinationChanged = countryLabel.text! != trip.destination
-        
-        return departureChanged || returnChanged || reasonChanged || destinationChanged
-    }
-    
-    func presentAlert(title: String?, message: String?) {
-        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        present(ac, animated: true)
-    }
-    
+
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == pickCountrySegueId {
@@ -106,8 +72,8 @@ class TripDetailViewController: UITableViewController {
                 destination: country,
                 reason: reason
             )
-            delegate.tripDetailViewControllerDidAdd(newTrip)
             
+            delegate.tripDetailViewControllerDidAdd(newTrip)
             navigationController?.popViewController(animated: true)
         }
     }
@@ -144,22 +110,54 @@ class TripDetailViewController: UITableViewController {
         }
     }
     
-    @IBAction func departurePickerValueChanged(_ sender: UIDatePicker) {
-        let departureDate = sender.date
+    @IBAction func datePickerValueChanged(_ sender: UIDatePicker) {
+        let departureDate = departurePicker.date
         let returnDate = returnPicker.date
         
-        if departureDate.occursAfter(returnDate) {
-            returnPicker.setDate(departureDate, animated: true)
+        // Prevent user from selecting an invalid departure date
+        if sender.tag == departurePickerTag {
+            if departureDate.occursAfter(returnDate) {
+                returnPicker.setDate(departureDate, animated: true)
+            }
         }
+        
+        // Prevent user from selecting an invalid return date
+        if sender.tag == returnPickerTag {
+            if !returnDate.occursAfter(departureDate) {
+                departurePicker.setDate(returnDate, animated: true)
+            }
+        }
+        
+        inputValueChanged(sender)
     }
     
-    @IBAction func returnPickerValueChanged(_ sender: UIDatePicker) {
+    // MARK: - Validation
+    func tripIsValid() -> Bool {
         let departureDate = departurePicker.date
-        let returnDate = sender.date
+        let returnDate = returnPicker.date
         
-        if !returnDate.occursAfter(departureDate) {
-            departurePicker.setDate(returnDate, animated: true)
+        guard returnDate.occursOnOrAfter(departureDate) else {
+            return false
         }
+        
+        guard let reason = reasonField.text, !reason.isEmpty else {
+            return false
+        }
+        
+        guard let country = countryLabel.text, country != "Choose A Country" else {
+            return false
+        }
+        
+        return true
+    }
+    
+    func dataChanged(for trip: Trip) -> Bool {
+        let departureChanged = !trip.departureDate.isTheSameDate(as: departurePicker.date)
+        let returnChanged = !trip.returnDate.isTheSameDate(as: returnPicker.date)
+        let destinationChanged = trip.destination != countryLabel.text!
+        let reasonChanged =  trip.reason != reasonField.text!
+        
+        return departureChanged || returnChanged || destinationChanged || reasonChanged
     }
     
     // MARK: - Keyboard Layout
