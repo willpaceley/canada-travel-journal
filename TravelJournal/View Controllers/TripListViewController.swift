@@ -130,6 +130,8 @@ extension TripListViewController {
                 style: .destructive,
                 handler: { [weak self] _ in
                     self?.dataModel.delete(trip: (self?.dataModel.trips[indexPath.row])!)
+                    self?.tableView.deleteRows(at: [indexPath], with: .automatic)
+                    self?.reloadFooter()
                 }
             ))
             
@@ -240,29 +242,25 @@ extension TripListViewController: DataModelDelegate {
 // MARK: - CloudKitManagerDelegate
 extension TripListViewController: CloudKitManagerDelegate {
     func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus) {
-        let alert: (title: String, message: String)
-        
         switch accountStatus {
         case .available:
             print("iCloud account is available. User is logged in.")
-            isLoading = true
-            dataModel.loadTrips()
-            return
         case .noAccount:
-            alert = (
-                title: "iCloud Drive Disabled",
-                message: "Please turn on iCloud Drive in the Settings for your device."
-            )
+            print("No iCloud account available.")
+//            alert = (
+//                title: "iCloud Drive Disabled",
+//                message: "Please turn on iCloud Drive for this app in the Settings for your device."
+//            )
         default:
-            alert = (
-                title: "iCloud Status Error",
-                message: "Please ensure you have logged into iCloud and enabled iCloud Drive."
-            )
+            print("Generic iCloud status.")
+//            alert = (
+//                title: "iCloud Status Error",
+//                message: "Please ensure you have logged into iCloud and enabled iCloud Drive."
+//            )
         }
         
-        isLoading = false
+        dataModel.loadTrips()
         refreshControl?.endRefreshing()
-        displayAlert(title: alert.title, message: alert.message)
     }
     
     func cloudKitManager(didHaveError error: Error) {

@@ -55,6 +55,7 @@ class DataModel {
                     DispatchQueue.main.async {
                         self?.delegate.dataModelDidLoadTrips()
                     }
+                    return
                 case .failure(let error):
                     DispatchQueue.main.async {
                         self?.delegate.dataModel(didHaveLoadError: error)
@@ -62,6 +63,20 @@ class DataModel {
                 }
             }
         }
+        
+        print("Loading trips from on-device storage.")
+        let url = FileManager.default.getTripDataURL()
+        do {
+            let tripData = try Data(contentsOf: url)
+            trips = try JSONDecoder().decode([Trip].self, from: tripData)
+            print("Trips successfully decoded from on-device storage.")
+            delegate.dataModelDidLoadTrips()
+        } catch {
+            print("An error occured loading trips from device storage: \(error.localizedDescription)")
+            delegate.dataModel(didHaveLoadError: error)
+        }
+        
+        
     }
     
     func saveTrips() {
@@ -70,6 +85,12 @@ class DataModel {
             return
         }
         
+        guard !trips.isEmpty else {
+            print("There were no trips to save.")
+            return
+        }
+        
+        // Persist in iCloud as source of truth across all iOS devices
         if accountStatus == .available {
             cloudKitManager.postTrips(trips: trips) { [weak self] result in
                 switch result {
@@ -85,6 +106,16 @@ class DataModel {
                     }
                 }
             }
+        }
+        
+        // Persist data on-device in case CloudKit is permanently or temporarily unavailable
+        let url = FileManager.default.getTripDataURL()
+        do {
+            let jsonData = try JSONEncoder().encode(trips)
+            try jsonData.write(to: url)
+            print("Trip data successfully saved in the app's documents directory.")
+        } catch {
+            print("An error occurred saving trip data locally: \(error.localizedDescription)")
         }
     }
     
