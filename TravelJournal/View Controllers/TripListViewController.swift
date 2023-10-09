@@ -11,6 +11,7 @@ import CloudKit
 class TripListViewController: UITableViewController {
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var shareButton: UIBarButtonItem!
+    @IBOutlet var iCloudStatusButton: UIBarButtonItem!
     
     private let cloudKitManager = CloudKitManager()
     
@@ -67,6 +68,20 @@ class TripListViewController: UITableViewController {
         tableView.footerView(forSection: 0)?.contentConfiguration = contentConfig
         
         tableView.endUpdates()
+    }
+    
+    func createCKStatusButton(for accountStatus: CKAccountStatus) -> UIButton {
+        let systemName = accountStatus == .available ? "checkmark.icloud" : "icloud.slash"
+        let accentColor: UIColor = accountStatus == .available ? .systemGreen : .systemRed
+        
+        var symbolConfig = UIImage.SymbolConfiguration(paletteColors: [accentColor, .tertiaryLabel])
+        symbolConfig = symbolConfig.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24)))
+        
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: systemName), for: .normal)
+        button.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
+
+        return button
     }
     
     func shareCSV(_ csv: String) {
@@ -191,6 +206,7 @@ extension TripListViewController: DataModelDelegate {
     
     func dataModelDidLoadTrips() {
         isLoading = false
+        refreshControl?.endRefreshing()
         shareButton.isEnabled = !dataModel.trips.isEmpty
         tableView.reloadData()
     }
@@ -242,23 +258,8 @@ extension TripListViewController: DataModelDelegate {
 // MARK: - CloudKitManagerDelegate
 extension TripListViewController: CloudKitManagerDelegate {
     func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus) {
-        switch accountStatus {
-        case .available:
-            print("iCloud account is available. User is logged in.")
-        case .noAccount:
-            print("No iCloud account available.")
-//            alert = (
-//                title: "iCloud Drive Disabled",
-//                message: "Please turn on iCloud Drive for this app in the Settings for your device."
-//            )
-        default:
-            print("Generic iCloud status.")
-//            alert = (
-//                title: "iCloud Status Error",
-//                message: "Please ensure you have logged into iCloud and enabled iCloud Drive."
-//            )
-        }
-        
+        let button = createCKStatusButton(for: accountStatus)
+        iCloudStatusButton.customView = button
         dataModel.loadTrips()
         refreshControl?.endRefreshing()
     }

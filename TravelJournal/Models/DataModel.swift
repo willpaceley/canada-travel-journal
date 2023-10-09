@@ -46,7 +46,7 @@ class DataModel {
         }
         
         let iCloudDataIsStale = UserDefaults.standard.bool(forKey: iCloudDataIsStaleKey)
-        print("iCloud data was stale? \(iCloudDataIsStale)")
+        print("iCloud data is stale? \(iCloudDataIsStale)")
         
         if accountStatus == .available && !iCloudDataIsStale {
             cloudKitManager.fetchTrips { [weak self] result in
