@@ -51,6 +51,7 @@
 		075E212A296A1F3C00899FC1 /* TripDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailViewController.swift; sourceTree = "<group>"; };
 		07E828F2296DFDDD0092BF3C /* TripViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewCell.swift; sourceTree = "<group>"; };
 		BE1729902A828CAA00D6DBD7 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		BE187B142AD4B05600EAE845 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		BE5A2E642AA75B2F0064CDDC /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		BE5A2E682AAA47BA0064CDDC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
@@ -99,6 +100,7 @@
 				0704D3622985C9FA00C5D07A /* TravelJournal.entitlements */,
 				075E21192968829400899FC1 /* Assets.xcassets */,
 				075E211E2968829400899FC1 /* Info.plist */,
+				BE187B142AD4B05600EAE845 /* PrivacyInfo.xcprivacy */,
 			);
 			path = TravelJournal;
 			sourceTree = "<group>";
