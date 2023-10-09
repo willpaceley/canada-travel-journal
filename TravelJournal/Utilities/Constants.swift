@@ -22,3 +22,6 @@ let countryCell = "CountryCell"
 // MARK: Tags
 let departurePickerTag = 100
 let returnPickerTag = 101
+
+// MARK: UserDefaults
+let iCloudDataIsStaleKey = "iCloudDataIsStale"

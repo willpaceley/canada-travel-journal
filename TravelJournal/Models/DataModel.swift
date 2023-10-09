@@ -45,7 +45,10 @@ class DataModel {
             return
         }
         
-        if accountStatus == .available {
+        let iCloudDataIsStale = UserDefaults.standard.bool(forKey: iCloudDataIsStaleKey)
+        print("iCloud data was stale? \(iCloudDataIsStale)")
+        
+        if accountStatus == .available && !iCloudDataIsStale {
             cloudKitManager.fetchTrips { [weak self] result in
                 switch result {
                 case .success(let trips):
@@ -62,21 +65,19 @@ class DataModel {
                     }
                 }
             }
+        } else {
+            print("Loading trips from on-device storage.")
+            let url = FileManager.default.getTripDataURL()
+            do {
+                let tripData = try Data(contentsOf: url)
+                trips = try JSONDecoder().decode([Trip].self, from: tripData)
+                print("Trips successfully decoded from on-device storage.")
+                delegate.dataModelDidLoadTrips()
+            } catch {
+                print("An error occured loading trips from device storage: \(error.localizedDescription)")
+                delegate.dataModel(didHaveLoadError: error)
+            }
         }
-        
-        print("Loading trips from on-device storage.")
-        let url = FileManager.default.getTripDataURL()
-        do {
-            let tripData = try Data(contentsOf: url)
-            trips = try JSONDecoder().decode([Trip].self, from: tripData)
-            print("Trips successfully decoded from on-device storage.")
-            delegate.dataModelDidLoadTrips()
-        } catch {
-            print("An error occured loading trips from device storage: \(error.localizedDescription)")
-            delegate.dataModel(didHaveLoadError: error)
-        }
-        
-        
     }
     
     func saveTrips() {
@@ -96,6 +97,7 @@ class DataModel {
                 switch result {
                 case .success(_):
                     print("Trips successfully saved to CloudKit DB.")
+                    UserDefaults.standard.setValue(false, forKey: iCloudDataIsStaleKey)
                     DispatchQueue.main.async {
                         self?.delegate.dataModelDidSaveTrips()
                     }
@@ -106,6 +108,9 @@ class DataModel {
                     }
                 }
             }
+        } else {
+            // Toggle flag in UserDefaults to indicate iCloud data is stale
+            UserDefaults.standard.set(true, forKey: iCloudDataIsStaleKey)
         }
         
         // Persist data on-device in case CloudKit is permanently or temporarily unavailable
