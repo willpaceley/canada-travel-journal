@@ -28,13 +28,11 @@ class DataModel {
     func add(trip: Trip) {
         trips.append(trip)
         sortByReverseChronological()
-        saveTrips()
     }
     
     func delete(trip: Trip) {
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)
-            saveTrips()
         } else {
             print("There was a problem finding the index of the trip to delete")
         }
