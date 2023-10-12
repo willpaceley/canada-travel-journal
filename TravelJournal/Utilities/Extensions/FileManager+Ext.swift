@@ -9,7 +9,7 @@ import Foundation
 
 extension FileManager {
     private func getDocumentsDirectory() -> URL {
-        return self.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return self.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
     
     func getTripDataURL() -> URL {

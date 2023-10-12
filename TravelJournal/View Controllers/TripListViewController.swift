@@ -44,6 +44,31 @@ class TripListViewController: UITableViewController {
         shareCSV(csv)
     }
     
+    @objc func iCloudStatusButtonPressed() {
+        guard let accountStatus = cloudKitManager.accountStatus else { return }
+        
+        var actions = [UIAlertAction]()
+        if accountStatus != .available {
+            let settingsAction = UIAlertAction(title: "Go to Settings", style: .default) { _ in
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            actions.append(settingsAction)
+        }
+        let cancelAction = UIAlertAction(title: "OK", style: .default)
+        actions.append(cancelAction)
+        
+        let (title, message) = getiCloudInstructions(for: accountStatus)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        for action in actions {
+            alertController.addAction(action)
+        }
+       
+        present(alertController, animated: true)
+    }
+    
     @objc func refreshTable() {
         dataModel.loadTrips()
     }
@@ -73,14 +98,14 @@ class TripListViewController: UITableViewController {
     func createCKStatusButton(for accountStatus: CKAccountStatus) -> UIButton {
         let systemName = accountStatus == .available ? "checkmark.icloud" : "icloud.slash"
         let accentColor: UIColor = accountStatus == .available ? .systemGreen : .systemRed
-        
         var symbolConfig = UIImage.SymbolConfiguration(paletteColors: [accentColor, .tertiaryLabel])
-        symbolConfig = symbolConfig.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24)))
+        symbolConfig = symbolConfig.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 22)))
         
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: systemName), for: .normal)
         button.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
-
+        button.addTarget(self, action: #selector(iCloudStatusButtonPressed), for: .touchUpInside)
+        
         return button
     }
     
@@ -98,6 +123,42 @@ class TripListViewController: UITableViewController {
         let vc = UIActivityViewController(activityItems: [fileName], applicationActivities: nil)
         vc.popoverPresentationController?.barButtonItem = shareButton
         present(vc, animated: true)
+    }
+    
+    func getiCloudInstructions(for accountStatus: CKAccountStatus) -> (title: String, message: String) {
+        var title: String
+        var description = ""
+        
+        if accountStatus != .available {
+            description = "Your trips are being saved on your device. CAUTION: Deletion of this app will result in the permanent loss of your trip data."
+        } else {
+            description = "Your trip data is securely stored in a private iCloud database. You can access and update your trip data across all of your iOS devices."
+        }
+        
+        switch accountStatus {
+        case .couldNotDetermine:
+            title = "Could Not Determine iCloud Status"
+        case .available:
+            title = "Connected To iCloud"
+        case .restricted:
+            title = "iCloud Access Restricted"
+        case .noAccount:
+            title = "No iCloud Account"
+            description += """
+                        \n\nTo fix this issue, ensure iCloud Drive is enabled in Settings. Please see instructions below.
+                        
+                        Step 1: Your name -> iCloud -> iCloud Drive -> Sync this iPhone (On)
+                        
+                        Step 2: Your name -> iCloud -> Show All Apps Using iCloud -> Travel Journal (On)
+                        """
+        case .temporarilyUnavailable:
+            title = "iCloud Temporarily Unavailable"
+            description += "\n\nA temporary iCloud issue has occurred. Please try connecting again later."
+        @unknown default:
+            title = "Unknown iCloud Status"
+        }
+        
+        return (title, description)
     }
     
     func displayAlert(title: String, message: String) {
@@ -199,7 +260,6 @@ extension TripListViewController {
 // MARK: - DataModelDelegate
 extension TripListViewController: DataModelDelegate {
     func dataModelDidSaveTrips() {
-        // TODO: Update iCloud bar button indicator with complete status
         shareButton.isEnabled = !dataModel.trips.isEmpty
         print("dataModelDidSaveTrips() was called.")
     }
@@ -216,7 +276,7 @@ extension TripListViewController: DataModelDelegate {
         refreshControl?.endRefreshing()
         
         displayAlert(
-            title: "iCloud Load Error",
+            title: "Loading Error",
             message: error.localizedDescription
         )
     }
