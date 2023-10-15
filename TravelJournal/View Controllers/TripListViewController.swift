@@ -127,13 +127,7 @@ class TripListViewController: UITableViewController {
     
     func getiCloudInstructions(for accountStatus: CKAccountStatus) -> (title: String, message: String) {
         var title: String
-        var description = ""
-        
-        if accountStatus != .available {
-            description = "Your trips are being saved on your device. CAUTION: Deletion of this app will result in the permanent loss of your trip data."
-        } else {
-            description = "Your trip data is securely stored in a private iCloud database. You can access and update your trip data across all of your iOS devices."
-        }
+        var message = ""
         
         switch accountStatus {
         case .couldNotDetermine:
@@ -144,21 +138,27 @@ class TripListViewController: UITableViewController {
             title = "iCloud Access Restricted"
         case .noAccount:
             title = "No iCloud Account"
-            description += """
-                        \n\nTo fix this issue, ensure iCloud Drive is enabled in Settings. Please see instructions below.
+            message += """
+                        To fix this issue, ensure iCloud Drive is enabled in Settings. Please see instructions below.
                         
-                        Step 1: Your name -> iCloud -> iCloud Drive -> Sync this iPhone (On)
+                        Step 1: Apple ID -> iCloud -> iCloud Drive -> Sync this iPhone (On)
                         
-                        Step 2: Your name -> iCloud -> Show All Apps Using iCloud -> Travel Journal (On)
+                        Step 2: Apple ID -> iCloud -> Show All Apps Using iCloud -> Travel Journal (On)
                         """
         case .temporarilyUnavailable:
             title = "iCloud Temporarily Unavailable"
-            description += "\n\nA temporary iCloud issue has occurred. Please try connecting again later."
+            message += "Please ensure you are logged into iCloud in Settings."
         @unknown default:
             title = "Unknown iCloud Status"
         }
         
-        return (title, description)
+        if accountStatus != .available {
+            message += "\n\nYour trips are being saved on your device. CAUTION: Deletion of this app will result in the permanent loss of your trip data."
+        } else {
+            message += "Your trip data is securely stored in a private iCloud database. You can access and update your trip data across all of your iOS devices."
+        }
+        
+        return (title, message)
     }
     
     func displayAlert(title: String, message: String) {

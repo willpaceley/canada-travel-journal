@@ -66,16 +66,20 @@ class DataModel {
                 }
             }
         } else {
-            print("Loading trips from on-device storage.")
-            let url = FileManager.default.getTripDataURL()
-            do {
-                let tripData = try Data(contentsOf: url)
-                trips = try JSONDecoder().decode([Trip].self, from: tripData)
-                print("Trips successfully decoded from on-device storage.")
+            let fileManager = FileManager.default
+            if fileManager.tripDataFileExists() {
+                print("Loading trips from on-device storage.")
+                let url = fileManager.getTripDataURL()
+                do {
+                    let tripData = try Data(contentsOf: url)
+                    trips = try JSONDecoder().decode([Trip].self, from: tripData)
+                    print("Trips successfully decoded from on-device storage.")
+                } catch {
+                    print("An error occured loading trips from device storage: \(error.localizedDescription)")
+                    delegate.dataModel(didHaveLoadError: error)
+                    return
+                }
                 delegate.dataModelDidLoadTrips()
-            } catch {
-                print("An error occured loading trips from device storage: \(error.localizedDescription)")
-                delegate.dataModel(didHaveLoadError: error)
             }
         }
     }
