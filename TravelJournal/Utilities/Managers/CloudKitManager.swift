@@ -21,6 +21,15 @@ class CloudKitManager {
     
     weak var delegate: CloudKitManagerDelegate!
     
+    var iCloudDataIsStale: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: iCloudDataIsStaleKey)
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: iCloudDataIsStaleKey)
+        }
+    }
+    
     init() {
         requestAccountStatus()
         setupNotificationHandling()
@@ -67,8 +76,14 @@ class CloudKitManager {
     }
     
     // MARK: - CloudKit Helper Methods
-    func fetchTrips(completionHandler: @escaping (Result<[Trip]?, Error>) -> Void) {
-        let query = CKQuery(recordType: "Trips", predicate: NSPredicate(value: true))
+    func fetchTrips(
+        forceDelete: Bool = false,
+        completionHandler: @escaping (Result<[Trip]?, Error>) -> Void
+    ) {
+        let query = CKQuery(
+            recordType: tripsRecordType,
+            predicate: NSPredicate(value: true)
+        )
         
         cloudKitDatabase.fetch(withQuery: query) { [weak self] result in
             switch result {
@@ -82,16 +97,26 @@ class CloudKitManager {
                 for (_, matchResult) in matchResults {
                     switch matchResult {
                     case .success(let record):
-                        // Set the record ID to update later without re-fetching
-                        self?.tripsRecordId = record.recordID
-                        
-                        if let data = record.value(forKey: tripDataKey) as? Data {
-                            if let trips = try? JSONDecoder().decode([Trip].self, from: data) {
-                                print("Successfully decoded trips from CK database, calling handler.")
-                                completionHandler(.success(trips))
-                                return
+                        // Set forceDelete flag to true to remove all Trip records
+                        // Useful for debug purposes when multiple records were created
+                        if forceDelete {
+                            self?.cloudKitDatabase.delete(withRecordID: record.recordID) { (recordId, error) in
+                                if let recordId {
+                                    print("Deleted record with ID: \(recordId)")
+                                }
+                            }
+                        } else {
+                            // Set the record ID to update later without re-fetching
+                            self?.tripsRecordId = record.recordID
+                            if let data = record.value(forKey: tripDataKey) as? Data {
+                                if let trips = try? JSONDecoder().decode([Trip].self, from: data) {
+                                    print("Successfully decoded trips from CK database, calling handler.")
+                                    completionHandler(.success(trips))
+                                    return
+                                }
                             }
                         }
+                        
                     case .failure(let error):
                         completionHandler(.failure(error))
                         return

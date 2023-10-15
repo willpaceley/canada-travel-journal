@@ -18,7 +18,12 @@ class TripListViewController: UITableViewController {
     var dataModel: DataModel!
     var isLoading = false {
         didSet {
-            isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
+            if isLoading {
+                activityIndicator.startAnimating()
+            } else {
+                activityIndicator.stopAnimating()
+                refreshControl?.endRefreshing()
+            }
         }
     }
     
@@ -259,29 +264,30 @@ extension TripListViewController {
 
 // MARK: - DataModelDelegate
 extension TripListViewController: DataModelDelegate {
-    func dataModelDidSaveTrips() {
+    func dataModelDidChange() {
+        isLoading = false
         shareButton.isEnabled = !dataModel.trips.isEmpty
-        print("dataModelDidSaveTrips() was called.")
     }
     
     func dataModelDidLoadTrips() {
         isLoading = false
-        refreshControl?.endRefreshing()
         shareButton.isEnabled = !dataModel.trips.isEmpty
         tableView.reloadData()
     }
     
-    func dataModel(didHaveLoadError error: Error) {
+    func dataModel(didHaveLoadError error: Error?) {
         isLoading = false
-        refreshControl?.endRefreshing()
         
-        displayAlert(
-            title: "Loading Error",
-            message: error.localizedDescription
-        )
+        if let error {
+            displayAlert(
+                title: "Loading Error",
+                message: error.localizedDescription
+            )
+        }
     }
     
     func dataModel(didHaveSaveError error: Error) {
+        isLoading = false
         var alert: (title: String, message: String)
         
         // TODO: Create a TJError type
@@ -318,10 +324,10 @@ extension TripListViewController: DataModelDelegate {
 // MARK: - CloudKitManagerDelegate
 extension TripListViewController: CloudKitManagerDelegate {
     func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus) {
+        isLoading = true
         let button = createCKStatusButton(for: accountStatus)
         iCloudStatusButton.customView = button
         dataModel.loadTrips()
-        refreshControl?.endRefreshing()
     }
     
     func cloudKitManager(didHaveError error: Error) {
@@ -342,6 +348,7 @@ extension TripListViewController: TripDetailViewControllerDelegate {
     
     func tripDetailViewControllerDidUpdate(_ trip: Trip) {
         if let index = dataModel.trips.firstIndex(where: {$0.id == trip.id}) {
+            dataModel.updatedTrip()
             let indexPath = IndexPath(row: index, section: 0)
             tableView.reloadRows(at: [indexPath], with: .automatic)
             reloadFooter()

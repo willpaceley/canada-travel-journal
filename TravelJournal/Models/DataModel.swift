@@ -8,14 +8,15 @@
 import CloudKit
 
 protocol DataModelDelegate: AnyObject {
+    func dataModelDidChange()
     func dataModelDidLoadTrips()
-    func dataModel(didHaveLoadError error: Error)
-    func dataModelDidSaveTrips()
+    func dataModel(didHaveLoadError error: Error?)
     func dataModel(didHaveSaveError error: Error)
 }
 
 class DataModel {
     private(set) var trips = [Trip]()
+    private var hasUnsavedChanges = false
     
     var totalDays: Int {
         trips.reduce(0) { $0 + $1.days }
@@ -28,11 +29,19 @@ class DataModel {
     func add(trip: Trip) {
         trips.append(trip)
         sortByReverseChronological()
+        hasUnsavedChanges = true
+        delegate.dataModelDidChange()
+    }
+    
+    func updatedTrip() {
+        hasUnsavedChanges = true
     }
     
     func delete(trip: Trip) {
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)
+            hasUnsavedChanges = true
+            delegate.dataModelDidChange()
         } else {
             print("There was a problem finding the index of the trip to delete")
         }
@@ -41,12 +50,18 @@ class DataModel {
     // MARK: - Data Persistence
     func loadTrips() {
         guard let accountStatus = cloudKitManager.accountStatus else {
-            print("CloudKit account status had not been determined yet.")
+            print("CloudKit account status was nil. Did not load trips.")
+            return
+        }
+        
+        guard !hasUnsavedChanges else {
+            print("There are unsaved changes in the data model. Did not load trips.")
+            // TODO: Add custom error, remove optionality from protocol
+            delegate.dataModel(didHaveLoadError: nil)
             return
         }
         
         let iCloudDataIsStale = UserDefaults.standard.bool(forKey: iCloudDataIsStaleKey)
-        print("iCloud data is stale? \(iCloudDataIsStale)")
         
         if accountStatus == .available && !iCloudDataIsStale {
             cloudKitManager.fetchTrips { [weak self] result in
@@ -57,6 +72,7 @@ class DataModel {
                     }
                     DispatchQueue.main.async {
                         self?.delegate.dataModelDidLoadTrips()
+                        self?.delegate.dataModelDidChange()
                     }
                     return
                 case .failure(let error):
@@ -65,46 +81,41 @@ class DataModel {
                     }
                 }
             }
-        } else {
-            let fileManager = FileManager.default
-            if fileManager.tripDataFileExists() {
-                print("Loading trips from on-device storage.")
-                let url = fileManager.getTripDataURL()
-                do {
-                    let tripData = try Data(contentsOf: url)
-                    trips = try JSONDecoder().decode([Trip].self, from: tripData)
-                    print("Trips successfully decoded from on-device storage.")
-                } catch {
-                    print("An error occured loading trips from device storage: \(error.localizedDescription)")
-                    delegate.dataModel(didHaveLoadError: error)
-                    return
-                }
-                delegate.dataModelDidLoadTrips()
+            return
+        }
+        
+        let fileManager = FileManager.default
+        if fileManager.tripDataFileExists() {
+            print("Loading trips from on-device storage.")
+            let url = fileManager.getTripDataURL()
+            do {
+                let tripData = try Data(contentsOf: url)
+                trips = try JSONDecoder().decode([Trip].self, from: tripData)
+                print("Trips successfully decoded from on-device storage.")
+            } catch {
+                print("An error occured loading trips from device storage: \(error.localizedDescription)")
+                delegate.dataModel(didHaveLoadError: error)
+                return
             }
+            delegate.dataModelDidLoadTrips()
+            delegate.dataModelDidChange()
         }
     }
     
     func saveTrips() {
         guard let accountStatus = cloudKitManager.accountStatus else {
-            print("CloudKit account status had not been determined yet.")
+            print("CloudKit account status was nil, did not save trips.")
             return
         }
-        
-        guard !trips.isEmpty else {
-            print("There were no trips to save.")
-            return
-        }
-        
+
         // Persist in iCloud as source of truth across all iOS devices
         if accountStatus == .available {
             cloudKitManager.postTrips(trips: trips) { [weak self] result in
                 switch result {
                 case .success(_):
                     print("Trips successfully saved to CloudKit DB.")
-                    UserDefaults.standard.setValue(false, forKey: iCloudDataIsStaleKey)
-                    DispatchQueue.main.async {
-                        self?.delegate.dataModelDidSaveTrips()
-                    }
+                    self?.cloudKitManager.iCloudDataIsStale = false
+                    self?.hasUnsavedChanges = false
                 case .failure(let error):
                     print("An error occurred while attempting to save trips to CloudKit DB.")
                     DispatchQueue.main.async {
@@ -114,7 +125,7 @@ class DataModel {
             }
         } else {
             // Toggle flag in UserDefaults to indicate iCloud data is stale
-            UserDefaults.standard.set(true, forKey: iCloudDataIsStaleKey)
+            cloudKitManager.iCloudDataIsStale = true
         }
         
         // Persist data on-device in case CloudKit is permanently or temporarily unavailable
@@ -123,6 +134,7 @@ class DataModel {
             let jsonData = try JSONEncoder().encode(trips)
             try jsonData.write(to: url)
             print("Trip data successfully saved in the app's documents directory.")
+            hasUnsavedChanges = false
         } catch {
             print("An error occurred saving trip data locally: \(error.localizedDescription)")
         }
