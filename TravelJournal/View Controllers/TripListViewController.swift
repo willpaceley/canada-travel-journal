@@ -7,6 +7,7 @@
 
 import UIKit
 import CloudKit
+import Network
 
 class TripListViewController: UITableViewController {
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
@@ -14,6 +15,7 @@ class TripListViewController: UITableViewController {
     @IBOutlet var iCloudStatusButton: UIBarButtonItem!
     
     private let cloudKitManager = CloudKitManager()
+    private let connectivityManager = ConnectivityManager()
     
     var dataModel: DataModel!
     var isLoading = false {
@@ -34,6 +36,9 @@ class TripListViewController: UITableViewController {
         dataModel.cloudKitManager = cloudKitManager
         
         cloudKitManager.delegate = self
+        
+        connectivityManager.delegate = self
+        connectivityManager.startMonitor()
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.sizeToFit()
@@ -362,5 +367,12 @@ extension TripListViewController: TripDetailViewControllerDelegate {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             reloadFooter()
         }
+    }
+}
+
+// MARK: - ConnectivityManagerDelegate
+extension TripListViewController: ConnectivityManagerDelegate {
+    func connectivityManagerStatusChanged(to status: NWPath.Status) {
+        print("Connectivity status changed to: \(status)")
     }
 }

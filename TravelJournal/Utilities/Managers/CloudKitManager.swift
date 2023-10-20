@@ -8,6 +8,7 @@
 //  From the article: https://cocoacasts.com/handling-account-status-changes-with-cloudkit
 
 import CloudKit
+import Network
 
 protocol CloudKitManagerDelegate: AnyObject {
     func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus)

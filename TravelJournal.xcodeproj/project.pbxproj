@@ -19,6 +19,7 @@
 		BE5A2E652AA75B2F0064CDDC /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E642AA75B2F0064CDDC /* DataModel.swift */; };
 		BE5A2E692AAA47BA0064CDDC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E682AAA47BA0064CDDC /* Constants.swift */; };
 		BE5A2E6E2AAEA1990064CDDC /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */; };
+		BE66D7F72AE3011B00986235 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */; };
 		BE90DA242AB347AC005D3450 /* CountrySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */; };
 		BE90DA262AB3490D005D3450 /* Countries.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA252AB3490D005D3450 /* Countries.swift */; };
 		BE90DA282AB4A11A005D3450 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA272AB4A11A005D3450 /* String+Ext.swift */; };
@@ -55,6 +56,7 @@
 		BE5A2E642AA75B2F0064CDDC /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		BE5A2E682AAA47BA0064CDDC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
+		BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
 		BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountrySearchViewController.swift; sourceTree = "<group>"; };
 		BE90DA252AB3490D005D3450 /* Countries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Countries.swift; sourceTree = "<group>"; };
 		BE90DA272AB4A11A005D3450 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				BE1729902A828CAA00D6DBD7 /* CloudKitManager.swift */,
+				BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				075E2125296886E000899FC1 /* Trip.swift in Sources */,
 				075E21152968829200899FC1 /* TripListViewController.swift in Sources */,
 				075E21112968829200899FC1 /* AppDelegate.swift in Sources */,
+				BE66D7F72AE3011B00986235 /* ConnectivityManager.swift in Sources */,
 				BE90DA282AB4A11A005D3450 /* String+Ext.swift in Sources */,
 				075E21132968829200899FC1 /* SceneDelegate.swift in Sources */,
 				BE1729912A828CAA00D6DBD7 /* CloudKitManager.swift in Sources */,
