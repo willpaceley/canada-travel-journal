@@ -17,8 +17,13 @@ class TripListViewController: UITableViewController {
     private let cloudKitManager = CloudKitManager()
     private let connectivityManager = ConnectivityManager()
     
-    var dataModel: DataModel!
-    var isLoading = false {
+    private var persistenceStatus: PersistenceStatus = .unknown {
+        didSet {
+            print("persistenceStatus Changed to: \(persistenceStatus)")
+        }
+    }
+    
+    private var isLoading = false {
         didSet {
             if isLoading {
                 activityIndicator.startAnimating()
@@ -28,6 +33,8 @@ class TripListViewController: UITableViewController {
             }
         }
     }
+    
+    var dataModel: DataModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -329,6 +336,10 @@ extension TripListViewController: DataModelDelegate {
 // MARK: - CloudKitManagerDelegate
 extension TripListViewController: CloudKitManagerDelegate {
     func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus) {
+        // networkUnavailable state has priority over all others
+        if persistenceStatus != .networkUnavailable {
+            persistenceStatus = accountStatus == .available ? .iCloudAvailable : .iCloudUnavailable
+        }
         isLoading = true
         let button = createCKStatusButton(for: accountStatus)
         iCloudStatusButton.customView = button
@@ -375,4 +386,12 @@ extension TripListViewController: ConnectivityManagerDelegate {
     func connectivityManagerStatusChanged(to status: NWPath.Status) {
         print("Connectivity status changed to: \(status)")
     }
+}
+
+// MARK: - PersistenceStatus
+enum PersistenceStatus {
+    case iCloudAvailable
+    case iCloudUnavailable
+    case networkUnavailable
+    case unknown
 }
