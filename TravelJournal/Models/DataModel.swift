@@ -6,6 +6,7 @@
 //
 
 import CloudKit
+import Network
 
 protocol DataModelDelegate: AnyObject {
     func dataModelDidChange()
@@ -18,12 +19,25 @@ class DataModel {
     private(set) var trips = [Trip]()
     private var hasUnsavedChanges = false
     
+    var persistenceStatus: PersistenceStatus = .unknown {
+        didSet {
+            print("persistenceStatus Changed from: \(oldValue) to: \(persistenceStatus)")
+        }
+    }
     var totalDays: Int {
         trips.reduce(0) { $0 + $1.days }
     }
     
-    var cloudKitManager: CloudKitManager!
+    var connectivityManager: ConnectivityManager
+    weak var cloudKitManager: CloudKitManager!
     weak var delegate: DataModelDelegate!
+    
+    // MARK: - Initializer
+    init(connectivityManager: ConnectivityManager) {
+        self.connectivityManager = connectivityManager
+        self.connectivityManager.delegate = self
+        self.connectivityManager.startMonitor()
+    }
     
     // MARK: - CRUD Methods
     func add(trip: Trip) {
@@ -63,7 +77,7 @@ class DataModel {
         
         let iCloudDataIsStale = UserDefaults.standard.bool(forKey: iCloudDataIsStaleKey)
         
-        if accountStatus == .available && !iCloudDataIsStale {
+        if persistenceStatus == .iCloudAvailable && !iCloudDataIsStale {
             cloudKitManager.fetchTrips { [weak self] result in
                 switch result {
                 case .success(let trips):
@@ -157,4 +171,29 @@ class DataModel {
     private func sortByReverseChronological() {
         trips.sort { $0.departureDate > $1.departureDate }
     }
+}
+
+// MARK: - ConnectivityManagerDelegate
+extension DataModel: ConnectivityManagerDelegate {
+    func connectivityManagerStatusChanged(to status: NWPath.Status) {
+        guard status != .satisfied else {
+            print("Device is not connected to a network.")
+            persistenceStatus = .networkUnavailable
+            return
+        }
+        
+        // If user was previously offline, check if CloudKit status changed
+        if persistenceStatus == .networkUnavailable {
+            // might need to wrap this in a timer as it takes time for internet to fire up?
+            cloudKitManager.requestAccountStatus()
+        }
+    }
+}
+
+// MARK: - PersistenceStatus
+enum PersistenceStatus {
+    case iCloudAvailable
+    case iCloudUnavailable
+    case networkUnavailable
+    case unknown
 }

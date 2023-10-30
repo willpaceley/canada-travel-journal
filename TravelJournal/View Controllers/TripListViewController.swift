@@ -15,13 +15,6 @@ class TripListViewController: UITableViewController {
     @IBOutlet var iCloudStatusButton: UIBarButtonItem!
     
     private let cloudKitManager = CloudKitManager()
-    private let connectivityManager = ConnectivityManager()
-    
-    private var persistenceStatus: PersistenceStatus = .unknown {
-        didSet {
-            print("persistenceStatus Changed to: \(persistenceStatus)")
-        }
-    }
     
     private var isLoading = false {
         didSet {
@@ -43,9 +36,6 @@ class TripListViewController: UITableViewController {
         dataModel.cloudKitManager = cloudKitManager
         
         cloudKitManager.delegate = self
-        
-        connectivityManager.delegate = self
-        connectivityManager.startMonitor()
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.sizeToFit()
@@ -337,8 +327,8 @@ extension TripListViewController: DataModelDelegate {
 extension TripListViewController: CloudKitManagerDelegate {
     func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus) {
         // networkUnavailable state has priority over all others
-        if persistenceStatus != .networkUnavailable {
-            persistenceStatus = accountStatus == .available ? .iCloudAvailable : .iCloudUnavailable
+        if dataModel.persistenceStatus != .networkUnavailable {
+            dataModel.persistenceStatus = cloudKitManager.accountStatus == .available ? .iCloudAvailable : .iCloudUnavailable
         }
         isLoading = true
         let button = createCKStatusButton(for: accountStatus)
@@ -379,19 +369,4 @@ extension TripListViewController: TripDetailViewControllerDelegate {
             reloadFooter()
         }
     }
-}
-
-// MARK: - ConnectivityManagerDelegate
-extension TripListViewController: ConnectivityManagerDelegate {
-    func connectivityManagerStatusChanged(to status: NWPath.Status) {
-        print("Connectivity status changed to: \(status)")
-    }
-}
-
-// MARK: - PersistenceStatus
-enum PersistenceStatus {
-    case iCloudAvailable
-    case iCloudUnavailable
-    case networkUnavailable
-    case unknown
 }

@@ -36,8 +36,26 @@ class CloudKitManager {
         setupNotificationHandling()
     }
     
-    // MARK: - Private Methods
-    private func requestAccountStatus() {
+    // MARK: - Notification Handling
+    private func setupNotificationHandling() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(accountDidChange(_:)),
+            name: Notification.Name.CKAccountChanged,
+            object: nil
+        )
+    }
+    
+    @objc func accountDidChange(_ notification: Notification) {
+        print("accountDidChange notification received. Requesting updated CKAccountStatus.")
+        DispatchQueue.main.async {
+            self.requestAccountStatus()
+        }
+    }
+    
+    // MARK: - CloudKit Helper Methods
+    func requestAccountStatus() {
         CKContainer.default().accountStatus { [unowned self] status, error in
             if let error {
                 DispatchQueue.main.async {
@@ -58,25 +76,6 @@ class CloudKitManager {
         }
     }
     
-    private func setupNotificationHandling() {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(accountDidChange(_:)),
-            name: Notification.Name.CKAccountChanged,
-            object: nil
-        )
-    }
-    
-    // MARK: - Notification Handling
-    @objc func accountDidChange(_ notification: Notification) {
-        print("accountDidChange notification received. Requesting updated CKAccountStatus.")
-        DispatchQueue.main.async {
-            self.requestAccountStatus()
-        }
-    }
-    
-    // MARK: - CloudKit Helper Methods
     func fetchTrips(
         forceDelete: Bool = false,
         completionHandler: @escaping (Result<[Trip]?, Error>) -> Void
