@@ -337,6 +337,14 @@ extension TripListViewController: CloudKitManagerDelegate {
     }
     
     func cloudKitManager(didHaveError error: Error) {
+        guard let ckError = error as? CKError else { return }
+        
+        if ckError.code == .networkUnavailable || ckError.code == .networkFailure {
+            dataModel.persistenceStatus = .networkUnavailable
+            dataModel.loadTrips()
+            return
+        }
+        
         isLoading = false
         displayAlert(
             title: "iCloud Status Error",

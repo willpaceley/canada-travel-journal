@@ -63,7 +63,7 @@ class DataModel {
     
     // MARK: - Data Persistence
     func loadTrips() {
-        guard let accountStatus = cloudKitManager.accountStatus else {
+        guard cloudKitManager.accountStatus != nil else {
             print("CloudKit account status was nil. Did not load trips.")
             return
         }
@@ -117,13 +117,13 @@ class DataModel {
     }
     
     func saveTrips() {
-        guard let accountStatus = cloudKitManager.accountStatus else {
+        guard cloudKitManager.accountStatus != nil else {
             print("CloudKit account status was nil, did not save trips.")
             return
         }
 
-        // Persist in iCloud as source of truth across all iOS devices
-        if accountStatus == .available {
+        // If available, persist data in iCloud as source of truth across all iOS devices
+        if persistenceStatus == .iCloudAvailable {
             cloudKitManager.postTrips(trips: trips) { [weak self] result in
                 switch result {
                 case .success(_):
@@ -176,7 +176,7 @@ class DataModel {
 // MARK: - ConnectivityManagerDelegate
 extension DataModel: ConnectivityManagerDelegate {
     func connectivityManagerStatusChanged(to status: NWPath.Status) {
-        guard status != .satisfied else {
+        guard status == .satisfied else {
             print("Device is not connected to a network.")
             persistenceStatus = .networkUnavailable
             return
