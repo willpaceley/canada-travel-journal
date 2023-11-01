@@ -12,7 +12,7 @@ import Network
 class TripListViewController: UITableViewController {
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var shareButton: UIBarButtonItem!
-    @IBOutlet var iCloudStatusButton: UIBarButtonItem!
+    @IBOutlet var persistenceStatusButton: UIBarButtonItem!
     
     private let cloudKitManager = CloudKitManager()
     
@@ -51,7 +51,7 @@ class TripListViewController: UITableViewController {
         shareCSV(csv)
     }
     
-    @objc func iCloudStatusButtonPressed() {
+    @objc func persistenceStatusButtonPressed() {
         guard let accountStatus = cloudKitManager.accountStatus else { return }
         
         var actions = [UIAlertAction]()
@@ -102,16 +102,29 @@ class TripListViewController: UITableViewController {
         tableView.endUpdates()
     }
     
-    func createCKStatusButton(for accountStatus: CKAccountStatus) -> UIButton {
-        let systemName = accountStatus == .available ? "checkmark.icloud" : "icloud.slash"
-        let accentColor: UIColor = accountStatus == .available ? .systemGreen : .systemRed
+    func createPersistenceStatusButton(for persistenceStatus: PersistenceStatus) -> UIButton {
+        let systemIcon: String
+        let accentColor: UIColor
+        
+        switch persistenceStatus {
+        case .iCloudAvailable:
+            systemIcon = "checkmark.icloud"
+        case .iCloudUnavailable:
+            systemIcon = "xmark.icloud"
+        case .networkUnavailable:
+            systemIcon = "icloud.slash"
+        case .unknown:
+            systemIcon = "externaldrive.badge.questionmark"
+        }
+        
+        accentColor = persistenceStatus == .iCloudAvailable ? .systemGreen : .systemRed
         var symbolConfig = UIImage.SymbolConfiguration(paletteColors: [accentColor, .tertiaryLabel])
         symbolConfig = symbolConfig.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 22)))
         
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: systemName), for: .normal)
+        button.setImage(UIImage(systemName: systemIcon), for: .normal)
         button.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
-        button.addTarget(self, action: #selector(iCloudStatusButtonPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(persistenceStatusButtonPressed), for: .touchUpInside)
         
         return button
     }
@@ -132,6 +145,7 @@ class TripListViewController: UITableViewController {
         present(vc, animated: true)
     }
     
+    // TODO: Tweak method to use persistenceStatus instead of accountStatus
     func getiCloudInstructions(for accountStatus: CKAccountStatus) -> (title: String, message: String) {
         var title: String
         var message = ""
@@ -331,8 +345,8 @@ extension TripListViewController: CloudKitManagerDelegate {
             dataModel.persistenceStatus = cloudKitManager.accountStatus == .available ? .iCloudAvailable : .iCloudUnavailable
         }
         isLoading = true
-        let button = createCKStatusButton(for: accountStatus)
-        iCloudStatusButton.customView = button
+        let button = createPersistenceStatusButton(for: dataModel.persistenceStatus)
+        persistenceStatusButton.customView = button
         dataModel.loadTrips()
     }
     
