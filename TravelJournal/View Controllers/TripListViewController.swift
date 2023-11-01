@@ -31,6 +31,7 @@ class TripListViewController: UITableViewController {
         super.viewDidLoad()
         
         dataModel.delegate = self
+        dataModel.connectivityManager.startMonitor()
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.sizeToFit()
@@ -275,6 +276,18 @@ extension TripListViewController {
 
 // MARK: - DataModelDelegate
 extension TripListViewController: DataModelDelegate {
+    func dataModelPersistenceStatus(changedTo status: PersistenceStatus) {
+        print("Data model persistence status changed to: \(status)")
+        isLoading = false
+        let button = createPersistenceStatusButton(for: status)
+        persistenceStatusButton.customView = button
+        
+        if status == .unknown {
+            isLoading = true
+            dataModel.cloudKitManager.requestAccountStatus()
+        }
+    }
+    
     func dataModelDidChange() {
         isLoading = false
         shareButton.isEnabled = !dataModel.trips.isEmpty

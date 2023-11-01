@@ -13,6 +13,7 @@ protocol DataModelDelegate: AnyObject {
     func dataModelDidLoadTrips()
     func dataModel(didHaveLoadError error: Error?)
     func dataModel(didHaveSaveError error: Error)
+    func dataModelPersistenceStatus(changedTo status: PersistenceStatus)
 }
 
 class DataModel {
@@ -24,7 +25,9 @@ class DataModel {
     
     var persistenceStatus: PersistenceStatus = .unknown {
         didSet {
-            print("persistenceStatus Changed from: \(oldValue) to: \(persistenceStatus)")
+            DispatchQueue.main.async {
+                self.delegate.dataModelPersistenceStatus(changedTo: self.persistenceStatus)
+            }
         }
     }
     var totalDays: Int {
@@ -39,9 +42,7 @@ class DataModel {
         self.cloudKitManager = cloudKitManager
         
         self.cloudKitManager.delegate = self
-        
         self.connectivityManager.delegate = self
-        self.connectivityManager.startMonitor()
     }
     
     // MARK: - CRUD Methods
@@ -180,8 +181,8 @@ class DataModel {
 
 // MARK: - CloudKitManagerDelegate
 extension DataModel: CloudKitManagerDelegate {
-    func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus) {
-        // networkUnavailable state has priority over all others
+    func cloudKitManager(accountStatusDidUpdate accountStatus: CKAccountStatus) {
+        // networkUnavailable state has priority over iCloud status
         if persistenceStatus != .networkUnavailable {
             persistenceStatus = cloudKitManager.accountStatus == .available ? .iCloudAvailable : .iCloudUnavailable
         }
@@ -205,16 +206,11 @@ extension DataModel: ConnectivityManagerDelegate {
         guard status == .satisfied else {
             print("Device is not connected to a network.")
             persistenceStatus = .networkUnavailable
-            // Maybe load here? Or in the persistenceChanged delegate?
             return
         }
         
-        print("Connectivity status is: \(status)")
-        // If user was previously offline, check if CloudKit status changed
-        if persistenceStatus == .networkUnavailable || persistenceStatus == .unknown {
-            // might need to wrap this in a timer as it takes time for internet to fire up?
-            cloudKitManager.requestAccountStatus()
-        }
+        // Set status to unknown to trigger CKAccountStatus update
+        persistenceStatus = .unknown
     }
 }
 

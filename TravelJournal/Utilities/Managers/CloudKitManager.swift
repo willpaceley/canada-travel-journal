@@ -10,7 +10,7 @@
 import CloudKit
 
 protocol CloudKitManagerDelegate: AnyObject {
-    func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus)
+    func cloudKitManager(accountStatusDidUpdate accountStatus: CKAccountStatus)
     func cloudKitManager(didHaveError error: Error)
 }
 
@@ -62,14 +62,9 @@ class CloudKitManager {
                 return
             }
             
-            // Return if the CKAccountStatus hasn't changed
-            guard self.accountStatus != status else {
-                return
-            }
-            
             self.accountStatus = status
             DispatchQueue.main.async {
-                self.delegate.cloudKitManager(accountStatusChanged: status)
+                self.delegate.cloudKitManager(accountStatusDidUpdate: status)
             }
         }
     }
