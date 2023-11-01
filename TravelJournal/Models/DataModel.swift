@@ -19,6 +19,9 @@ class DataModel {
     private(set) var trips = [Trip]()
     private var hasUnsavedChanges = false
     
+    let connectivityManager: ConnectivityManager
+    let cloudKitManager: CloudKitManager
+    
     var persistenceStatus: PersistenceStatus = .unknown {
         didSet {
             print("persistenceStatus Changed from: \(oldValue) to: \(persistenceStatus)")
@@ -28,13 +31,15 @@ class DataModel {
         trips.reduce(0) { $0 + $1.days }
     }
     
-    var connectivityManager: ConnectivityManager
-    weak var cloudKitManager: CloudKitManager!
     weak var delegate: DataModelDelegate!
     
     // MARK: - Initializer
-    init(connectivityManager: ConnectivityManager) {
+    init(cloudKitManager: CloudKitManager, connectivityManager: ConnectivityManager) {
         self.connectivityManager = connectivityManager
+        self.cloudKitManager = cloudKitManager
+        
+        self.cloudKitManager.delegate = self
+        
         self.connectivityManager.delegate = self
         self.connectivityManager.startMonitor()
     }
@@ -173,17 +178,40 @@ class DataModel {
     }
 }
 
+// MARK: - CloudKitManagerDelegate
+extension DataModel: CloudKitManagerDelegate {
+    func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus) {
+        // networkUnavailable state has priority over all others
+        if persistenceStatus != .networkUnavailable {
+            persistenceStatus = cloudKitManager.accountStatus == .available ? .iCloudAvailable : .iCloudUnavailable
+        }
+    }
+    
+    func cloudKitManager(didHaveError error: Error) {
+        guard let ckError = error as? CKError else { return }
+        
+        if ckError.code == .networkUnavailable || ckError.code == .networkFailure {
+            persistenceStatus = .networkUnavailable
+            return
+        }
+        
+        // TODO: Pass error back to delegate
+    }
+}
+
 // MARK: - ConnectivityManagerDelegate
 extension DataModel: ConnectivityManagerDelegate {
     func connectivityManagerStatusChanged(to status: NWPath.Status) {
         guard status == .satisfied else {
             print("Device is not connected to a network.")
             persistenceStatus = .networkUnavailable
+            // Maybe load here? Or in the persistenceChanged delegate?
             return
         }
         
+        print("Connectivity status is: \(status)")
         // If user was previously offline, check if CloudKit status changed
-        if persistenceStatus == .networkUnavailable {
+        if persistenceStatus == .networkUnavailable || persistenceStatus == .unknown {
             // might need to wrap this in a timer as it takes time for internet to fire up?
             cloudKitManager.requestAccountStatus()
         }

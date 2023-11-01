@@ -11,10 +11,8 @@ import Network
 
 class TripListViewController: UITableViewController {
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet var shareButton: UIBarButtonItem!
     @IBOutlet var persistenceStatusButton: UIBarButtonItem!
-    
-    private let cloudKitManager = CloudKitManager()
+    @IBOutlet var shareButton: UIBarButtonItem!
     
     private var isLoading = false {
         didSet {
@@ -33,9 +31,6 @@ class TripListViewController: UITableViewController {
         super.viewDidLoad()
         
         dataModel.delegate = self
-        dataModel.cloudKitManager = cloudKitManager
-        
-        cloudKitManager.delegate = self
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.sizeToFit()
@@ -52,7 +47,7 @@ class TripListViewController: UITableViewController {
     }
     
     @objc func persistenceStatusButtonPressed() {
-        guard let accountStatus = cloudKitManager.accountStatus else { return }
+        guard let accountStatus = dataModel.cloudKitManager.accountStatus else { return }
         
         var actions = [UIAlertAction]()
         if accountStatus != .available {
@@ -338,34 +333,34 @@ extension TripListViewController: DataModelDelegate {
 }
 
 // MARK: - CloudKitManagerDelegate
-extension TripListViewController: CloudKitManagerDelegate {
-    func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus) {
-        // networkUnavailable state has priority over all others
-        if dataModel.persistenceStatus != .networkUnavailable {
-            dataModel.persistenceStatus = cloudKitManager.accountStatus == .available ? .iCloudAvailable : .iCloudUnavailable
-        }
-        isLoading = true
-        let button = createPersistenceStatusButton(for: dataModel.persistenceStatus)
-        persistenceStatusButton.customView = button
-        dataModel.loadTrips()
-    }
-    
-    func cloudKitManager(didHaveError error: Error) {
-        guard let ckError = error as? CKError else { return }
-        
-        if ckError.code == .networkUnavailable || ckError.code == .networkFailure {
-            dataModel.persistenceStatus = .networkUnavailable
-            dataModel.loadTrips()
-            return
-        }
-        
-        isLoading = false
-        displayAlert(
-            title: "iCloud Status Error",
-            message: error.localizedDescription
-        )
-    }
-}
+//extension TripListViewController: CloudKitManagerDelegate {
+//    func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus) {
+//        // networkUnavailable state has priority over all others
+//        if dataModel.persistenceStatus != .networkUnavailable {
+//            dataModel.persistenceStatus = cloudKitManager.accountStatus == .available ? .iCloudAvailable : .iCloudUnavailable
+//        }
+//        isLoading = true
+//        let button = createPersistenceStatusButton(for: dataModel.persistenceStatus)
+//        persistenceStatusButton.customView = button
+//        dataModel.loadTrips()
+//    }
+//    
+//    func cloudKitManager(didHaveError error: Error) {
+//        guard let ckError = error as? CKError else { return }
+//        
+//        if ckError.code == .networkUnavailable || ckError.code == .networkFailure {
+//            dataModel.persistenceStatus = .networkUnavailable
+//            dataModel.loadTrips()
+//            return
+//        }
+//        
+//        isLoading = false
+//        displayAlert(
+//            title: "iCloud Status Error",
+//            message: error.localizedDescription
+//        )
+//    }
+//}
 
 // MARK: - TripDetailViewControllerDelegate
 extension TripListViewController: TripDetailViewControllerDelegate {
