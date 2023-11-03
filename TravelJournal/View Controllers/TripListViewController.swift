@@ -278,14 +278,21 @@ extension TripListViewController {
 extension TripListViewController: DataModelDelegate {
     func dataModelPersistenceStatus(changedTo status: PersistenceStatus) {
         print("Data model persistence status changed to: \(status)")
-        isLoading = false
-        let button = createPersistenceStatusButton(for: status)
-        persistenceStatusButton.customView = button
-        
+        // Unknown status occurs when device status changes to connected
         if status == .unknown {
             isLoading = true
             dataModel.cloudKitManager.requestAccountStatus()
+            return
         }
+
+        if dataModel.trips.isEmpty {
+            isLoading = true
+            dataModel.loadTrips()
+        }
+        
+        isLoading = false
+        let button = createPersistenceStatusButton(for: status)
+        persistenceStatusButton.customView = button
     }
     
     func dataModelDidChange() {

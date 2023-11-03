@@ -69,8 +69,8 @@ class DataModel {
     
     // MARK: - Data Persistence
     func loadTrips() {
-        guard cloudKitManager.accountStatus != nil else {
-            print("CloudKit account status was nil. Did not load trips.")
+        guard persistenceStatus != .unknown else {
+            print("Persistence status was unknown. Did not load trips.")
             return
         }
         
@@ -123,8 +123,8 @@ class DataModel {
     }
     
     func saveTrips() {
-        guard cloudKitManager.accountStatus != nil else {
-            print("CloudKit account status was nil, did not save trips.")
+        guard persistenceStatus != .unknown else {
+            print("Persistence status was unknown. Did not save trips.")
             return
         }
 
