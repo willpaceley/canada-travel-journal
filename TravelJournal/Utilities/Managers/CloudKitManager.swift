@@ -104,6 +104,7 @@ class CloudKitManager {
                             // Set the record ID to update later without re-fetching
                             self?.tripsRecordID = record.recordID
                             self?.checkedForExistingRecord = true
+                            
                             if let data = record.value(forKey: tripDataKey) as? Data {
                                 if let trips = try? JSONDecoder().decode([Trip].self, from: data) {
                                     print("Successfully decoded trips from CK database, calling handler.")
@@ -156,6 +157,7 @@ class CloudKitManager {
                         case .success(let record):
                             print("Successfully updated existing record trips record in CloudKit DB.")
                             self?.tripsRecordID = recordId
+                            self?.checkedForExistingRecord = true
                             completionHandler(.success(record))
                         case .failure(let error):
                             print("An error occurred updating a trips record in CloudKit DB.")
@@ -195,37 +197,41 @@ class CloudKitManager {
             if let record {
                 print("Successfully saved new trips record to CloudKit.")
                 self?.tripsRecordID = record.recordID
+                self?.checkedForExistingRecord = true
                 completionHandler(.success(record))
             }
         }
     }
     
-    // Checks the user's CloudKit private database for a pre-existing trips record
-    // When tripsRecordID property is nil, this check is necessary to postTrips()
-    // This edge case occurs when the app doesn't fetch trips from iCloud on launch
-    // (e.g. iCloud is initially unavailable or iCloud data is marked stale)
+    /// Checks the CloudKit private database for a pre-existing `CKRecord.ID` and passes the parameters
+    /// back to ``postTrips(trips:completionHandler:)`` to save the user's trip data in iCloud.
+    ///
+    /// This method is necessary to prevent an edge case that results in the accidental creation
+    /// of a second record in the CloudKit private database. This edge case can occur when the app
+    /// doesn't fetch trips from iCloud on launch (e.g. iCloud is initially unavailable or iCloud data is marked stale).
     private func checkForTripsRecordID(trips: [Trip], completionHandler: @escaping ((Result<CKRecord, Error>) -> Void)) {
         let query = CKQuery(
             recordType: tripsRecordType,
             predicate: NSPredicate(value: true)
         )
         
-        cloudKitDatabase.perform(query, inZoneWith: nil) { [weak self] records, error in
+        cloudKitDatabase.fetch(withQuery: query, resultsLimit: 1) { [weak self] result in
             guard let self else { return }
-            
-            if let error {
+
+            switch result {
+            case .success(let (matchResults, _)):
+                if !matchResults.isEmpty {
+                    let (recordID, _) = matchResults.first!
+                    print("Found a pre-existing trips record ID: \(recordID.recordName)")
+                    self.tripsRecordID = recordID
+                }
+                
+                self.checkedForExistingRecord = true
+                postTrips(trips: trips, completionHandler: completionHandler)
+                
+            case .failure(let error):
                 completionHandler(.failure(error))
-                return
             }
-            
-            if let record = records?.first {
-                let tripsRecordID = record.recordID
-                self.tripsRecordID = tripsRecordID
-                print("Found a pre-existing trips record ID: \(tripsRecordID.recordName)")
-            }
-            
-            self.checkedForExistingRecord = true
-            postTrips(trips: trips, completionHandler: completionHandler)
         }
     }
 }
