@@ -16,6 +16,11 @@ protocol CloudKitManagerDelegate: AnyObject {
 
 class CloudKitManager {
     private let cloudKitDatabase = CKContainer.default().privateCloudDatabase
+    private let tripsQuery = CKQuery(
+        recordType: tripsRecordType,
+        predicate: NSPredicate(value: true)
+    )
+    
     private(set) var accountStatus: CKAccountStatus?
     private(set) var tripsRecordID: CKRecord.ID?
     private(set) var checkedForExistingRecord = false
@@ -70,16 +75,8 @@ class CloudKitManager {
         }
     }
     
-    func fetchTrips(
-        forceDelete: Bool = false,
-        completionHandler: @escaping (Result<[Trip]?, Error>) -> Void
-    ) {
-        let query = CKQuery(
-            recordType: tripsRecordType,
-            predicate: NSPredicate(value: true)
-        )
-        
-        cloudKitDatabase.fetch(withQuery: query) { [weak self] result in
+    func fetchTrips(completionHandler: @escaping (Result<[Trip]?, Error>) -> Void) {
+        cloudKitDatabase.fetch(withQuery: tripsQuery, resultsLimit: 1) { [weak self] result in
             switch result {
             case .success((let matchResults, _)):
                 if matchResults.isEmpty {
@@ -88,37 +85,25 @@ class CloudKitManager {
                     return
                 }
                 
-                for (_, matchResult) in matchResults {
-                    switch matchResult {
-                    case .success(let record):
-                        // FOR DEVELOPMENT PURPOSES ONLY
-                        // Set forceDelete flag to true to remove all Trip records
-                        // Useful for debug purposes when multiple records were created
-                        if forceDelete {
-                            self?.cloudKitDatabase.delete(withRecordID: record.recordID) { (recordId, error) in
-                                if let recordId {
-                                    print("Deleted record with ID: \(recordId)")
-                                }
-                            }
-                        } else {
-                            // Set the record ID to update later without re-fetching
-                            self?.tripsRecordID = record.recordID
-                            self?.checkedForExistingRecord = true
-                            
-                            if let data = record.value(forKey: tripDataKey) as? Data {
-                                if let trips = try? JSONDecoder().decode([Trip].self, from: data) {
-                                    print("Successfully decoded trips from CK database, calling handler.")
-                                    completionHandler(.success(trips))
-                                    return
-                                }
-                            }
-                        }
-                        
-                    case .failure(let error):
-                        completionHandler(.failure(error))
+                let (_, matchResult) = matchResults.first!
+                switch matchResult {
+                case .success(let record):
+                    // Set the record ID to update later without re-fetching
+                    self?.tripsRecordID = record.recordID
+                    self?.checkedForExistingRecord = true
+                    
+                    if let tripData = record.value(forKey: tripDataKey) as? Data,
+                       let trips = try? JSONDecoder().decode([Trip].self, from: tripData) {
+                        print("Successfully decoded trips from CK database, calling handler.")
+                        completionHandler(.success(trips))
                         return
                     }
+                    
+                case .failure(let error):
+                    completionHandler(.failure(error))
+                    return
                 }
+                
             case .failure(let error):
                 completionHandler(.failure(error))
             }
@@ -183,6 +168,33 @@ class CloudKitManager {
         }
     }
     
+    /// Deletes all trip data from the user's private iCloud Database.
+    ///
+    /// > Warning: This method is for development purposes only.
+    /// Use in production could result in an irrecoverable loss of the user's trip data.
+    func deleteAllTripRecords() {
+        cloudKitDatabase.fetch(withQuery: tripsQuery) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let (matchResults, _)):
+                for (recordID, _) in matchResults {
+                    self.cloudKitDatabase.delete(withRecordID: recordID) { deletedRecordID, deleteError in
+                        if let error = deleteError {
+                            print("An error occurred deleting CKRecord. \(error.localizedDescription)")
+                        }
+                        
+                        if let recordID = deletedRecordID {
+                            print("Deleted record with ID: \(recordID.recordName)")
+                        }
+                    }
+                }
+                
+            case .failure(let error):
+                print("An error occurred while fetching records to delete. \(error.localizedDescription)")
+            }
+        }
+    }
+    
     // MARK: - Private Methods
     private func createNewTripsRecord(trips: [Trip], completionHandler: @escaping (Result<CKRecord, Error>) -> Void) {
         let tripsRecord = CKRecord(recordType: tripsRecordType)
@@ -209,13 +221,11 @@ class CloudKitManager {
     /// This method is necessary to prevent an edge case that results in the accidental creation
     /// of a second record in the CloudKit private database. This edge case can occur when the app
     /// doesn't fetch trips from iCloud on launch (e.g. iCloud is initially unavailable or iCloud data is marked stale).
-    private func checkForTripsRecordID(trips: [Trip], completionHandler: @escaping ((Result<CKRecord, Error>) -> Void)) {
-        let query = CKQuery(
-            recordType: tripsRecordType,
-            predicate: NSPredicate(value: true)
-        )
-        
-        cloudKitDatabase.fetch(withQuery: query, resultsLimit: 1) { [weak self] result in
+    private func checkForTripsRecordID(
+        trips: [Trip],
+        completionHandler: @escaping ((Result<CKRecord, Error>) -> Void)
+    ) {
+        cloudKitDatabase.fetch(withQuery: tripsQuery, resultsLimit: 1) { [weak self] result in
             guard let self else { return }
 
             switch result {

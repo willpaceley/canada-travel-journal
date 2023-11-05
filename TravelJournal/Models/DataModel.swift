@@ -25,6 +25,7 @@ class DataModel {
     
     var persistenceStatus: PersistenceStatus = .unknown {
         didSet {
+            // TODO: Add check to prevent sending delegate updates when nothing changed
             DispatchQueue.main.async {
                 self.delegate.dataModelPersistenceStatus(changedTo: self.persistenceStatus)
             }
