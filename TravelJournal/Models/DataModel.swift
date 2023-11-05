@@ -219,6 +219,7 @@ extension DataModel: ConnectivityManagerDelegate {
 enum PersistenceStatus {
     case iCloudAvailable
     case iCloudUnavailable
+    // TODO: Add a iCloudTemporarilyUnavailable case?
     case networkUnavailable
     case unknown
 }

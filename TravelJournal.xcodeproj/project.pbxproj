@@ -23,6 +23,7 @@
 		BE90DA242AB347AC005D3450 /* CountrySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */; };
 		BE90DA262AB3490D005D3450 /* Countries.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA252AB3490D005D3450 /* Countries.swift */; };
 		BE90DA282AB4A11A005D3450 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA272AB4A11A005D3450 /* String+Ext.swift */; };
+		BE9ED8D02AF8441700734B0E /* PersistenceAlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9ED8CF2AF8441700734B0E /* PersistenceAlertFactory.swift */; };
 		BEAA579D2AD44194004F19D0 /* FileManager+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAA579C2AD44194004F19D0 /* FileManager+Ext.swift */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +61,7 @@
 		BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountrySearchViewController.swift; sourceTree = "<group>"; };
 		BE90DA252AB3490D005D3450 /* Countries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Countries.swift; sourceTree = "<group>"; };
 		BE90DA272AB4A11A005D3450 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
+		BE9ED8CF2AF8441700734B0E /* PersistenceAlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceAlertFactory.swift; sourceTree = "<group>"; };
 		BEAA579C2AD44194004F19D0 /* FileManager+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -110,6 +112,7 @@
 		BE17298F2A828C9D00D6DBD7 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				BE9ED8CE2AF843AE00734B0E /* Alerts */,
 				BE5A2E6F2AAEA5F80064CDDC /* Managers */,
 				BE5A2E6C2AAEA1850064CDDC /* Extensions */,
 				BE5A2E682AAA47BA0064CDDC /* Constants.swift */,
@@ -171,6 +174,14 @@
 				BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		BE9ED8CE2AF843AE00734B0E /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				BE9ED8CF2AF8441700734B0E /* PersistenceAlertFactory.swift */,
+			);
+			path = Alerts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,6 +270,7 @@
 				BE5A2E692AAA47BA0064CDDC /* Constants.swift in Sources */,
 				BE90DA262AB3490D005D3450 /* Countries.swift in Sources */,
 				BE5A2E6E2AAEA1990064CDDC /* Date+Ext.swift in Sources */,
+				BE9ED8D02AF8441700734B0E /* PersistenceAlertFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -48,10 +48,8 @@ class TripListViewController: UITableViewController {
     }
     
     @objc func persistenceStatusButtonPressed() {
-        guard let accountStatus = dataModel.cloudKitManager.accountStatus else { return }
-        
         var actions = [UIAlertAction]()
-        if accountStatus != .available {
+        if dataModel.persistenceStatus != .iCloudAvailable {
             let settingsAction = UIAlertAction(title: "Go to Settings", style: .default) { _ in
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
@@ -62,7 +60,7 @@ class TripListViewController: UITableViewController {
         let cancelAction = UIAlertAction(title: "OK", style: .default)
         actions.append(cancelAction)
         
-        let (title, message) = getiCloudInstructions(for: accountStatus)
+        let (title, message) = PersistenceAlertFactory.alert(for: dataModel.persistenceStatus)
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         
         for action in actions {
@@ -139,43 +137,6 @@ class TripListViewController: UITableViewController {
         let vc = UIActivityViewController(activityItems: [fileName], applicationActivities: nil)
         vc.popoverPresentationController?.barButtonItem = shareButton
         present(vc, animated: true)
-    }
-    
-    // TODO: Tweak method to use persistenceStatus instead of accountStatus
-    func getiCloudInstructions(for accountStatus: CKAccountStatus) -> (title: String, message: String) {
-        var title: String
-        var message = ""
-        
-        switch accountStatus {
-        case .couldNotDetermine:
-            title = "Could Not Determine iCloud Status"
-        case .available:
-            title = "Connected To iCloud"
-        case .restricted:
-            title = "iCloud Access Restricted"
-        case .noAccount:
-            title = "No iCloud Account"
-            message += """
-                        To fix this issue, ensure iCloud Drive is enabled in Settings. Please see instructions below.
-                        
-                        Step 1: Apple ID -> iCloud -> iCloud Drive -> Sync this iPhone (On)
-                        
-                        Step 2: Apple ID -> iCloud -> Show All Apps Using iCloud -> Travel Journal (On)
-                        """
-        case .temporarilyUnavailable:
-            title = "iCloud Temporarily Unavailable"
-            message += "Please ensure you are logged into iCloud in Settings."
-        @unknown default:
-            title = "Unknown iCloud Status"
-        }
-        
-        if accountStatus != .available {
-            message += "\n\nYour trips are being saved on your device. CAUTION: Deletion of this app will result in the permanent loss of your trip data."
-        } else {
-            message += "Your trip data is securely stored in a private iCloud database. You can access and update your trip data across all of your iOS devices."
-        }
-        
-        return (title, message)
     }
     
     func displayAlert(title: String, message: String) {
@@ -351,36 +312,6 @@ extension TripListViewController: DataModelDelegate {
         displayAlert(title: alert.title, message: alert.message)
     }
 }
-
-// MARK: - CloudKitManagerDelegate
-//extension TripListViewController: CloudKitManagerDelegate {
-//    func cloudKitManager(accountStatusChanged accountStatus: CKAccountStatus) {
-//        // networkUnavailable state has priority over all others
-//        if dataModel.persistenceStatus != .networkUnavailable {
-//            dataModel.persistenceStatus = cloudKitManager.accountStatus == .available ? .iCloudAvailable : .iCloudUnavailable
-//        }
-//        isLoading = true
-//        let button = createPersistenceStatusButton(for: dataModel.persistenceStatus)
-//        persistenceStatusButton.customView = button
-//        dataModel.loadTrips()
-//    }
-//    
-//    func cloudKitManager(didHaveError error: Error) {
-//        guard let ckError = error as? CKError else { return }
-//        
-//        if ckError.code == .networkUnavailable || ckError.code == .networkFailure {
-//            dataModel.persistenceStatus = .networkUnavailable
-//            dataModel.loadTrips()
-//            return
-//        }
-//        
-//        isLoading = false
-//        displayAlert(
-//            title: "iCloud Status Error",
-//            message: error.localizedDescription
-//        )
-//    }
-//}
 
 // MARK: - TripDetailViewControllerDelegate
 extension TripListViewController: TripDetailViewControllerDelegate {
