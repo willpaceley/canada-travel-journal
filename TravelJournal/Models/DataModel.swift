@@ -139,6 +139,7 @@ class DataModel {
                     self?.hasUnsavedChanges = false
                 case .failure(let error):
                     print("An error occurred while attempting to save trips to CloudKit DB.")
+                    self?.cloudKitManager.iCloudDataIsStale = true
                     DispatchQueue.main.async {
                         self?.delegate.dataModel(didHaveSaveError: error)
                     }
@@ -182,7 +183,9 @@ class DataModel {
 
 // MARK: - CloudKitManagerDelegate
 extension DataModel: CloudKitManagerDelegate {
-    func cloudKitManager(accountStatusDidUpdate accountStatus: CKAccountStatus) {
+    func cloudKitManager(accountStatusDidChange accountStatus: CKAccountStatus) {
+        print("CloudKit account status changed to: \(accountStatus)")
+        
         // networkUnavailable state has priority over iCloud status
         if persistenceStatus != .networkUnavailable {
             persistenceStatus = cloudKitManager.accountStatus == .available ? .iCloudAvailable : .iCloudUnavailable

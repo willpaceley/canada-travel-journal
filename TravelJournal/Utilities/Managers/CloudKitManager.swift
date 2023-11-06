@@ -10,7 +10,7 @@
 import CloudKit
 
 protocol CloudKitManagerDelegate: AnyObject {
-    func cloudKitManager(accountStatusDidUpdate accountStatus: CKAccountStatus)
+    func cloudKitManager(accountStatusDidChange accountStatus: CKAccountStatus)
     func cloudKitManager(didHaveError error: Error)
 }
 
@@ -60,7 +60,9 @@ class CloudKitManager {
     
     // MARK: - CloudKit Helper Methods
     func requestAccountStatus() {
-        CKContainer.default().accountStatus { [unowned self] status, error in
+        CKContainer.default().accountStatus { [weak self] status, error in
+            guard let self else { return }
+            
             if let error {
                 DispatchQueue.main.async {
                     self.delegate.cloudKitManager(didHaveError: error)
@@ -68,9 +70,12 @@ class CloudKitManager {
                 return
             }
             
-            self.accountStatus = status
-            DispatchQueue.main.async {
-                self.delegate.cloudKitManager(accountStatusDidUpdate: status)
+            // Check if the account status has changed
+            if status != self.accountStatus {
+                self.accountStatus = status
+                DispatchQueue.main.async {
+                    self.delegate.cloudKitManager(accountStatusDidChange: status)
+                }
             }
         }
     }
@@ -171,7 +176,7 @@ class CloudKitManager {
     /// Deletes all trip data from the user's private iCloud Database.
     ///
     /// > Warning: This method is for development purposes only.
-    /// Use in production could result in an irrecoverable loss of the user's trip data.
+    /// Usage in production could result in an irrecoverable loss of the user's trip data.
     func deleteAllTripRecords() {
         cloudKitDatabase.fetch(withQuery: tripsQuery) { [weak self] result in
             guard let self else { return }
