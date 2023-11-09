@@ -8,8 +8,6 @@
 import Foundation
 
 struct PersistenceAlertFactory {
-    typealias Alert = (title: String, message: String)
-    
     static func alert(for persistenceStatus: PersistenceStatus) -> Alert {
         let title: String
         var message = ""

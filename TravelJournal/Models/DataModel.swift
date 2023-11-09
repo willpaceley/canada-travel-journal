@@ -11,8 +11,8 @@ import Network
 protocol DataModelDelegate: AnyObject {
     func dataModelDidChange()
     func dataModelDidLoadTrips()
-    func dataModel(didHaveLoadError error: Error?)
-    func dataModel(didHaveSaveError error: Error)
+    func dataModel(didHaveLoadError error: TravelJournalError?)
+    func dataModel(didHaveSaveError error: TravelJournalError)
     func dataModelPersistenceStatus(changedTo status: PersistenceStatus)
 }
 
@@ -97,8 +97,9 @@ class DataModel {
                     }
                     return
                 case .failure(let error):
+                    let loadError = TravelJournalError.loadError(error)
                     DispatchQueue.main.async {
-                        self?.delegate.dataModel(didHaveLoadError: error)
+                        self?.delegate.dataModel(didHaveLoadError: loadError)
                     }
                 }
             }

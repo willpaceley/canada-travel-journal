@@ -25,6 +25,7 @@
 		BE90DA282AB4A11A005D3450 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA272AB4A11A005D3450 /* String+Ext.swift */; };
 		BE9ED8D02AF8441700734B0E /* PersistenceAlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9ED8CF2AF8441700734B0E /* PersistenceAlertFactory.swift */; };
 		BEAA579D2AD44194004F19D0 /* FileManager+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAA579C2AD44194004F19D0 /* FileManager+Ext.swift */; };
+		BEC1032C2AFD6B9100536A80 /* ErrorAlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC1032B2AFD6B9100536A80 /* ErrorAlertFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,6 +64,7 @@
 		BE90DA272AB4A11A005D3450 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		BE9ED8CF2AF8441700734B0E /* PersistenceAlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceAlertFactory.swift; sourceTree = "<group>"; };
 		BEAA579C2AD44194004F19D0 /* FileManager+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Ext.swift"; sourceTree = "<group>"; };
+		BEC1032B2AFD6B9100536A80 /* ErrorAlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +181,7 @@
 		BE9ED8CE2AF843AE00734B0E /* Alerts */ = {
 			isa = PBXGroup;
 			children = (
+				BEC1032B2AFD6B9100536A80 /* ErrorAlertFactory.swift */,
 				BE9ED8CF2AF8441700734B0E /* PersistenceAlertFactory.swift */,
 			);
 			path = Alerts;
@@ -266,6 +269,7 @@
 				BEAA579D2AD44194004F19D0 /* FileManager+Ext.swift in Sources */,
 				075E212B296A1F3C00899FC1 /* TripDetailViewController.swift in Sources */,
 				BE90DA242AB347AC005D3450 /* CountrySearchViewController.swift in Sources */,
+				BEC1032C2AFD6B9100536A80 /* ErrorAlertFactory.swift in Sources */,
 				07E828F3296DFDDD0092BF3C /* TripViewCell.swift in Sources */,
 				BE5A2E692AAA47BA0064CDDC /* Constants.swift in Sources */,
 				BE90DA262AB3490D005D3450 /* Countries.swift in Sources */,
