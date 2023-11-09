@@ -267,7 +267,7 @@ extension TripListViewController: DataModelDelegate {
         tableView.reloadData()
     }
     
-    func dataModel(didHaveLoadError error: Error?) {
+    func dataModel(didHaveLoadError error: TravelJournalError?) {
         isLoading = false
         
         if let error {
@@ -278,38 +278,10 @@ extension TripListViewController: DataModelDelegate {
         }
     }
     
-    func dataModel(didHaveSaveError error: Error) {
+    func dataModel(didHaveSaveError error: TravelJournalError) {
         isLoading = false
-        var alert: (title: String, message: String)
-        
-        // TODO: Create a TJError type
-        // TODO: Create an alert context to provides alerts for all errors in app
-        if let ckError = error as? CKError {
-            switch ckError.code {
-            case .networkUnavailable:
-                alert = (
-                    title: "Network Unavailable",
-                    message: "The Internet connection appears to be offline."
-                )
-            case .notAuthenticated:
-                alert = (
-                    title: "iCloud Drive Not Enabled",
-                    message: "Please turn on iCloud Drive in the Settings for your device. Your trips will not be saved."
-                )
-            default:
-                alert = (
-                    title: "iCloud Save Error",
-                    message: "\(error.localizedDescription). CKError Code: \(ckError.code.rawValue)"
-                )
-            }
-        } else {
-            alert = (
-                title: "Save Error",
-                message: error.localizedDescription
-            )
-        }
-        
-        displayAlert(title: alert.title, message: alert.message)
+        let (title, message) = ErrorAlertFactory.saveErrorAlert(for: error)
+        displayAlert(title: title, message: message)
     }
 }
 

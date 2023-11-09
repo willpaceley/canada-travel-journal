@@ -116,7 +116,9 @@ class DataModel {
                 print("Trips successfully decoded from on-device storage.")
             } catch {
                 print("An error occured loading trips from device storage: \(error.localizedDescription)")
-                delegate.dataModel(didHaveLoadError: error)
+                // TODO: Explore on-device specific errors?
+                let loadError = TravelJournalError.loadError(error)
+                delegate.dataModel(didHaveLoadError: loadError)
                 return
             }
             delegate.dataModelDidLoadTrips()
@@ -141,8 +143,9 @@ class DataModel {
                 case .failure(let error):
                     print("An error occurred while attempting to save trips to CloudKit DB.")
                     self?.cloudKitManager.iCloudDataIsStale = true
+                    let saveError = TravelJournalError.saveError(error)
                     DispatchQueue.main.async {
-                        self?.delegate.dataModel(didHaveSaveError: error)
+                        self?.delegate.dataModel(didHaveSaveError: saveError)
                     }
                 }
             }
