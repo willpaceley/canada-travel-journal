@@ -269,12 +269,10 @@ extension TripListViewController: DataModelDelegate {
     
     func dataModel(didHaveLoadError error: TravelJournalError?) {
         isLoading = false
-        
+        // error is nil if there were unsaved changes to prevent data loss
         if let error {
-            displayAlert(
-                title: "Loading Error",
-                message: error.localizedDescription
-            )
+            let (title, message) = ErrorAlertFactory.loadErrorAlert(for: error)
+            displayAlert(title: title, message: message)
         }
     }
     

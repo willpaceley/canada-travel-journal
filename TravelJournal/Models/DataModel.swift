@@ -158,7 +158,7 @@ class DataModel {
         let url = FileManager.default.getTripDataURL()
         do {
             let jsonData = try JSONEncoder().encode(trips)
-            try jsonData.write(to: url)
+            try jsonData.write(to: url, options: [.atomic])
             print("Trip data successfully saved in the app's documents directory.")
             hasUnsavedChanges = false
         } catch {

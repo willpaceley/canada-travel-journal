@@ -10,6 +10,56 @@ import CloudKit
 typealias Alert = (title: String, message: String)
 
 struct ErrorAlertFactory {
+    // MARK: - loadError
+    static func loadErrorAlert(for error: Error) -> Alert {
+        let alert: Alert
+        
+        // CKError
+        if let ckError = error as? CKError {
+            alert = (
+                title: "iCloud Load Error",
+                message: "\(error.localizedDescription). Error Code: \(ckError.code.rawValue)"
+            )
+            return alert
+        }
+        
+        // DecodingError
+        if let decodingError = error as? DecodingError {
+            switch decodingError {
+            case .typeMismatch:
+                alert = (
+                    title: "Type Mismatch",
+                    message: "The trip data could not be decoded because it did not match the type of what was found in the encoded payload."
+                )
+            case .valueNotFound:
+                alert = (
+                    title: "Value Not Found",
+                    message: "A non-optional value of the given type was expected, but a null value was found."
+                )
+            case .keyNotFound(let codingKey, _):
+                alert = (
+                    title: "Key Not Found",
+                    message: "A keyed decoding container was asked for an entry for the given key, \(codingKey.stringValue), but did not contain one."
+                )
+            case .dataCorrupted:
+                alert = (
+                    title: "Data Corrupted",
+                    message: "The trip data is corrupted or otherwise invalid and could not be decoded."
+                )
+            @unknown default:
+                alert = (
+                    title: "Decoding Error",
+                    message: "An error of unknown origin occurred while decoding trip data from JSON."
+                )
+            }
+            return alert
+        }
+        
+        alert = (title: "Loading Error", message: error.localizedDescription)
+        return alert
+    }
+    
+    // MARK: - saveError
     static func saveErrorAlert(for error: Error) -> Alert {
         let alert: Alert
         
@@ -55,8 +105,6 @@ struct ErrorAlertFactory {
         alert = (title: "Save Error", message: error.localizedDescription)
         return alert
     }
-
-    
 }
 
 // MARK: - TravelJournalError
