@@ -11,7 +11,7 @@ import Network
 protocol DataModelDelegate: AnyObject {
     func dataModelDidChange()
     func dataModelDidLoadTrips()
-    func dataModel(didHaveLoadError error: TravelJournalError?)
+    func dataModel(didHaveLoadError error: TravelJournalError)
     func dataModel(didHaveSaveError error: TravelJournalError)
     func dataModelPersistenceStatus(changedTo status: PersistenceStatus)
 }
@@ -72,13 +72,13 @@ class DataModel {
     func loadTrips() {
         guard persistenceStatus != .unknown else {
             print("Persistence status was unknown. Did not load trips.")
+            delegate.dataModel(didHaveLoadError: TravelJournalError.unknownPersistenceStatus)
             return
         }
         
         guard !hasUnsavedChanges else {
             print("There are unsaved changes in the data model. Did not load trips.")
-            // TODO: Add custom error, remove optionality from protocol
-            delegate.dataModel(didHaveLoadError: nil)
+            delegate.dataModel(didHaveLoadError: TravelJournalError.unsavedChanges)
             return
         }
         

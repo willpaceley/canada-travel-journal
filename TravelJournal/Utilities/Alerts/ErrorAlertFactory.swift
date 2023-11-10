@@ -108,8 +108,27 @@ struct ErrorAlertFactory {
 }
 
 // MARK: - TravelJournalError
-enum TravelJournalError: Error {
+enum TravelJournalError: Error, Equatable {
     case loadError(_ error: Error)
     case saveError(_ error: Error)
     case cloudKitError(_ error: CKError)
+    case unknownPersistenceStatus
+    case unsavedChanges
+    
+    // Necessary implementation for conformance to Equatable
+    static func == (lhs: TravelJournalError, rhs: TravelJournalError) -> Bool {
+        switch (lhs, rhs) {
+        case let (.loadError(error1), .loadError(error2)):
+            return error1.localizedDescription == error2.localizedDescription
+        case let (.saveError(error1), .saveError(error2)):
+            return error1.localizedDescription == error2.localizedDescription
+        case let (.cloudKitError(error1), .cloudKitError(error2)):
+            return error1.localizedDescription == error2.localizedDescription
+        case (.unknownPersistenceStatus, .unknownPersistenceStatus),
+            (.unsavedChanges, .unsavedChanges):
+            return true
+        default:
+            return false
+        }
+    }
 }

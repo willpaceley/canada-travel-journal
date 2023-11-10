@@ -267,10 +267,10 @@ extension TripListViewController: DataModelDelegate {
         tableView.reloadData()
     }
     
-    func dataModel(didHaveLoadError error: TravelJournalError?) {
+    func dataModel(didHaveLoadError error: TravelJournalError) {
         isLoading = false
-        // error is nil if there were unsaved changes to prevent data loss
-        if let error {
+        
+        if error != .unsavedChanges || error != .unknownPersistenceStatus {
             let (title, message) = ErrorAlertFactory.loadErrorAlert(for: error)
             displayAlert(title: title, message: message)
         }
