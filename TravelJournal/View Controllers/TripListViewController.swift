@@ -130,7 +130,7 @@ class TripListViewController: UITableViewController {
         do {
             try csv.write(to: fileName, atomically: true, encoding: .utf8)
         } catch {
-            print("An error occurred while creating the CSV file.")
+            print("An error occurred while writing the CSV file to disc.")
             return
         }
         
@@ -279,6 +279,12 @@ extension TripListViewController: DataModelDelegate {
     func dataModel(didHaveSaveError error: TravelJournalError) {
         isLoading = false
         let (title, message) = ErrorAlertFactory.saveErrorAlert(for: error)
+        displayAlert(title: title, message: message)
+    }
+    
+    func dataModel(didHaveCloudKitError error: CKError) {
+        isLoading = false
+        let (title, message) = ErrorAlertFactory.cloudKitErrorAlert(for: error)
         displayAlert(title: title, message: message)
     }
 }

@@ -11,9 +11,10 @@ import Network
 protocol DataModelDelegate: AnyObject {
     func dataModelDidChange()
     func dataModelDidLoadTrips()
+    func dataModelPersistenceStatus(changedTo status: PersistenceStatus)
     func dataModel(didHaveLoadError error: TravelJournalError)
     func dataModel(didHaveSaveError error: TravelJournalError)
-    func dataModelPersistenceStatus(changedTo status: PersistenceStatus)
+    func dataModel(didHaveCloudKitError error: CKError)
 }
 
 class DataModel {
@@ -26,6 +27,7 @@ class DataModel {
     var persistenceStatus: PersistenceStatus = .unknown {
         didSet {
             // TODO: Add check to prevent sending delegate updates when nothing changed
+            // WP note: this might be impossible as sending .unknown as status is important?
             DispatchQueue.main.async {
                 self.delegate.dataModelPersistenceStatus(changedTo: self.persistenceStatus)
             }
@@ -113,10 +115,9 @@ class DataModel {
             do {
                 let tripData = try Data(contentsOf: url)
                 trips = try JSONDecoder().decode([Trip].self, from: tripData)
-                print("Trips successfully decoded from on-device storage.")
+                print("Trips successfully decoded from device storage.")
             } catch {
                 print("An error occured loading trips from device storage: \(error.localizedDescription)")
-                // TODO: Explore on-device specific errors?
                 let loadError = TravelJournalError.loadError(error)
                 delegate.dataModel(didHaveLoadError: loadError)
                 return
@@ -204,7 +205,7 @@ extension DataModel: CloudKitManagerDelegate {
             return
         }
         
-        // TODO: Pass error back to delegate
+        delegate.dataModel(didHaveCloudKitError: ckError)
     }
 }
 
@@ -226,7 +227,6 @@ extension DataModel: ConnectivityManagerDelegate {
 enum PersistenceStatus {
     case iCloudAvailable
     case iCloudUnavailable
-    // TODO: Add a iCloudTemporarilyUnavailable case?
     case networkUnavailable
     case unknown
 }

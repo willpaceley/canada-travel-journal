@@ -105,6 +105,20 @@ struct ErrorAlertFactory {
         alert = (title: "Save Error", message: error.localizedDescription)
         return alert
     }
+    
+    // MARK: cloudKitError
+    static func cloudKitErrorAlert(for error: CKError) -> Alert {
+        guard error.code != .networkUnavailable, error.code != .networkFailure else {
+            fatalError("Delegated method cloudKitErrorAlert(error:) should not be invoked for CKError code \(error.code.rawValue)")
+        }
+        
+        let alert = (
+            title: "iCloud Error",
+            message: "An error occurred while obtaining the CloudKit status. \(error.localizedDescription)"
+        )
+        
+        return alert
+    }
 }
 
 // MARK: - TravelJournalError
