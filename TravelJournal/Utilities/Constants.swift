@@ -25,3 +25,6 @@ let returnPickerTag = 101
 
 // MARK: UserDefaults
 let iCloudDataIsStaleKey = "iCloudDataIsStale"
+
+// MARK: CSV
+let csvFileName = "TravelJournalTrips.csv"

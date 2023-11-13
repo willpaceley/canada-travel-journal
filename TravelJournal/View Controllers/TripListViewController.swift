@@ -43,8 +43,19 @@ class TripListViewController: UITableViewController {
     
     // MARK: - @IBAction and @objc
     @IBAction func shareButtonPressed() {
-        let csv = dataService.createCSV()
-        shareCSV(csv)
+        let csvContent = CSVUtility.generateCSVContent(from: dataService.trips)
+        
+        do {
+            try CSVUtility.writeCSVFile(csvContent: csvContent)
+        } catch {
+            print("An error occurred writing the CSV file to the device.")
+            return
+        }
+        
+        let csvFile = CSVUtility.getCSVFilePath()
+        let vc = UIActivityViewController(activityItems: [csvFile], applicationActivities: nil)
+        vc.popoverPresentationController?.barButtonItem = shareButton
+        present(vc, animated: true)
     }
     
     @objc func persistenceStatusButtonPressed() {
@@ -121,22 +132,6 @@ class TripListViewController: UITableViewController {
         button.addTarget(self, action: #selector(persistenceStatusButtonPressed), for: .touchUpInside)
         
         return button
-    }
-    
-    func shareCSV(_ csv: String) {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileName = documentsDirectory.appendingPathComponent("TravelJournalTrips.csv")
-        
-        do {
-            try csv.write(to: fileName, atomically: true, encoding: .utf8)
-        } catch {
-            print("An error occurred while writing the CSV file to disc.")
-            return
-        }
-        
-        let vc = UIActivityViewController(activityItems: [fileName], applicationActivities: nil)
-        vc.popoverPresentationController?.barButtonItem = shareButton
-        present(vc, animated: true)
     }
     
     func displayAlert(title: String, message: String) {

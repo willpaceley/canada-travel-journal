@@ -167,20 +167,7 @@ class TripDataService {
         }
     }
     
-    // MARK: - Helper Methods
-    func createCSV() -> String {
-        var contents = "Destination,Departure Date,Return Date,Days,Reason\n"
-        
-        for trip in trips {
-            let departureDate = trip.departureDate.format()
-            let returnDate = trip.departureDate.format()
-            
-            contents += "\"\(trip.destination)\",\"\(departureDate)\",\"\(returnDate)\",\"\(trip.days)\",\"\(trip.reason)\"\n"
-        }
-        
-        return contents
-    }
-    
+    // MARK: - Private Methods
     private func sortByReverseChronological() {
         trips.sort { $0.departureDate > $1.departureDate }
     }
