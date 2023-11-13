@@ -26,8 +26,6 @@ class TripDataService {
     
     var persistenceStatus: PersistenceStatus = .unknown {
         didSet {
-            // TODO: Add check to prevent sending delegate updates when nothing changed
-            // WP note: this might be impossible as sending .unknown as status is important?
             DispatchQueue.main.async {
                 self.delegate.dataServicePersistenceStatus(changedTo: self.persistenceStatus)
             }
@@ -87,27 +85,57 @@ class TripDataService {
         let iCloudDataIsStale = UserDefaults.standard.bool(forKey: iCloudDataIsStaleKey)
         
         if persistenceStatus == .iCloudAvailable && !iCloudDataIsStale {
-            cloudKitManager.fetchTrips { [weak self] result in
-                switch result {
-                case .success(let trips):
-                    if let trips {
-                        self?.trips = trips
-                    }
-                    DispatchQueue.main.async {
-                        self?.delegate.dataServiceDidLoadTrips()
-                        self?.delegate.tripDataDidChange()
-                    }
-                    return
-                case .failure(let error):
-                    let loadError = TravelJournalError.loadError(error)
-                    DispatchQueue.main.async {
-                        self?.delegate.dataService(didHaveLoadError: loadError)
-                    }
-                }
-            }
+            loadTripsFromiCloud()
+        } else {
+            loadTripsFromDevice()
+        }
+    }
+    
+    func saveTrips() {
+        guard persistenceStatus != .unknown else {
+            print("Persistence status was unknown. Did not save trips.")
             return
         }
+
+        // If available, persist data in iCloud as source of truth across all iOS devices
+        if persistenceStatus == .iCloudAvailable {
+            saveTripsToiCloud()
+        } else {
+            // Toggle flag in UserDefaults to indicate iCloud data is stale
+            cloudKitManager.iCloudDataIsStale = true
+        }
         
+        // Always persist data on-device in case CloudKit is permanently or temporarily unavailable
+        saveTripsToDevice()
+    }
+    
+    // MARK: - Private Methods
+    private func sortByReverseChronological() {
+        trips.sort { $0.departureDate > $1.departureDate }
+    }
+    
+    private func loadTripsFromiCloud() {
+        cloudKitManager.fetchTrips { [weak self] result in
+            switch result {
+            case .success(let trips):
+                if let trips {
+                    self?.trips = trips
+                }
+                DispatchQueue.main.async {
+                    self?.delegate.dataServiceDidLoadTrips()
+                    self?.delegate.tripDataDidChange()
+                }
+                return
+            case .failure(let error):
+                let loadError = TravelJournalError.loadError(error)
+                DispatchQueue.main.async {
+                    self?.delegate.dataService(didHaveLoadError: loadError)
+                }
+            }
+        }
+    }
+    
+    private func loadTripsFromDevice() {
         let fileManager = FileManager.default
         if fileManager.tripDataFileExists() {
             print("Loading trips from on-device storage.")
@@ -127,35 +155,25 @@ class TripDataService {
         }
     }
     
-    func saveTrips() {
-        guard persistenceStatus != .unknown else {
-            print("Persistence status was unknown. Did not save trips.")
-            return
-        }
-
-        // If available, persist data in iCloud as source of truth across all iOS devices
-        if persistenceStatus == .iCloudAvailable {
-            cloudKitManager.postTrips(trips: trips) { [weak self] result in
-                switch result {
-                case .success(_):
-                    print("Trips successfully saved to CloudKit DB.")
-                    self?.cloudKitManager.iCloudDataIsStale = false
-                    self?.hasUnsavedChanges = false
-                case .failure(let error):
-                    print("An error occurred while attempting to save trips to CloudKit DB.")
-                    self?.cloudKitManager.iCloudDataIsStale = true
-                    let saveError = TravelJournalError.saveError(error)
-                    DispatchQueue.main.async {
-                        self?.delegate.dataService(didHaveSaveError: saveError)
-                    }
+    private func saveTripsToiCloud() {
+        cloudKitManager.postTrips(trips: trips) { [weak self] result in
+            switch result {
+            case .success(_):
+                print("Trips successfully saved to CloudKit DB.")
+                self?.cloudKitManager.iCloudDataIsStale = false
+                self?.hasUnsavedChanges = false
+            case .failure(let error):
+                print("An error occurred while attempting to save trips to CloudKit DB.")
+                self?.cloudKitManager.iCloudDataIsStale = true
+                let saveError = TravelJournalError.saveError(error)
+                DispatchQueue.main.async {
+                    self?.delegate.dataService(didHaveSaveError: saveError)
                 }
             }
-        } else {
-            // Toggle flag in UserDefaults to indicate iCloud data is stale
-            cloudKitManager.iCloudDataIsStale = true
         }
-        
-        // Persist data on-device in case CloudKit is permanently or temporarily unavailable
+    }
+    
+    private func saveTripsToDevice() {
         let url = FileManager.default.getTripDataURL()
         do {
             let jsonData = try JSONEncoder().encode(trips)
@@ -163,13 +181,8 @@ class TripDataService {
             print("Trip data successfully saved in the app's documents directory.")
             hasUnsavedChanges = false
         } catch {
-            print("An error occurred saving trip data locally: \(error.localizedDescription)")
+            print("An error occurred saving trip data on device: \(error.localizedDescription)")
         }
-    }
-    
-    // MARK: - Private Methods
-    private func sortByReverseChronological() {
-        trips.sort { $0.departureDate > $1.departureDate }
     }
 }
 
