@@ -25,13 +25,13 @@ class TripListViewController: UITableViewController {
         }
     }
     
-    var dataModel: DataModel!
+    var dataService: TripDataService!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        dataModel.delegate = self
-        dataModel.connectivityManager.startMonitor()
+        dataService.delegate = self
+        dataService.connectivityManager.startMonitor()
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.sizeToFit()
@@ -43,13 +43,13 @@ class TripListViewController: UITableViewController {
     
     // MARK: - @IBAction and @objc
     @IBAction func shareButtonPressed() {
-        let csv = dataModel.createCSV()
+        let csv = dataService.createCSV()
         shareCSV(csv)
     }
     
     @objc func persistenceStatusButtonPressed() {
         var actions = [UIAlertAction]()
-        if dataModel.persistenceStatus != .iCloudAvailable {
+        if dataService.persistenceStatus != .iCloudAvailable {
             let settingsAction = UIAlertAction(title: "Go to Settings", style: .default) { _ in
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
@@ -60,7 +60,7 @@ class TripListViewController: UITableViewController {
         let cancelAction = UIAlertAction(title: "OK", style: .default)
         actions.append(cancelAction)
         
-        let (title, message) = PersistenceAlertFactory.alert(for: dataModel.persistenceStatus)
+        let (title, message) = PersistenceAlertFactory.alert(for: dataService.persistenceStatus)
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         
         for action in actions {
@@ -71,7 +71,7 @@ class TripListViewController: UITableViewController {
     }
     
     @objc func refreshTable() {
-        dataModel.loadTrips()
+        dataService.loadTrips()
     }
     
     // MARK: - Navigation
@@ -90,7 +90,7 @@ class TripListViewController: UITableViewController {
         tableView.beginUpdates()
         
         var contentConfig = tableView.footerView(forSection: 0)?.defaultContentConfiguration()
-        contentConfig?.text = !dataModel.trips.isEmpty ? "Total days outside of Canada: \(dataModel.totalDays)" : nil
+        contentConfig?.text = !dataService.trips.isEmpty ? "Total days outside of Canada: \(dataService.totalDays)" : nil
         tableView.footerView(forSection: 0)?.contentConfiguration = contentConfig
         
         tableView.endUpdates()
@@ -153,12 +153,12 @@ class TripListViewController: UITableViewController {
 // MARK: - UITableViewDataSource
 extension TripListViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataModel.trips.count
+        return dataService.trips.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Trip", for: indexPath) as! TripViewCell
-        let trip = dataModel.trips[indexPath.row]
+        let trip = dataService.trips[indexPath.row]
         
         cell.countryLabel.text = trip.destination
         cell.dateLabel.text = trip.departureDate.format()
@@ -171,7 +171,7 @@ extension TripListViewController {
 // MARK: - UITableViewDelegate
 extension TripListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let trip = dataModel.trips[indexPath.row]
+        let trip = dataService.trips[indexPath.row]
         performSegue(withIdentifier: editTripSegueId, sender: trip)
     }
     
@@ -183,7 +183,7 @@ extension TripListViewController {
                 title: "Delete",
                 style: .destructive,
                 handler: { [weak self] _ in
-                    self?.dataModel.delete(trip: (self?.dataModel.trips[indexPath.row])!)
+                    self?.dataService.delete(trip: (self?.dataService.trips[indexPath.row])!)
                     self?.tableView.deleteRows(at: [indexPath], with: .automatic)
                     self?.reloadFooter()
                 }
@@ -194,15 +194,15 @@ extension TripListViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if !dataModel.trips.isEmpty {
-            return "Total days outside of Canada: \(dataModel.totalDays)"
+        if !dataService.trips.isEmpty {
+            return "Total days outside of Canada: \(dataService.totalDays)"
         }
         
         return nil
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return dataModel.trips.isEmpty ? "Click the ＋ button to add a new trip!" : nil
+        return dataService.trips.isEmpty ? "Click the ＋ button to add a new trip!" : nil
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -227,7 +227,7 @@ extension TripListViewController {
     override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         if let footerView = view as? UITableViewHeaderFooterView {
             var config = footerView.defaultContentConfiguration()
-            config.text = "Total days outside of Canada: \(dataModel.totalDays)"
+            config.text = "Total days outside of Canada: \(dataService.totalDays)"
             footerView.contentConfiguration = config
         } else {
             print("A problem occurred casting footer view parameter to UITableHeaderFooterView.")
@@ -235,20 +235,46 @@ extension TripListViewController {
     }
 }
 
-// MARK: - DataModelDelegate
-extension TripListViewController: DataModelDelegate {
-    func dataModelPersistenceStatus(changedTo status: PersistenceStatus) {
-        print("Data model persistence status changed to: \(status)")
+// MARK: - TripDetailViewControllerDelegate
+extension TripListViewController: TripDetailViewControllerDelegate {
+    func tripDetailViewControllerDidAdd(_ trip: Trip) {
+        dataService.add(trip: trip)
+        tableView.reloadData()
+    }
+    
+    func tripDetailViewControllerDidUpdate(_ trip: Trip) {
+        if let index = dataService.trips.firstIndex(where: {$0.id == trip.id}) {
+            dataService.updatedTrip()
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+            reloadFooter()
+        }
+    }
+    
+    func tripDetailViewControllerDidDelete(_ trip: Trip) {
+        if let index = dataService.trips.firstIndex(where: {$0.id == trip.id}) {
+            dataService.delete(trip: trip)
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            reloadFooter()
+        }
+    }
+}
+
+// MARK: - TripsDataServiceDelegate
+extension TripListViewController: TripDataServiceDelegate {
+    func dataServicePersistenceStatus(changedTo status: PersistenceStatus) {
+        print("Data service persistence status changed to: \(status)")
         // Unknown status occurs when device status changes to connected
         if status == .unknown {
             isLoading = true
-            dataModel.cloudKitManager.requestAccountStatus()
+            dataService.cloudKitManager.requestAccountStatus()
             return
         }
 
-        if dataModel.trips.isEmpty {
+        if dataService.trips.isEmpty {
             isLoading = true
-            dataModel.loadTrips()
+            dataService.loadTrips()
         }
         
         isLoading = false
@@ -256,18 +282,18 @@ extension TripListViewController: DataModelDelegate {
         persistenceStatusButton.customView = button
     }
     
-    func dataModelDidChange() {
+    func tripDataDidChange() {
         isLoading = false
-        shareButton.isEnabled = !dataModel.trips.isEmpty
+        shareButton.isEnabled = !dataService.trips.isEmpty
     }
     
-    func dataModelDidLoadTrips() {
+    func dataServiceDidLoadTrips() {
         isLoading = false
-        shareButton.isEnabled = !dataModel.trips.isEmpty
+        shareButton.isEnabled = !dataService.trips.isEmpty
         tableView.reloadData()
     }
     
-    func dataModel(didHaveLoadError error: TravelJournalError) {
+    func dataService(didHaveLoadError error: TravelJournalError) {
         isLoading = false
         
         if error != .unsavedChanges || error != .unknownPersistenceStatus {
@@ -276,41 +302,15 @@ extension TripListViewController: DataModelDelegate {
         }
     }
     
-    func dataModel(didHaveSaveError error: TravelJournalError) {
+    func dataService(didHaveSaveError error: TravelJournalError) {
         isLoading = false
         let (title, message) = ErrorAlertFactory.saveErrorAlert(for: error)
         displayAlert(title: title, message: message)
     }
     
-    func dataModel(didHaveCloudKitError error: CKError) {
+    func dataService(didHaveCloudKitError error: CKError) {
         isLoading = false
         let (title, message) = ErrorAlertFactory.cloudKitErrorAlert(for: error)
         displayAlert(title: title, message: message)
-    }
-}
-
-// MARK: - TripDetailViewControllerDelegate
-extension TripListViewController: TripDetailViewControllerDelegate {
-    func tripDetailViewControllerDidAdd(_ trip: Trip) {
-        dataModel.add(trip: trip)
-        tableView.reloadData()
-    }
-    
-    func tripDetailViewControllerDidUpdate(_ trip: Trip) {
-        if let index = dataModel.trips.firstIndex(where: {$0.id == trip.id}) {
-            dataModel.updatedTrip()
-            let indexPath = IndexPath(row: index, section: 0)
-            tableView.reloadRows(at: [indexPath], with: .automatic)
-            reloadFooter()
-        }
-    }
-    
-    func tripDetailViewControllerDidDelete(_ trip: Trip) {
-        if let index = dataModel.trips.firstIndex(where: {$0.id == trip.id}) {
-            dataModel.delete(trip: trip)
-            let indexPath = IndexPath(row: index, section: 0)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            reloadFooter()
-        }
     }
 }

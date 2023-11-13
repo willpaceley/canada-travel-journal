@@ -21,7 +21,7 @@ class ConnectivityManager {
         monitor.pathUpdateHandler = pathUpdateHandler(_:)
     }
     
-    // Call startMonitor() after the DataModel delegate has been set
+    // Call startMonitor() after the TripDataService delegate has been set
     func startMonitor() {
         let queue = DispatchQueue(label: "Monitor")
         monitor.start(queue: queue)

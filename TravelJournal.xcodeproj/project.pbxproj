@@ -16,7 +16,7 @@
 		075E212B296A1F3C00899FC1 /* TripDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075E212A296A1F3C00899FC1 /* TripDetailViewController.swift */; };
 		07E828F3296DFDDD0092BF3C /* TripViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E828F2296DFDDD0092BF3C /* TripViewCell.swift */; };
 		BE1729912A828CAA00D6DBD7 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1729902A828CAA00D6DBD7 /* CloudKitManager.swift */; };
-		BE5A2E652AA75B2F0064CDDC /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E642AA75B2F0064CDDC /* DataModel.swift */; };
+		BE5A2E652AA75B2F0064CDDC /* TripDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E642AA75B2F0064CDDC /* TripDataService.swift */; };
 		BE5A2E692AAA47BA0064CDDC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E682AAA47BA0064CDDC /* Constants.swift */; };
 		BE5A2E6E2AAEA1990064CDDC /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */; };
 		BE66D7F72AE3011B00986235 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */; };
@@ -55,7 +55,7 @@
 		07E828F2296DFDDD0092BF3C /* TripViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewCell.swift; sourceTree = "<group>"; };
 		BE1729902A828CAA00D6DBD7 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		BE187B142AD4B05600EAE845 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		BE5A2E642AA75B2F0064CDDC /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		BE5A2E642AA75B2F0064CDDC /* TripDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDataService.swift; sourceTree = "<group>"; };
 		BE5A2E682AAA47BA0064CDDC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
@@ -114,9 +114,10 @@
 		BE17298F2A828C9D00D6DBD7 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				BE9ED8CE2AF843AE00734B0E /* Alerts */,
+				BEC1032D2B029F7A00536A80 /* Services */,
 				BE5A2E6F2AAEA5F80064CDDC /* Managers */,
 				BE5A2E6C2AAEA1850064CDDC /* Extensions */,
+				BE9ED8CE2AF843AE00734B0E /* Alerts */,
 				BE5A2E682AAA47BA0064CDDC /* Constants.swift */,
 				BE90DA252AB3490D005D3450 /* Countries.swift */,
 			);
@@ -127,7 +128,6 @@
 			isa = PBXGroup;
 			children = (
 				075E2124296886E000899FC1 /* Trip.swift */,
-				BE5A2E642AA75B2F0064CDDC /* DataModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -185,6 +185,14 @@
 				BE9ED8CF2AF8441700734B0E /* PersistenceAlertFactory.swift */,
 			);
 			path = Alerts;
+			sourceTree = "<group>";
+		};
+		BEC1032D2B029F7A00536A80 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BE5A2E642AA75B2F0064CDDC /* TripDataService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,7 +273,7 @@
 				BE90DA282AB4A11A005D3450 /* String+Ext.swift in Sources */,
 				075E21132968829200899FC1 /* SceneDelegate.swift in Sources */,
 				BE1729912A828CAA00D6DBD7 /* CloudKitManager.swift in Sources */,
-				BE5A2E652AA75B2F0064CDDC /* DataModel.swift in Sources */,
+				BE5A2E652AA75B2F0064CDDC /* TripDataService.swift in Sources */,
 				BEAA579D2AD44194004F19D0 /* FileManager+Ext.swift in Sources */,
 				075E212B296A1F3C00899FC1 /* TripDetailViewController.swift in Sources */,
 				BE90DA242AB347AC005D3450 /* CountrySearchViewController.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  DataModel.swift
+//  TripDataService.swift
 //  TravelJournal
 //
 //  Created by Will Paceley on 2023-09-05.
@@ -8,16 +8,16 @@
 import CloudKit
 import Network
 
-protocol DataModelDelegate: AnyObject {
-    func dataModelDidChange()
-    func dataModelDidLoadTrips()
-    func dataModelPersistenceStatus(changedTo status: PersistenceStatus)
-    func dataModel(didHaveLoadError error: TravelJournalError)
-    func dataModel(didHaveSaveError error: TravelJournalError)
-    func dataModel(didHaveCloudKitError error: CKError)
+protocol TripDataServiceDelegate: AnyObject {
+    func tripDataDidChange()
+    func dataServiceDidLoadTrips()
+    func dataServicePersistenceStatus(changedTo status: PersistenceStatus)
+    func dataService(didHaveLoadError error: TravelJournalError)
+    func dataService(didHaveSaveError error: TravelJournalError)
+    func dataService(didHaveCloudKitError error: CKError)
 }
 
-class DataModel {
+class TripDataService {
     private(set) var trips = [Trip]()
     private var hasUnsavedChanges = false
     
@@ -29,7 +29,7 @@ class DataModel {
             // TODO: Add check to prevent sending delegate updates when nothing changed
             // WP note: this might be impossible as sending .unknown as status is important?
             DispatchQueue.main.async {
-                self.delegate.dataModelPersistenceStatus(changedTo: self.persistenceStatus)
+                self.delegate.dataServicePersistenceStatus(changedTo: self.persistenceStatus)
             }
         }
     }
@@ -37,7 +37,7 @@ class DataModel {
         trips.reduce(0) { $0 + $1.days }
     }
     
-    weak var delegate: DataModelDelegate!
+    weak var delegate: TripDataServiceDelegate!
     
     // MARK: - Initializer
     init(cloudKitManager: CloudKitManager, connectivityManager: ConnectivityManager) {
@@ -53,7 +53,7 @@ class DataModel {
         trips.append(trip)
         sortByReverseChronological()
         hasUnsavedChanges = true
-        delegate.dataModelDidChange()
+        delegate.tripDataDidChange()
     }
     
     func updatedTrip() {
@@ -64,7 +64,7 @@ class DataModel {
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)
             hasUnsavedChanges = true
-            delegate.dataModelDidChange()
+            delegate.tripDataDidChange()
         } else {
             print("There was a problem finding the index of the trip to delete")
         }
@@ -74,13 +74,13 @@ class DataModel {
     func loadTrips() {
         guard persistenceStatus != .unknown else {
             print("Persistence status was unknown. Did not load trips.")
-            delegate.dataModel(didHaveLoadError: TravelJournalError.unknownPersistenceStatus)
+            delegate.dataService(didHaveLoadError: TravelJournalError.unknownPersistenceStatus)
             return
         }
         
         guard !hasUnsavedChanges else {
-            print("There are unsaved changes in the data model. Did not load trips.")
-            delegate.dataModel(didHaveLoadError: TravelJournalError.unsavedChanges)
+            print("There are unsaved changes. Did not load trips.")
+            delegate.dataService(didHaveLoadError: TravelJournalError.unsavedChanges)
             return
         }
         
@@ -94,14 +94,14 @@ class DataModel {
                         self?.trips = trips
                     }
                     DispatchQueue.main.async {
-                        self?.delegate.dataModelDidLoadTrips()
-                        self?.delegate.dataModelDidChange()
+                        self?.delegate.dataServiceDidLoadTrips()
+                        self?.delegate.tripDataDidChange()
                     }
                     return
                 case .failure(let error):
                     let loadError = TravelJournalError.loadError(error)
                     DispatchQueue.main.async {
-                        self?.delegate.dataModel(didHaveLoadError: loadError)
+                        self?.delegate.dataService(didHaveLoadError: loadError)
                     }
                 }
             }
@@ -119,11 +119,11 @@ class DataModel {
             } catch {
                 print("An error occured loading trips from device storage: \(error.localizedDescription)")
                 let loadError = TravelJournalError.loadError(error)
-                delegate.dataModel(didHaveLoadError: loadError)
+                delegate.dataService(didHaveLoadError: loadError)
                 return
             }
-            delegate.dataModelDidLoadTrips()
-            delegate.dataModelDidChange()
+            delegate.dataServiceDidLoadTrips()
+            delegate.tripDataDidChange()
         }
     }
     
@@ -146,7 +146,7 @@ class DataModel {
                     self?.cloudKitManager.iCloudDataIsStale = true
                     let saveError = TravelJournalError.saveError(error)
                     DispatchQueue.main.async {
-                        self?.delegate.dataModel(didHaveSaveError: saveError)
+                        self?.delegate.dataService(didHaveSaveError: saveError)
                     }
                 }
             }
@@ -187,7 +187,7 @@ class DataModel {
 }
 
 // MARK: - CloudKitManagerDelegate
-extension DataModel: CloudKitManagerDelegate {
+extension TripDataService: CloudKitManagerDelegate {
     func cloudKitManager(accountStatusDidChange accountStatus: CKAccountStatus) {
         print("CloudKit account status changed to: \(accountStatus)")
         
@@ -205,12 +205,12 @@ extension DataModel: CloudKitManagerDelegate {
             return
         }
         
-        delegate.dataModel(didHaveCloudKitError: ckError)
+        delegate.dataService(didHaveCloudKitError: ckError)
     }
 }
 
 // MARK: - ConnectivityManagerDelegate
-extension DataModel: ConnectivityManagerDelegate {
+extension TripDataService: ConnectivityManagerDelegate {
     func connectivityManagerStatusChanged(to status: NWPath.Status) {
         guard status == .satisfied else {
             print("Device is not connected to a network.")
