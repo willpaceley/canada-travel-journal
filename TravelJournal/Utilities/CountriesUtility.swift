@@ -1,5 +1,5 @@
 //
-//  Countries.swift
+//  CountriesUtility.swift
 //  TravelJournal
 //
 //  Created by Will Paceley on 2023-09-14.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct Countries {
+struct CountriesUtility {
     // Method to populate country array using NSLocale.isoCountryCodes by Amir Sk on Stack Overflow
     // Link: https://stackoverflow.com/questions/27875463/how-do-i-get-a-list-of-countries-in-swift-ios
-    static func all(excluding countryCodes: [String] = []) -> [String] {
+    static func allCountries(excluding countryCodes: [String] = []) -> [String] {
         var countries = [String]()
         let userLocaleId = Locale.current.identifier
         

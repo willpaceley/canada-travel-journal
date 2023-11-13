@@ -14,7 +14,7 @@ protocol CountrySearchViewControllerDelegate: AnyObject {
 class CountrySearchViewController: UITableViewController {
     weak var delegate: CountrySearchViewControllerDelegate!
     
-    var countries = Countries.all(excluding: ["CA"])
+    var countries = CountriesUtility.allCountries(excluding: ["CA"])
     var selectedCountry: String?
     var searchString = ""
     
@@ -71,7 +71,7 @@ extension CountrySearchViewController: UISearchResultsUpdating {
         guard let text = searchController.searchBar.text else { return }
         searchString = text
         
-        let allCountries = Countries.all(excluding: ["CA"])
+        let allCountries = CountriesUtility.allCountries(excluding: ["CA"])
         if !text.isEmpty {
             let matchedCountries = allCountries.filter {
                 $0.localizedLowercase.starts(with: text.localizedLowercase)
