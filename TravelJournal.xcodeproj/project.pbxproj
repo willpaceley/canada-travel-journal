@@ -27,6 +27,7 @@
 		BE9ED8D02AF8441700734B0E /* PersistenceAlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9ED8CF2AF8441700734B0E /* PersistenceAlertFactory.swift */; };
 		BEAA579D2AD44194004F19D0 /* FileManager+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAA579C2AD44194004F19D0 /* FileManager+Ext.swift */; };
 		BEBE93BE2B07B76C00FA5396 /* Logger+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBE93BD2B07B76C00FA5396 /* Logger+Ext.swift */; };
+		BEBE93C02B07C1A600FA5396 /* CKAccountStatus+CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBE93BF2B07C1A600FA5396 /* CKAccountStatus+CustomStringConvertible.swift */; };
 		BEC1032C2AFD6B9100536A80 /* ErrorAlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC1032B2AFD6B9100536A80 /* ErrorAlertFactory.swift */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,7 @@
 		BE9ED8CF2AF8441700734B0E /* PersistenceAlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceAlertFactory.swift; sourceTree = "<group>"; };
 		BEAA579C2AD44194004F19D0 /* FileManager+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Ext.swift"; sourceTree = "<group>"; };
 		BEBE93BD2B07B76C00FA5396 /* Logger+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Ext.swift"; sourceTree = "<group>"; };
+		BEBE93BF2B07C1A600FA5396 /* CKAccountStatus+CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKAccountStatus+CustomStringConvertible.swift"; sourceTree = "<group>"; };
 		BEC1032B2AFD6B9100536A80 /* ErrorAlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -167,6 +169,7 @@
 		BE5A2E6C2AAEA1850064CDDC /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				BEBE93C12B07C20000FA5396 /* CustomStringConvertible */,
 				BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */,
 				BE90DA272AB4A11A005D3450 /* String+Ext.swift */,
 				BEBE93BD2B07B76C00FA5396 /* Logger+Ext.swift */,
@@ -191,6 +194,14 @@
 				BE9ED8CF2AF8441700734B0E /* PersistenceAlertFactory.swift */,
 			);
 			path = Alerts;
+			sourceTree = "<group>";
+		};
+		BEBE93C12B07C20000FA5396 /* CustomStringConvertible */ = {
+			isa = PBXGroup;
+			children = (
+				BEBE93BF2B07C1A600FA5396 /* CKAccountStatus+CustomStringConvertible.swift */,
+			);
+			path = CustomStringConvertible;
 			sourceTree = "<group>";
 		};
 		BEC1032D2B029F7A00536A80 /* Services */ = {
@@ -281,6 +292,7 @@
 				BE1729912A828CAA00D6DBD7 /* CloudKitManager.swift in Sources */,
 				BE5A2E652AA75B2F0064CDDC /* TripDataService.swift in Sources */,
 				BEAA579D2AD44194004F19D0 /* FileManager+Ext.swift in Sources */,
+				BEBE93C02B07C1A600FA5396 /* CKAccountStatus+CustomStringConvertible.swift in Sources */,
 				075E212B296A1F3C00899FC1 /* TripDetailViewController.swift in Sources */,
 				BE90DA242AB347AC005D3450 /* CountrySearchViewController.swift in Sources */,
 				BEBE93BE2B07B76C00FA5396 /* Logger+Ext.swift in Sources */,

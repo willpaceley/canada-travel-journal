@@ -192,7 +192,7 @@ class TripDataService {
 // MARK: - CloudKitManagerDelegate
 extension TripDataService: CloudKitManagerDelegate {
     func cloudKitManager(accountStatusDidChange accountStatus: CKAccountStatus) {
-        logger.debug("CloudKit account status value changed to: \(accountStatus.rawValue)")
+        logger.debug("CloudKit account status changed to: \(accountStatus)")
         
         // networkUnavailable state has priority over iCloud status
         if persistenceStatus != .networkUnavailable {
