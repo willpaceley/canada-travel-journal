@@ -14,7 +14,6 @@ extension FileManager {
     
     func getTripDataURL() -> URL {
         let documentDirectory = getDocumentsDirectory()
-//        print(documentDirectory)
         let url: URL
         if #available(iOS 16.0, *) {
             url = documentDirectory.appending(path: "TripData.json")

@@ -28,6 +28,7 @@
 		BEAA579D2AD44194004F19D0 /* FileManager+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAA579C2AD44194004F19D0 /* FileManager+Ext.swift */; };
 		BEBE93BE2B07B76C00FA5396 /* Logger+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBE93BD2B07B76C00FA5396 /* Logger+Ext.swift */; };
 		BEBE93C02B07C1A600FA5396 /* CKAccountStatus+CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBE93BF2B07C1A600FA5396 /* CKAccountStatus+CustomStringConvertible.swift */; };
+		BEBE93C32B07C51E00FA5396 /* PersistenceStatus+CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBE93C22B07C51E00FA5396 /* PersistenceStatus+CustomStringConvertible.swift */; };
 		BEC1032C2AFD6B9100536A80 /* ErrorAlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC1032B2AFD6B9100536A80 /* ErrorAlertFactory.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		BEAA579C2AD44194004F19D0 /* FileManager+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Ext.swift"; sourceTree = "<group>"; };
 		BEBE93BD2B07B76C00FA5396 /* Logger+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Ext.swift"; sourceTree = "<group>"; };
 		BEBE93BF2B07C1A600FA5396 /* CKAccountStatus+CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKAccountStatus+CustomStringConvertible.swift"; sourceTree = "<group>"; };
+		BEBE93C22B07C51E00FA5396 /* PersistenceStatus+CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistenceStatus+CustomStringConvertible.swift"; sourceTree = "<group>"; };
 		BEC1032B2AFD6B9100536A80 /* ErrorAlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -200,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				BEBE93BF2B07C1A600FA5396 /* CKAccountStatus+CustomStringConvertible.swift */,
+				BEBE93C22B07C51E00FA5396 /* PersistenceStatus+CustomStringConvertible.swift */,
 			);
 			path = CustomStringConvertible;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 				BEC1032C2AFD6B9100536A80 /* ErrorAlertFactory.swift in Sources */,
 				07E828F3296DFDDD0092BF3C /* TripViewCell.swift in Sources */,
 				BE5A2E692AAA47BA0064CDDC /* Constants.swift in Sources */,
+				BEBE93C32B07C51E00FA5396 /* PersistenceStatus+CustomStringConvertible.swift in Sources */,
 				BE90DA262AB3490D005D3450 /* CountriesUtility.swift in Sources */,
 				BE5A2E6E2AAEA1990064CDDC /* Date+Ext.swift in Sources */,
 				BE9ED8D02AF8441700734B0E /* PersistenceAlertFactory.swift in Sources */,

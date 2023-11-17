@@ -8,6 +8,9 @@
 import UIKit
 import CloudKit
 import Network
+import OSLog
+
+fileprivate let logger = Logger(category: "TripListViewController")
 
 class TripListViewController: UITableViewController {
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
@@ -48,7 +51,7 @@ class TripListViewController: UITableViewController {
         do {
             try CSVUtility.writeCSVFile(csvContent: csvContent)
         } catch {
-            print("An error occurred writing the CSV file to the device.")
+            logger.error("An error occurred writing the CSV file to the device.")
             return
         }
         
@@ -215,7 +218,7 @@ extension TripListViewController {
 
             headerView.contentConfiguration = config
         } else {
-            print("A problem occurred casting header view parameter to UITableHeaderFooterView.")
+            logger.error("A problem occurred casting header view parameter to UITableHeaderFooterView.")
         }
     }
     
@@ -225,7 +228,7 @@ extension TripListViewController {
             config.text = "Total days outside of Canada: \(dataService.totalDays)"
             footerView.contentConfiguration = config
         } else {
-            print("A problem occurred casting footer view parameter to UITableHeaderFooterView.")
+            logger.error("A problem occurred casting footer view parameter to UITableHeaderFooterView.")
         }
     }
 }
@@ -259,7 +262,7 @@ extension TripListViewController: TripDetailViewControllerDelegate {
 // MARK: - TripsDataServiceDelegate
 extension TripListViewController: TripDataServiceDelegate {
     func dataServicePersistenceStatus(changedTo status: PersistenceStatus) {
-        print("Data service persistence status changed to: \(status)")
+        logger.log("Data service persistence status changed to: \(status)")
         // Unknown status occurs when device status changes to connected
         if status == .unknown {
             isLoading = true
