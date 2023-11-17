@@ -7,6 +7,9 @@
 
 import CloudKit
 import Network
+import OSLog
+
+fileprivate let logger = Logger(category: "TripDataService")
 
 protocol TripDataServiceDelegate: AnyObject {
     func tripDataDidChange()
@@ -64,20 +67,20 @@ class TripDataService {
             hasUnsavedChanges = true
             delegate.tripDataDidChange()
         } else {
-            print("There was a problem finding the index of the trip to delete")
+            logger.error("There was a problem finding the index of the trip to delete")
         }
     }
     
     // MARK: - Data Persistence
     func loadTrips() {
         guard persistenceStatus != .unknown else {
-            print("Persistence status was unknown. Did not load trips.")
+            logger.warning("Persistence status was unknown. Did not load trips.")
             delegate.dataService(didHaveLoadError: TravelJournalError.unknownPersistenceStatus)
             return
         }
         
         guard !hasUnsavedChanges else {
-            print("There are unsaved changes. Did not load trips.")
+            logger.warning("There are unsaved changes. Did not load trips.")
             delegate.dataService(didHaveLoadError: TravelJournalError.unsavedChanges)
             return
         }
@@ -93,7 +96,7 @@ class TripDataService {
     
     func saveTrips() {
         guard persistenceStatus != .unknown else {
-            print("Persistence status was unknown. Did not save trips.")
+            logger.warning("Persistence status was unknown. Did not save trips.")
             return
         }
 
@@ -138,14 +141,14 @@ class TripDataService {
     private func loadTripsFromDevice() {
         let fileManager = FileManager.default
         if fileManager.tripDataFileExists() {
-            print("Loading trips from on-device storage.")
+            logger.log("Loading trips from on-device storage.")
             let url = fileManager.getTripDataURL()
             do {
                 let tripData = try Data(contentsOf: url)
                 trips = try JSONDecoder().decode([Trip].self, from: tripData)
-                print("Trips successfully decoded from device storage.")
+                logger.log("Trips successfully decoded from device storage.")
             } catch {
-                print("An error occured loading trips from device storage: \(error.localizedDescription)")
+                logger.error("An error occured loading trips from device storage: \(error.localizedDescription)")
                 let loadError = TravelJournalError.loadError(error)
                 delegate.dataService(didHaveLoadError: loadError)
                 return
@@ -159,11 +162,11 @@ class TripDataService {
         cloudKitManager.postTrips(trips: trips) { [weak self] result in
             switch result {
             case .success(_):
-                print("Trips successfully saved to CloudKit DB.")
+                logger.log("Trips successfully saved to CloudKit DB.")
                 self?.cloudKitManager.iCloudDataIsStale = false
                 self?.hasUnsavedChanges = false
             case .failure(let error):
-                print("An error occurred while attempting to save trips to CloudKit DB.")
+                logger.error("An error occurred while attempting to save trips to CloudKit DB.")
                 self?.cloudKitManager.iCloudDataIsStale = true
                 let saveError = TravelJournalError.saveError(error)
                 DispatchQueue.main.async {
@@ -178,10 +181,10 @@ class TripDataService {
         do {
             let jsonData = try JSONEncoder().encode(trips)
             try jsonData.write(to: url, options: [.atomic])
-            print("Trip data successfully saved in the app's documents directory.")
+            logger.log("Trip data successfully saved in the app's documents directory.")
             hasUnsavedChanges = false
         } catch {
-            print("An error occurred saving trip data on device: \(error.localizedDescription)")
+            logger.error("An error occurred saving trip data on device: \(error.localizedDescription)")
         }
     }
 }
@@ -189,7 +192,7 @@ class TripDataService {
 // MARK: - CloudKitManagerDelegate
 extension TripDataService: CloudKitManagerDelegate {
     func cloudKitManager(accountStatusDidChange accountStatus: CKAccountStatus) {
-        print("CloudKit account status changed to: \(accountStatus)")
+        logger.debug("CloudKit account status value changed to: \(accountStatus.rawValue)")
         
         // networkUnavailable state has priority over iCloud status
         if persistenceStatus != .networkUnavailable {
@@ -213,7 +216,7 @@ extension TripDataService: CloudKitManagerDelegate {
 extension TripDataService: ConnectivityManagerDelegate {
     func connectivityManagerStatusChanged(to status: NWPath.Status) {
         guard status == .satisfied else {
-            print("Device is not connected to a network.")
+            logger.warning("Device is not connected to a network.")
             persistenceStatus = .networkUnavailable
             return
         }
