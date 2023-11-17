@@ -8,6 +8,9 @@
 //  From the article: https://cocoacasts.com/handling-account-status-changes-with-cloudkit
 
 import CloudKit
+import OSLog
+
+fileprivate let logger = Logger(category: "CloudKitManager")
 
 protocol CloudKitManagerDelegate: AnyObject {
     func cloudKitManager(accountStatusDidChange accountStatus: CKAccountStatus)
@@ -52,7 +55,8 @@ class CloudKitManager {
     }
     
     @objc func accountDidChange(_ notification: Notification) {
-        print("accountDidChange notification received. Requesting updated CKAccountStatus.")
+        logger.log("accountDidChange notification received. Requesting updated CKAccountStatus.")
+        // TODO: Consider setting a flag to prevent re-requesting while a request is in progress
         DispatchQueue.main.async {
             self.requestAccountStatus()
         }
@@ -85,7 +89,7 @@ class CloudKitManager {
             switch result {
             case .success((let matchResults, _)):
                 if matchResults.isEmpty {
-                    print("No Trips record found in CloudKit DB.")
+                    logger.log("No Trips record found in CloudKit DB.")
                     completionHandler(.success(nil))
                     return
                 }
@@ -93,13 +97,14 @@ class CloudKitManager {
                 let (_, matchResult) = matchResults.first!
                 switch matchResult {
                 case .success(let record):
+                    logger.log("Found a pre-existing trips record ID: \(record.recordID.recordName)")
                     // Set the record ID to update later without re-fetching
                     self?.tripsRecordID = record.recordID
                     self?.checkedForExistingRecord = true
                     
                     if let tripData = record.value(forKey: tripDataKey) as? Data,
                        let trips = try? JSONDecoder().decode([Trip].self, from: tripData) {
-                        print("Successfully decoded trips from CK database, calling handler.")
+                        logger.log("Successfully decoded trips from CloudKit database.")
                         completionHandler(.success(trips))
                         return
                     }
@@ -119,19 +124,17 @@ class CloudKitManager {
         // Only proceed if there is a pre-existing CKRecord.ID for the trip data
         guard let tripsRecordID else {
             if checkedForExistingRecord {
-                // If we checked for a record and it didn't exist, create a new one
-                print("No trips found in CloudKit DB. Creating new record.")
+                logger.log("No trips found in CloudKit DB. Creating new record.")
                 createNewTripsRecord(trips: trips, completionHandler: completionHandler)
             } else {
-                // Check for a pre-existing CKRecord.ID before creating a new record
-                print("Checking for a pre-existing trips record ID in CloudKit DB.")
+                logger.log("Checking for a pre-existing trips record ID in CloudKit DB.")
                 checkForTripsRecordID(trips: trips, completionHandler: completionHandler)
             }
             return
         }
         
         // There is an existing trips record saved in CloudKit database
-        print("Trips are already saved in CloudKit DB. Updating existing record.")
+        logger.log("Trips are already saved in CloudKit DB. Updating existing record.")
         do {
             let tripsRecord = CKRecord(recordType: tripsRecordType)
             let tripData = try JSONEncoder().encode(trips)
@@ -145,12 +148,12 @@ class CloudKitManager {
                     for (recordId, saveResult) in saveResults {
                         switch saveResult {
                         case .success(let record):
-                            print("Successfully updated existing record trips record in CloudKit DB.")
+                            logger.log("Successfully updated existing record trips record in CloudKit DB.")
                             self?.tripsRecordID = recordId
                             self?.checkedForExistingRecord = true
                             completionHandler(.success(record))
                         case .failure(let error):
-                            print("An error occurred updating a trips record in CloudKit DB.")
+                            logger.error("An error occurred updating a trips record in CloudKit DB.")
                             completionHandler(.failure(error))
                         }
                     }
@@ -159,7 +162,7 @@ class CloudKitManager {
                     for (recordId, deleteResult) in deleteResults {
                         switch deleteResult {
                         case .success():
-                            print("Old Trips record successfully deleted from CloudKit: \(recordId.recordName)")
+                            logger.log("Old Trips record successfully deleted from CloudKit: \(recordId.recordName)")
                         case.failure(let error):
                             completionHandler(.failure(error))
                         }
@@ -185,17 +188,17 @@ class CloudKitManager {
                 for (recordID, _) in matchResults {
                     self.cloudKitDatabase.delete(withRecordID: recordID) { deletedRecordID, deleteError in
                         if let error = deleteError {
-                            print("An error occurred deleting CKRecord. \(error.localizedDescription)")
+                            logger.error("An error occurred deleting CKRecord. \(error.localizedDescription)")
                         }
                         
                         if let recordID = deletedRecordID {
-                            print("Deleted record with ID: \(recordID.recordName)")
+                            logger.log("Deleted record with ID: \(recordID.recordName)")
                         }
                     }
                 }
                 
             case .failure(let error):
-                print("An error occurred while fetching records to delete. \(error.localizedDescription)")
+                logger.error("An error occurred while fetching records to delete. \(error.localizedDescription)")
             }
         }
     }
@@ -206,13 +209,13 @@ class CloudKitManager {
         
         cloudKitDatabase.save(tripsRecord) { [weak self] record, error in
             if let error {
-                print("An error occurred creating new CloudKit trips record.")
+                logger.error("An error occurred creating new CloudKit trips record.")
                 completionHandler(.failure(error))
                 return
             }
             
             if let record {
-                print("Successfully saved new trips record to CloudKit.")
+                logger.log("Successfully saved new trips record to CloudKit.")
                 self?.tripsRecordID = record.recordID
                 self?.checkedForExistingRecord = true
                 completionHandler(.success(record))
@@ -237,7 +240,7 @@ class CloudKitManager {
             case .success(let (matchResults, _)):
                 if !matchResults.isEmpty {
                     let (recordID, _) = matchResults.first!
-                    print("Found a pre-existing trips record ID: \(recordID.recordName)")
+                    logger.log("Found a pre-existing trips record ID: \(recordID.recordName)")
                     self.tripsRecordID = recordID
                 }
                 
