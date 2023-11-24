@@ -99,6 +99,8 @@ class TripDataService {
             logger.warning("Persistence status was unknown. Did not save trips.")
             return
         }
+        
+        // TODO: Add a guard for empty trips array to prevent persisting nothing
 
         // If available, persist data in iCloud as source of truth across all iOS devices
         if persistenceStatus == .iCloudAvailable {
