@@ -202,11 +202,8 @@ extension TripListViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return dataService.trips.isEmpty ? "Click the ＋ button to add a new trip!" : nil
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50.0
+        // willDisplayHeaderView(_:view:section:) provides content for the header
+        return dataService.trips.isEmpty ? " " : nil
     }
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -214,8 +211,8 @@ extension TripListViewController {
             var config = headerView.defaultContentConfiguration()
 
             // Must set header text here, otherwise defaultContentConfiguration overrides the current title
-            config.text = "Start tracking your trips outside of Canada by clicking the ＋ button in the top-right."
-            config.textProperties.alignment = .center
+            config.text = "Add your first trip by clicking the ＋ button in the top-right corner."
+            config.textProperties.font = .preferredFont(forTextStyle: .headline)
             config.textProperties.lineBreakMode = .byWordWrapping
             config.textProperties.numberOfLines = 0
 
