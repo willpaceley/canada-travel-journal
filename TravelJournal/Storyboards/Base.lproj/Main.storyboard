@@ -135,33 +135,33 @@
                             <tableViewSection headerTitle="Time Outside Canada" id="yJx-Jm-1ta">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="ryk-wr-IfR">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="59"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="58.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ryk-wr-IfR" id="bRH-aq-z8J">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="59"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="58.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <datePicker tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="b1o-78-IN0">
-                                                    <rect key="frame" x="215" y="8" width="150" height="43"/>
+                                                    <rect key="frame" x="161" y="8" width="204" height="42.5"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="150" id="CoA-ww-zEp"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="CoA-ww-zEp"/>
                                                     </constraints>
                                                     <connections>
                                                         <action selector="datePickerValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="M7K-Je-gpN"/>
                                                     </connections>
                                                 </datePicker>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Depart Canada" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4NL-Ao-8Te">
-                                                    <rect key="frame" x="16" y="19" width="150" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Departure Date" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4NL-Ao-8Te">
+                                                    <rect key="frame" x="16" y="19" width="135" height="20.5"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="8M3-7D-UE9"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="135" id="8M3-7D-UE9"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="b1o-78-IN0" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="4NL-Ao-8Te" secondAttribute="trailing" constant="10" id="Fd8-4u-pRE"/>
+                                                <constraint firstItem="b1o-78-IN0" firstAttribute="leading" secondItem="4NL-Ao-8Te" secondAttribute="trailing" constant="10" id="Fd8-4u-pRE"/>
                                                 <constraint firstItem="4NL-Ao-8Te" firstAttribute="leading" secondItem="bRH-aq-z8J" secondAttribute="leadingMargin" id="I0c-qT-EGI"/>
                                                 <constraint firstItem="b1o-78-IN0" firstAttribute="top" secondItem="bRH-aq-z8J" secondAttribute="top" constant="8" id="Oz7-Pl-Ifq"/>
                                                 <constraint firstAttribute="bottom" secondItem="b1o-78-IN0" secondAttribute="bottom" constant="8" id="Qi4-E1-m6a"/>
@@ -172,27 +172,27 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="1xp-zK-4wt">
-                                        <rect key="frame" x="0.0" y="114.5" width="375" height="59"/>
+                                        <rect key="frame" x="0.0" y="114" width="375" height="58.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1xp-zK-4wt" id="rcN-Ev-ecm">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="59"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="58.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <datePicker tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="iFV-Ze-C0X">
-                                                    <rect key="frame" x="215" y="8" width="150" height="43"/>
+                                                    <rect key="frame" x="161" y="8" width="204" height="42.5"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="150" id="qF9-yJ-iAl"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="qF9-yJ-iAl"/>
                                                     </constraints>
                                                     <connections>
                                                         <action selector="datePickerValueChanged:" destination="mer-2w-ESy" eventType="valueChanged" id="hIZ-QB-sNV"/>
                                                     </connections>
                                                 </datePicker>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Return to Canada" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bpd-94-L7K">
-                                                    <rect key="frame" x="16" y="19" width="150" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Return Date" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bpd-94-L7K">
+                                                    <rect key="frame" x="16" y="19" width="135" height="20.5"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="DQ9-v2-ceX"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="135" id="DQ9-v2-ceX"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -201,7 +201,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="iFV-Ze-C0X" secondAttribute="trailing" constant="10" id="Ceh-D3-gOJ"/>
                                                 <constraint firstItem="bpd-94-L7K" firstAttribute="bottom" secondItem="rcN-Ev-ecm" secondAttribute="bottomMargin" constant="-8" id="Efk-uc-Htt"/>
                                                 <constraint firstItem="bpd-94-L7K" firstAttribute="leading" secondItem="rcN-Ev-ecm" secondAttribute="leadingMargin" id="IPQ-gF-XfK"/>
-                                                <constraint firstItem="iFV-Ze-C0X" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="bpd-94-L7K" secondAttribute="trailing" constant="10" id="Q5G-TE-LVZ"/>
+                                                <constraint firstItem="iFV-Ze-C0X" firstAttribute="leading" secondItem="bpd-94-L7K" secondAttribute="trailing" constant="10" id="Q5G-TE-LVZ"/>
                                                 <constraint firstAttribute="bottom" secondItem="iFV-Ze-C0X" secondAttribute="bottom" constant="8" id="Zgq-4B-rJ2"/>
                                                 <constraint firstItem="bpd-94-L7K" firstAttribute="top" secondItem="rcN-Ev-ecm" secondAttribute="topMargin" constant="8" id="urI-8b-L1C"/>
                                                 <constraint firstItem="iFV-Ze-C0X" firstAttribute="top" secondItem="rcN-Ev-ecm" secondAttribute="top" constant="8" id="xk5-Ld-Er7"/>
@@ -213,16 +213,16 @@
                             <tableViewSection headerTitle="Destination" id="t5L-AC-H8g">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="PJ6-pv-wav" style="IBUITableViewCellStyleDefault" id="dA9-HE-41b">
-                                        <rect key="frame" x="0.0" y="229.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="228.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dA9-HE-41b" id="3kF-tJ-kVf">
                                             <rect key="frame" x="0.0" y="0.0" width="348.5" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Choose A Country" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PJ6-pv-wav">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Choose A Country" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="PJ6-pv-wav">
                                                     <rect key="frame" x="16" y="0.0" width="324.5" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -237,15 +237,15 @@
                             <tableViewSection headerTitle="Reason For Travel" id="X2S-oh-LOw">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="bai-Nz-Cuy">
-                                        <rect key="frame" x="0.0" y="329.5" width="375" height="66"/>
+                                        <rect key="frame" x="0.0" y="328.5" width="375" height="66"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bai-Nz-Cuy" id="gAc-BY-IWu">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="66"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Vacation, work, family, etc." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Eh9-je-tzA">
+                                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Vacation, work, family, etc." textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Eh9-je-tzA">
                                                     <rect key="frame" x="16" y="16" width="343" height="34"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                     <connections>
                                                         <action selector="inputValueChanged:" destination="mer-2w-ESy" eventType="editingChanged" id="hkF-UC-cGe"/>
@@ -265,7 +265,7 @@
                             <tableViewSection id="RpT-Rw-B9c" userLabel="Add Trip">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="PVX-u4-NFi">
-                                        <rect key="frame" x="0.0" y="431.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="430.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PVX-u4-NFi" id="cc8-wf-EQg">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
