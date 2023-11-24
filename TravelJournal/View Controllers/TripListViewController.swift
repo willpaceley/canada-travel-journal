@@ -37,8 +37,7 @@ class TripListViewController: UITableViewController {
         dataService.connectivityManager.startMonitor()
         
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.sizeToFit()
-        title = "Canada Travel Journal"
+        title = "My Trips"
         
         // Fetch most recent data when user pulls down on UITableView
         self.refreshControl?.addTarget(self, action: #selector(refreshTable), for: UIControl.Event.valueChanged)
@@ -269,7 +268,8 @@ extension TripListViewController: TripDataServiceDelegate {
             dataService.cloudKitManager.requestAccountStatus()
             return
         }
-
+        
+        // TODO: Confirm loading logic here.
         if dataService.trips.isEmpty {
             isLoading = true
             dataService.loadTrips()

@@ -36,15 +36,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <activityIndicatorView key="tableFooterView" hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" id="wWi-Nq-Deu">
-                            <rect key="frame" x="0.0" y="135.5" width="375" height="44"/>
+                            <rect key="frame" x="0.0" y="134" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </activityIndicatorView>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Trip" editingAccessoryType="disclosureIndicator" id="UF6-Sn-afZ" customClass="TripViewCell" customModule="TravelJournal" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="50" width="375" height="57.5"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="56"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UF6-Sn-afZ" id="bod-hA-w9Y">
-                                    <rect key="frame" x="0.0" y="0.0" width="348.5" height="57.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="348.5" height="56"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Country" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQx-gv-Y9T">
@@ -54,14 +54,14 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="je9-T4-AhC">
-                                            <rect key="frame" x="16" y="31.5" width="278.5" height="20"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                            <rect key="frame" x="16" y="31.5" width="278.5" height="18.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                            <color key="textColor" systemColor="secondaryLabelColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Days" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAV-vb-H6h">
-                                            <rect key="frame" x="304.5" y="19" width="36" height="19.5"/>
+                                            <rect key="frame" x="304.5" y="18.5" width="36" height="19.5"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
-                                            <color key="textColor" systemColor="secondaryLabelColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -90,7 +90,7 @@
                             <outlet property="delegate" destination="Ovz-4b-Pf9" id="c8q-v8-36V"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Canada Travel Journal" id="CQK-J5-w3B">
+                    <navigationItem key="navigationItem" id="CQK-J5-w3B">
                         <leftBarButtonItems>
                             <barButtonItem enabled="NO" title="Item" image="square.and.arrow.up" catalog="system" id="nQa-BR-Uo7">
                                 <connections>
