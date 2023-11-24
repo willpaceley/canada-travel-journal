@@ -127,7 +127,9 @@ class TripListViewController: UITableViewController {
         
         accentColor = persistenceStatus == .iCloudAvailable ? .systemGreen : .systemRed
         var symbolConfig = UIImage.SymbolConfiguration(paletteColors: [accentColor, .tertiaryLabel])
-        symbolConfig = symbolConfig.applying(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 22)))
+        symbolConfig = symbolConfig.applying(
+            UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .title2))
+        )
         
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: systemIcon), for: .normal)
@@ -214,6 +216,7 @@ extension TripListViewController {
             // Must set header text here, otherwise defaultContentConfiguration overrides the current title
             config.text = "Start tracking your trips outside of Canada by clicking the ＋ button in the top-right."
             config.textProperties.alignment = .center
+            config.textProperties.lineBreakMode = .byWordWrapping
             config.textProperties.numberOfLines = 0
 
             headerView.contentConfiguration = config

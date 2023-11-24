@@ -36,33 +36,32 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <activityIndicatorView key="tableFooterView" hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" id="wWi-Nq-Deu">
-                            <rect key="frame" x="0.0" y="133" width="375" height="44"/>
+                            <rect key="frame" x="0.0" y="135.5" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </activityIndicatorView>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Trip" editingAccessoryType="disclosureIndicator" id="UF6-Sn-afZ" customClass="TripViewCell" customModule="TravelJournal" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="50" width="375" height="55"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="57.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UF6-Sn-afZ" id="bod-hA-w9Y">
-                                    <rect key="frame" x="0.0" y="0.0" width="348.5" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="348.5" height="57.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Country" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQx-gv-Y9T">
-                                            <rect key="frame" x="16" y="6" width="282.5" height="20.5"/>
-                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Country" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQx-gv-Y9T">
+                                            <rect key="frame" x="16" y="6" width="278.5" height="20.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="je9-T4-AhC">
-                                            <rect key="frame" x="16" y="31.5" width="30.5" height="17.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <nil key="textColor"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="je9-T4-AhC">
+                                            <rect key="frame" x="16" y="31.5" width="278.5" height="20"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Days" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAV-vb-H6h">
-                                            <rect key="frame" x="308.5" y="19" width="32" height="17"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <nil key="textColor"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Days" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAV-vb-H6h">
+                                            <rect key="frame" x="304.5" y="19" width="36" height="19.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                            <color key="textColor" systemColor="secondaryLabelColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -73,6 +72,7 @@
                                         <constraint firstItem="je9-T4-AhC" firstAttribute="leading" secondItem="bod-hA-w9Y" secondAttribute="leading" constant="16" id="OOm-nR-t4h"/>
                                         <constraint firstItem="HAV-vb-H6h" firstAttribute="leading" secondItem="jQx-gv-Y9T" secondAttribute="trailing" constant="10" id="bG3-ax-j9X"/>
                                         <constraint firstItem="HAV-vb-H6h" firstAttribute="centerY" secondItem="bod-hA-w9Y" secondAttribute="centerY" id="d2t-4n-9b3"/>
+                                        <constraint firstItem="HAV-vb-H6h" firstAttribute="leading" secondItem="je9-T4-AhC" secondAttribute="trailing" constant="10" id="vVw-HE-4QF"/>
                                         <constraint firstItem="je9-T4-AhC" firstAttribute="top" secondItem="jQx-gv-Y9T" secondAttribute="bottom" constant="5" id="wAM-ah-57T"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="je9-T4-AhC" secondAttribute="bottom" constant="-10" id="we4-zO-G1t"/>
                                     </constraints>
@@ -373,6 +373,9 @@
     <resources>
         <image name="icloud" catalog="system" width="128" height="90"/>
         <image name="square.and.arrow.up" catalog="system" width="108" height="128"/>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
