@@ -11,7 +11,11 @@ extension String {
     func boldFirstNCharacters(n numberOfCharacters: Int) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: self)
         let range = NSRange(location: 0, length: numberOfCharacters)
-        attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: range)
+        attributedString.addAttribute(
+            .font,
+            value: UIFont.preferredFont(forTextStyle: .headline),
+            range: range
+        )
         return attributedString
     }
 }
