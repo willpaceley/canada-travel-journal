@@ -85,6 +85,7 @@ class CloudKitManager {
     }
     
     func fetchTrips(completionHandler: @escaping (Result<[Trip]?, Error>) -> Void) {
+        logger.log("Attempting to fetch trip data from CloudKit.")
         cloudKitDatabase.fetch(withQuery: tripsQuery, resultsLimit: 1) { [weak self] result in
             switch result {
             case .success((let matchResults, _)):

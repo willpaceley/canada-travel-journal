@@ -100,7 +100,10 @@ class TripDataService {
             return
         }
         
-        // TODO: Add a guard for empty trips array to prevent persisting nothing
+        guard !trips.isEmpty else {
+            logger.warning("No trips available to save. Did not create empty record.")
+            return
+        }
 
         // If available, persist data in iCloud as source of truth across all iOS devices
         if persistenceStatus == .iCloudAvailable {
