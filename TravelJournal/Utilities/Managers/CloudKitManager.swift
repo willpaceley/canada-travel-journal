@@ -108,6 +108,8 @@ class CloudKitManager {
                         logger.log("Successfully decoded trips from CloudKit database.")
                         completionHandler(.success(trips))
                         return
+                    } else {
+                        logger.error("An error occurred decoding trip data from the CloudKit record.")
                     }
                     
                 case .failure(let error):
@@ -206,21 +208,28 @@ class CloudKitManager {
     
     // MARK: - Private Methods
     private func createNewTripsRecord(trips: [Trip], completionHandler: @escaping (Result<CKRecord, Error>) -> Void) {
-        let tripsRecord = CKRecord(recordType: tripsRecordType)
-        
-        cloudKitDatabase.save(tripsRecord) { [weak self] record, error in
-            if let error {
-                logger.error("An error occurred creating new CloudKit trips record.")
-                completionHandler(.failure(error))
-                return
-            }
+        do {
+            let tripsRecord = CKRecord(recordType: tripsRecordType)
+            let tripData = try JSONEncoder().encode(trips)
+            tripsRecord[tripDataKey] = tripData
             
-            if let record {
-                logger.log("Successfully saved new trips record to CloudKit.")
-                self?.tripsRecordID = record.recordID
-                self?.checkedForExistingRecord = true
-                completionHandler(.success(record))
+            cloudKitDatabase.save(tripsRecord) { [weak self] record, error in
+                if let error {
+                    logger.error("An error occurred creating new CloudKit trips record.")
+                    completionHandler(.failure(error))
+                    return
+                }
+                
+                if let record {
+                    logger.log("Successfully created new trips record in CloudKit.")
+                    self?.tripsRecordID = record.recordID
+                    self?.checkedForExistingRecord = true
+                    completionHandler(.success(record))
+                }
             }
+        } catch {
+            logger.error("An error occurred encoding trip data to save in CloudKit.")
+            completionHandler(.failure(error))
         }
     }
     

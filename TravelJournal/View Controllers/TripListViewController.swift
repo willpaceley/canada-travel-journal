@@ -262,6 +262,10 @@ extension TripListViewController: TripDetailViewControllerDelegate {
 extension TripListViewController: TripDataServiceDelegate {
     func dataServicePersistenceStatus(changedTo status: PersistenceStatus) {
         logger.log("Data service persistence status changed to: \(status)")
+        
+        let button = createPersistenceStatusButton(for: status)
+        persistenceStatusButton.customView = button
+        
         // Unknown status occurs when device status changes to connected
         if status == .unknown {
             isLoading = true
@@ -269,15 +273,13 @@ extension TripListViewController: TripDataServiceDelegate {
             return
         }
         
-        // TODO: Confirm loading logic here.
         if dataService.trips.isEmpty {
             isLoading = true
             dataService.loadTrips()
+            return
         }
         
         isLoading = false
-        let button = createPersistenceStatusButton(for: status)
-        persistenceStatusButton.customView = button
     }
     
     func tripDataDidChange() {
