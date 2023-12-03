@@ -27,6 +27,7 @@ class CloudKitManager {
     private(set) var accountStatus: CKAccountStatus?
     private(set) var tripsRecordID: CKRecord.ID?
     private(set) var checkedForExistingRecord = false
+    private(set) var requestInProgress = false
     
     weak var delegate: CloudKitManagerDelegate!
     
@@ -55,17 +56,26 @@ class CloudKitManager {
     }
     
     @objc func accountDidChange(_ notification: Notification) {
-        logger.log("accountDidChange notification received. Requesting updated CKAccountStatus.")
-        // TODO: Consider setting a flag to prevent re-requesting while a request is in progress
+        logger.log("accountDidChange notification received.")
+        
+        guard !requestInProgress else {
+            logger.warning("A request for CKAccountStatus was already in progress.")
+            return
+        }
+        
+        logger.log("Requesting updated CKAccountStatus.")
         DispatchQueue.main.async {
             self.requestAccountStatus()
         }
+        
     }
     
     // MARK: - CloudKit Helper Methods
     func requestAccountStatus() {
+        requestInProgress = true
         CKContainer.default().accountStatus { [weak self] status, error in
             guard let self else { return }
+            self.requestInProgress = false
             
             if let error {
                 DispatchQueue.main.async {

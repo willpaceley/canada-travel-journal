@@ -86,6 +86,9 @@ class TripDataService {
         }
         
         let iCloudDataIsStale = UserDefaults.standard.bool(forKey: iCloudDataIsStaleKey)
+        if iCloudDataIsStale {
+            logger.warning("Trip data saved on device is more recent than iCloud record.")
+        }
         
         if persistenceStatus == .iCloudAvailable && !iCloudDataIsStale {
             loadTripsFromiCloud()
@@ -111,6 +114,7 @@ class TripDataService {
         } else {
             // Toggle flag in UserDefaults to indicate iCloud data is stale
             cloudKitManager.iCloudDataIsStale = true
+            logger.warning("iCloud unavailable for persistence. Saving trip data to device.")
         }
         
         // Always persist data on-device in case CloudKit is permanently or temporarily unavailable

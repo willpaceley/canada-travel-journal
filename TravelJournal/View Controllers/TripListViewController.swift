@@ -261,7 +261,7 @@ extension TripListViewController: TripDetailViewControllerDelegate {
 // MARK: - TripsDataServiceDelegate
 extension TripListViewController: TripDataServiceDelegate {
     func dataServicePersistenceStatus(changedTo status: PersistenceStatus) {
-        logger.log("Data service persistence status changed to: \(status)")
+        logger.log("Data service persistence status changed to: \(status, privacy: .public)")
         
         let button = createPersistenceStatusButton(for: status)
         persistenceStatusButton.customView = button
