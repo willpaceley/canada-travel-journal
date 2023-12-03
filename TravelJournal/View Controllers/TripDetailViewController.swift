@@ -32,6 +32,7 @@ class TripDetailViewController: UITableViewController {
         
         navigationItem.largeTitleDisplayMode = .never
         setupKeyboardNotifications()
+        setupAccessibility()
         
         if let trip = tripToEdit {
             title = "Edit Trip"
@@ -56,6 +57,13 @@ class TripDetailViewController: UITableViewController {
             if let country = countryLabel.text, !country.isEmpty {
                 vc.selectedCountry = country
             }
+        }
+    }
+    
+    // MARK: - Accessibility
+    func setupAccessibility() {
+        if let tripToEdit {
+            doneButton.accessibilityHint = "Trip data has not changed."
         }
     }
     
@@ -105,8 +113,11 @@ class TripDetailViewController: UITableViewController {
     
     @IBAction func inputValueChanged(_ sender: Any) {
         if let tripToEdit {
-            doneButton.isEnabled = dataChanged(for: tripToEdit)
+            let tripDataChanged = dataChanged(for: tripToEdit)
+            doneButton.isEnabled = tripDataChanged
+            doneButton.accessibilityHint = !tripDataChanged ? "Trip data has not changed." : nil
         } else {
+            // TODO: Improve accessibility for addTripButton
             addTripButton.isEnabled = tripIsValid()
         }
     }
