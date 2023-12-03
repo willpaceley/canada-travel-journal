@@ -77,6 +77,8 @@ class TripDetailViewController: UITableViewController {
             delegate.tripDetailViewControllerDidAdd(newTrip)
             navigationController?.popViewController(animated: true)
         }
+        
+        // TODO: Provide VoiceOver feedback if trip is invalid
     }
     
     @IBAction func doneButtonPressed() {
@@ -234,6 +236,7 @@ extension TripDetailViewController: CountrySearchViewControllerDelegate {
         
         navigationController?.popViewController(animated: true)
         
+        // TODO: Create extension wrapper for this notification boilerplate
         // Set focus back to country label if VoiceOver is enabled
         if UIAccessibility.isVoiceOverRunning {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

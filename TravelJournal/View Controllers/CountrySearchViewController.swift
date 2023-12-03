@@ -23,15 +23,24 @@ class CountrySearchViewController: UITableViewController {
         
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search for a country"
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         
-        // If a country is selected, automatically scroll to that row on load
         if let selectedCountry, let index = countries.firstIndex(of: selectedCountry) {
+            // If a country is selected, automatically scroll to that row on load
             let indexPath = IndexPath(row: index, section: 0)
-            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+            return
+        }
+        
+        // Focus the search bar if VoiceOver is currently enabled
+        if UIAccessibility.isVoiceOverRunning {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                UIAccessibility.post(notification: .layoutChanged, argument: searchController.searchBar)
+            }
         }
     }
 }
@@ -51,7 +60,15 @@ extension CountrySearchViewController {
         contentConfiguration.attributedText = attributedCountry
         cell.contentConfiguration = contentConfiguration
         cell.accessibilityLabel = country
-        cell.accessoryType = selectedCountry == country ? .checkmark : .none
+        
+        let isSelectedCell = selectedCountry == country
+        cell.accessoryType = isSelectedCell ? .checkmark : .none
+        
+        if UIAccessibility.isVoiceOverRunning, isSelectedCell {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                UIAccessibility.post(notification: .layoutChanged, argument: cell)
+            }
+        }
         
         return cell
     }
@@ -82,5 +99,20 @@ extension CountrySearchViewController: UISearchResultsUpdating {
         }
         
         tableView.reloadData()
+    }
+}
+
+// MARK: UISearchBarDelegate
+extension CountrySearchViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        // Set focus to first country selected if VoiceOver is enabled
+        guard !countries.isEmpty, UIAccessibility.isVoiceOverRunning else { return }
+        
+        let firstCountryIndexPath = IndexPath(row: 0, section: 0)
+        let cell = tableView.cellForRow(at: firstCountryIndexPath)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIAccessibility.post(notification: .layoutChanged, argument: cell)
+        }
     }
 }
