@@ -114,6 +114,7 @@
                     </refreshControl>
                     <connections>
                         <outlet property="activityIndicator" destination="wWi-Nq-Deu" id="n1D-sn-T0w"/>
+                        <outlet property="addTripButton" destination="a7h-0E-rRF" id="37s-D1-MIz"/>
                         <outlet property="persistenceStatusButton" destination="gCn-mP-B1N" id="1cS-xm-4EA"/>
                         <outlet property="shareButton" destination="nQa-BR-Uo7" id="CPd-hT-J8g"/>
                         <segue destination="mer-2w-ESy" kind="show" identifier="EditTrip" id="7VW-NE-1od"/>

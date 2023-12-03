@@ -15,6 +15,7 @@ fileprivate let logger = Logger(category: "TripListViewController")
 class TripListViewController: UITableViewController {
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var persistenceStatusButton: UIBarButtonItem!
+    @IBOutlet var addTripButton: UIBarButtonItem!
     @IBOutlet var shareButton: UIBarButtonItem!
     
     private var isLoading = false {
@@ -41,6 +42,8 @@ class TripListViewController: UITableViewController {
         
         // Fetch most recent data when user pulls down on UITableView
         self.refreshControl?.addTarget(self, action: #selector(refreshTable), for: UIControl.Event.valueChanged)
+        
+        setupAccessibility()
     }
     
     // MARK: - @IBAction and @objc
@@ -96,6 +99,17 @@ class TripListViewController: UITableViewController {
             let tripToEdit = sender as? Trip
             vc.tripToEdit = tripToEdit
         }
+    }
+    
+    // MARK: - Accessibility
+    func setupAccessibility() {
+        shareButton.accessibilityLabel = "Share"
+        shareButton.accessibilityHint = "Share a spreadsheet of your trips."
+        
+        persistenceStatusButton.accessibilityLabel = "App Status"
+        persistenceStatusButton.accessibilityHint = "View the current status of the application."
+        
+        addTripButton.accessibilityHint = "Add a new trip."
     }
     
     // MARK: - UI Updates
@@ -162,6 +176,7 @@ extension TripListViewController {
         cell.countryLabel.text = trip.destination
         cell.dateLabel.text = trip.departureDate.format()
         cell.daysLabel.text = "\(trip.days) \(trip.days > 1 ? "Days" : "Day")"
+        cell.accessibilityHint = "Edit the details of this trip."
         
         return cell
     }
