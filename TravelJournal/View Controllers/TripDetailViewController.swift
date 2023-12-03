@@ -32,11 +32,11 @@ class TripDetailViewController: UITableViewController {
         
         navigationItem.largeTitleDisplayMode = .never
         setupKeyboardNotifications()
-        setupAccessibility()
         
         if let trip = tripToEdit {
             title = "Edit Trip"
             addTripButton.isHidden = true
+            doneButton.accessibilityHint = "Trip data has not changed."
             
             departurePicker.date = trip.departureDate
             returnPicker.date = trip.returnDate
@@ -45,6 +45,7 @@ class TripDetailViewController: UITableViewController {
         } else {
             title = "Add New Trip"
             navigationItem.rightBarButtonItems = nil
+            addTripButton.accessibilityHint = "All fields are required."
         }
     }
 
@@ -57,13 +58,6 @@ class TripDetailViewController: UITableViewController {
             if let country = countryLabel.text, !country.isEmpty {
                 vc.selectedCountry = country
             }
-        }
-    }
-    
-    // MARK: - Accessibility
-    func setupAccessibility() {
-        if let tripToEdit {
-            doneButton.accessibilityHint = "Trip data has not changed."
         }
     }
     
@@ -117,8 +111,9 @@ class TripDetailViewController: UITableViewController {
             doneButton.isEnabled = tripDataChanged
             doneButton.accessibilityHint = !tripDataChanged ? "Trip data has not changed." : nil
         } else {
-            // TODO: Improve accessibility for addTripButton
-            addTripButton.isEnabled = tripIsValid()
+            let tripIsValid = tripIsValid()
+            addTripButton.isEnabled = tripIsValid
+            addTripButton.accessibilityHint = !tripIsValid ? "All fields are required." : nil
         }
     }
     
@@ -238,5 +233,12 @@ extension TripDetailViewController: CountrySearchViewControllerDelegate {
         inputValueChanged(country)
         
         navigationController?.popViewController(animated: true)
+        
+        // Set focus back to country label if VoiceOver is enabled
+        if UIAccessibility.isVoiceOverRunning {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                UIAccessibility.post(notification: .layoutChanged, argument: self.countryLabel)
+            }
+        }
     }
 }
