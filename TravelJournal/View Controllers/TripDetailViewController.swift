@@ -233,15 +233,7 @@ extension TripDetailViewController: CountrySearchViewControllerDelegate {
     func countrySearchViewController(didPick country: String) {
         countryLabel.text = country
         inputValueChanged(country)
-        
         navigationController?.popViewController(animated: true)
-        
-        // TODO: Create extension wrapper for this notification boilerplate
-        // Set focus back to country label if VoiceOver is enabled
-        if UIAccessibility.isVoiceOverRunning {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                UIAccessibility.post(notification: .layoutChanged, argument: self.countryLabel)
-            }
-        }
+        UIAccessibility.setVoiceOverFocus(to: countryLabel)
     }
 }

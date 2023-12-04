@@ -281,6 +281,8 @@ extension TripListViewController: TripDataServiceDelegate {
         let button = createPersistenceStatusButton(for: status)
         persistenceStatusButton.customView = button
         
+        // TODO: Add VoiceOver announcements for loading status
+        
         // Unknown status occurs when device status changes to connected
         if status == .unknown {
             isLoading = true
