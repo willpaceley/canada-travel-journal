@@ -36,7 +36,6 @@ class TripDetailViewController: UITableViewController {
         if let trip = tripToEdit {
             title = "Edit Trip"
             addTripButton.isHidden = true
-            doneButton.accessibilityHint = "Trip data has not changed."
             
             departurePicker.date = trip.departureDate
             returnPicker.date = trip.returnDate
@@ -45,8 +44,9 @@ class TripDetailViewController: UITableViewController {
         } else {
             title = "Add New Trip"
             navigationItem.rightBarButtonItems = nil
-            addTripButton.accessibilityHint = "All fields are required."
         }
+        
+        setupAccessibility()
     }
 
     // MARK: - Navigation
@@ -59,6 +59,18 @@ class TripDetailViewController: UITableViewController {
                 vc.selectedCountry = country
             }
         }
+    }
+    
+    // MARK: - Accessibility
+    private func setupAccessibility() {
+        let isEditing = tripToEdit != nil
+        if isEditing {
+            doneButton.accessibilityHint = "Trip data has not changed."
+        } else {
+            addTripButton.accessibilityHint = "Complete all fields to enable this button."
+        }
+        
+        reasonField.accessibilityHint = "Enter your reason for travelling outside of Canada."
     }
     
     // MARK: - @IBActions
@@ -77,8 +89,6 @@ class TripDetailViewController: UITableViewController {
             delegate.tripDetailViewControllerDidAdd(newTrip)
             navigationController?.popViewController(animated: true)
         }
-        
-        // TODO: Provide VoiceOver feedback if trip is invalid
     }
     
     @IBAction func doneButtonPressed() {
@@ -94,7 +104,11 @@ class TripDetailViewController: UITableViewController {
     }
     
     @IBAction func trashButtonPressed() {
-        let ac = UIAlertController(title: "Delete Trip", message: "Are you sure you want to delete this trip?", preferredStyle: .alert)
+        let ac = UIAlertController(
+            title: "Delete Trip",
+            message: "Are you sure you want to delete this trip?",
+            preferredStyle: .alert
+        )
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
             guard let self else { return }
@@ -115,7 +129,7 @@ class TripDetailViewController: UITableViewController {
         } else {
             let tripIsValid = tripIsValid()
             addTripButton.isEnabled = tripIsValid
-            addTripButton.accessibilityHint = !tripIsValid ? "All fields are required." : nil
+            addTripButton.accessibilityHint = !tripIsValid ? "Complete all fields to enable this button." : nil
         }
     }
     
