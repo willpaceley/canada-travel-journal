@@ -21,6 +21,7 @@ class TripListViewController: UITableViewController {
     private var isLoading = false {
         didSet {
             if isLoading {
+                UIAccessibility.announce(message: "Loading saved trips.")
                 activityIndicator.startAnimating()
             } else {
                 activityIndicator.stopAnimating()
@@ -281,8 +282,6 @@ extension TripListViewController: TripDataServiceDelegate {
         let button = createPersistenceStatusButton(for: status)
         persistenceStatusButton.customView = button
         
-        // TODO: Add VoiceOver announcements for loading status
-        
         // Unknown status occurs when device status changes to connected
         if status == .unknown {
             isLoading = true
@@ -307,6 +306,9 @@ extension TripListViewController: TripDataServiceDelegate {
     func dataServiceDidLoadTrips() {
         isLoading = false
         shareButton.isEnabled = !dataService.trips.isEmpty
+        
+        UIAccessibility.announce(message: "Loaded trips.")
+        
         tableView.reloadData()
     }
     
