@@ -18,7 +18,7 @@ struct CSVUtility {
         
         for trip in trips {
             let departureDate = trip.departureDate.format()
-            let returnDate = trip.departureDate.format()
+            let returnDate = trip.returnDate.format()
             
             contents += "\"\(trip.destination)\",\"\(departureDate)\",\"\(returnDate)\",\"\(trip.days)\",\"\(trip.reason)\"\n"
         }
