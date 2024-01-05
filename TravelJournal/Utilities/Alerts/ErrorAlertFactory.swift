@@ -127,7 +127,6 @@ enum TravelJournalError: Error, Equatable {
     case saveError(_ error: Error)
     case cloudKitError(_ error: CKError)
     case unknownPersistenceStatus
-    case unsavedChanges
     
     // Necessary implementation for conformance to Equatable
     static func == (lhs: TravelJournalError, rhs: TravelJournalError) -> Bool {
@@ -138,8 +137,7 @@ enum TravelJournalError: Error, Equatable {
             return error1.localizedDescription == error2.localizedDescription
         case let (.cloudKitError(error1), .cloudKitError(error2)):
             return error1.localizedDescription == error2.localizedDescription
-        case (.unknownPersistenceStatus, .unknownPersistenceStatus),
-            (.unsavedChanges, .unsavedChanges):
+        case (.unknownPersistenceStatus, .unknownPersistenceStatus):
             return true
         default:
             return false

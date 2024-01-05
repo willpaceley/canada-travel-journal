@@ -18,10 +18,12 @@ class TripListViewController: UITableViewController {
     @IBOutlet var addTripButton: UIBarButtonItem!
     @IBOutlet var shareButton: UIBarButtonItem!
     
+    private var trips = [Trip]()
+    
     private var isLoading = false {
         didSet {
             if isLoading {
-                UIAccessibility.announce(message: "Loading saved trips.")
+                UIAccessibility.announce(message: "Loading")
                 activityIndicator.startAnimating()
             } else {
                 activityIndicator.stopAnimating()
@@ -29,9 +31,16 @@ class TripListViewController: UITableViewController {
             }
         }
     }
+    private var totalDays: Int {
+        trips.reduce(0) { $0 + $1.days }
+    }
     
-    var dataService: TripDataService!
+    let dataService = TripDataService(
+        cloudKitManager: CloudKitManager(),
+        connectivityManager: ConnectivityManager()
+    )
     
+    // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,7 +58,7 @@ class TripListViewController: UITableViewController {
     
     // MARK: - @IBAction and @objc
     @IBAction func shareButtonPressed() {
-        let csvContent = CSVUtility.generateCSVContent(from: dataService.trips)
+        let csvContent = CSVUtility.generateCSVContent(from: trips)
         
         do {
             try CSVUtility.writeCSVFile(csvContent: csvContent)
@@ -88,7 +97,7 @@ class TripListViewController: UITableViewController {
     }
     
     @objc func refreshTable() {
-        dataService.loadTrips()
+        loadTrips()
     }
     
     // MARK: - Navigation
@@ -118,7 +127,7 @@ class TripListViewController: UITableViewController {
         tableView.beginUpdates()
         
         var contentConfig = tableView.footerView(forSection: 0)?.defaultContentConfiguration()
-        contentConfig?.text = !dataService.trips.isEmpty ? "Total days outside of Canada: \(dataService.totalDays)" : nil
+        contentConfig?.text = !trips.isEmpty ? "Total days outside of Canada: \(totalDays)" : nil
         tableView.footerView(forSection: 0)?.contentConfiguration = contentConfig
         
         tableView.endUpdates()
@@ -162,17 +171,60 @@ class TripListViewController: UITableViewController {
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
     }
+    
+    // MARK: - Helper Methods
+    private func sortByReverseChronological() {
+        trips.sort { $0.departureDate > $1.departureDate }
+    }
+    
+    private func loadTrips() {
+        dataService.loadTrips { [weak self] result in
+            switch result {
+            case .success(let trips):
+                if let trips {
+                    self?.trips = trips
+                    UIAccessibility.announce(message: "Loaded trips.")
+                    DispatchQueue.main.async {
+                        self?.tableView.reloadData()
+                    }
+                }
+            case .failure(let error):
+                if error != .unknownPersistenceStatus {
+                    let (title, message) = ErrorAlertFactory.loadErrorAlert(for: error)
+                    DispatchQueue.main.async {
+                        self?.displayAlert(title: title, message: message)
+                    }
+                }
+            }
+        }
+        isLoading = false
+    }
+    
+    private func deleteTrip(_ trip: Trip) {
+        if let index = trips.firstIndex(where: {$0.id == trip.id}) {
+            trips.remove(at: index)
+            
+            dataService.save(trips)
+            
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            shareButton.isEnabled = !trips.isEmpty
+            reloadFooter()
+        } else {
+            logger.error("There was a problem finding the index of the trip to delete")
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
 extension TripListViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataService.trips.count
+        return trips.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Trip", for: indexPath) as! TripViewCell
-        let trip = dataService.trips[indexPath.row]
+        let trip = trips[indexPath.row]
         
         cell.countryLabel.text = trip.destination
         cell.dateLabel.text = trip.departureDate.format()
@@ -186,7 +238,7 @@ extension TripListViewController {
 // MARK: - UITableViewDelegate
 extension TripListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let trip = dataService.trips[indexPath.row]
+        let trip = trips[indexPath.row]
         performSegue(withIdentifier: editTripSegueId, sender: trip)
     }
     
@@ -198,9 +250,8 @@ extension TripListViewController {
                 title: "Delete",
                 style: .destructive,
                 handler: { [weak self] _ in
-                    self?.dataService.delete(trip: (self?.dataService.trips[indexPath.row])!)
-                    self?.tableView.deleteRows(at: [indexPath], with: .automatic)
-                    self?.reloadFooter()
+                    let trip = self?.trips[indexPath.row]
+                    self?.deleteTrip(trip!)
                 }
             ))
             
@@ -209,8 +260,8 @@ extension TripListViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if !dataService.trips.isEmpty {
-            return "Total days outside of Canada: \(dataService.totalDays)"
+        if !trips.isEmpty {
+            return "Total days outside of Canada: \(totalDays)"
         }
         
         return nil
@@ -218,7 +269,7 @@ extension TripListViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // willDisplayHeaderView(_:view:section:) provides content for the header
-        return dataService.trips.isEmpty ? " " : nil
+        return trips.isEmpty ? " " : nil
     }
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -240,7 +291,7 @@ extension TripListViewController {
     override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         if let footerView = view as? UITableViewHeaderFooterView {
             var config = footerView.defaultContentConfiguration()
-            config.text = "Total days outside of Canada: \(dataService.totalDays)"
+            config.text = "Total days outside of Canada: \(totalDays)"
             footerView.contentConfiguration = config
         } else {
             logger.error("A problem occurred casting footer view parameter to UITableHeaderFooterView.")
@@ -251,13 +302,17 @@ extension TripListViewController {
 // MARK: - TripDetailViewControllerDelegate
 extension TripListViewController: TripDetailViewControllerDelegate {
     func tripDetailViewControllerDidAdd(_ trip: Trip) {
-        dataService.add(trip: trip)
+        trips.append(trip)
+        sortByReverseChronological()
+        
+        dataService.save(trips)
+        
+        shareButton.isEnabled = !trips.isEmpty
         tableView.reloadData()
     }
     
     func tripDetailViewControllerDidUpdate(_ trip: Trip) {
-        if let index = dataService.trips.firstIndex(where: {$0.id == trip.id}) {
-            dataService.updatedTrip()
+        if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             let indexPath = IndexPath(row: index, section: 0)
             tableView.reloadRows(at: [indexPath], with: .automatic)
             reloadFooter()
@@ -265,11 +320,17 @@ extension TripListViewController: TripDetailViewControllerDelegate {
     }
     
     func tripDetailViewControllerDidDelete(_ trip: Trip) {
-        if let index = dataService.trips.firstIndex(where: {$0.id == trip.id}) {
-            dataService.delete(trip: trip)
+        if let index = trips.firstIndex(where: {$0.id == trip.id}) {
+            trips.remove(at: index)
+            
+            dataService.save(trips)
+            
             let indexPath = IndexPath(row: index, section: 0)
             tableView.deleteRows(at: [indexPath], with: .automatic)
+            shareButton.isEnabled = !trips.isEmpty
             reloadFooter()
+        } else {
+            logger.error("There was a problem finding the index of the trip to delete")
         }
     }
 }
@@ -289,36 +350,13 @@ extension TripListViewController: TripDataServiceDelegate {
             return
         }
         
-        if dataService.trips.isEmpty {
+        if trips.isEmpty {
             isLoading = true
-            dataService.loadTrips()
+            loadTrips()
             return
         }
         
         isLoading = false
-    }
-    
-    func tripDataDidChange() {
-        isLoading = false
-        shareButton.isEnabled = !dataService.trips.isEmpty
-    }
-    
-    func dataServiceDidLoadTrips() {
-        isLoading = false
-        shareButton.isEnabled = !dataService.trips.isEmpty
-        
-        UIAccessibility.announce(message: "Loaded trips.")
-        
-        tableView.reloadData()
-    }
-    
-    func dataService(didHaveLoadError error: TravelJournalError) {
-        isLoading = false
-        
-        if error != .unsavedChanges || error != .unknownPersistenceStatus {
-            let (title, message) = ErrorAlertFactory.loadErrorAlert(for: error)
-            displayAlert(title: title, message: message)
-        }
     }
     
     func dataService(didHaveSaveError error: TravelJournalError) {

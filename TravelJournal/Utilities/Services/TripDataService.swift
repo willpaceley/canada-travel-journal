@@ -12,18 +12,12 @@ import OSLog
 fileprivate let logger = Logger(category: "TripDataService")
 
 protocol TripDataServiceDelegate: AnyObject {
-    func tripDataDidChange()
-    func dataServiceDidLoadTrips()
     func dataServicePersistenceStatus(changedTo status: PersistenceStatus)
-    func dataService(didHaveLoadError error: TravelJournalError)
     func dataService(didHaveSaveError error: TravelJournalError)
     func dataService(didHaveCloudKitError error: CKError)
 }
 
 class TripDataService {
-    private(set) var trips = [Trip]()
-    private var hasUnsavedChanges = false
-    
     let connectivityManager: ConnectivityManager
     let cloudKitManager: CloudKitManager
     
@@ -33,9 +27,6 @@ class TripDataService {
                 self.delegate.dataServicePersistenceStatus(changedTo: self.persistenceStatus)
             }
         }
-    }
-    var totalDays: Int {
-        trips.reduce(0) { $0 + $1.days }
     }
     
     weak var delegate: TripDataServiceDelegate!
@@ -49,39 +40,11 @@ class TripDataService {
         self.connectivityManager.delegate = self
     }
     
-    // MARK: - CRUD Methods
-    func add(trip: Trip) {
-        trips.append(trip)
-        sortByReverseChronological()
-        hasUnsavedChanges = true
-        delegate.tripDataDidChange()
-    }
-    
-    func updatedTrip() {
-        hasUnsavedChanges = true
-    }
-    
-    func delete(trip: Trip) {
-        if let index = trips.firstIndex(where: {$0.id == trip.id}) {
-            trips.remove(at: index)
-            hasUnsavedChanges = true
-            delegate.tripDataDidChange()
-        } else {
-            logger.error("There was a problem finding the index of the trip to delete")
-        }
-    }
-    
     // MARK: - Data Persistence
-    func loadTrips() {
+    func loadTrips(completionHandler: @escaping (Result<[Trip]?, TravelJournalError>) -> Void) {
         guard persistenceStatus != .unknown else {
             logger.warning("Persistence status was unknown. Did not load trips.")
-            delegate.dataService(didHaveLoadError: TravelJournalError.unknownPersistenceStatus)
-            return
-        }
-        
-        guard !hasUnsavedChanges else {
-            logger.warning("There are unsaved changes. Did not load trips.")
-            delegate.dataService(didHaveLoadError: TravelJournalError.unsavedChanges)
+            completionHandler(.failure(TravelJournalError.unknownPersistenceStatus))
             return
         }
         
@@ -91,13 +54,13 @@ class TripDataService {
         }
         
         if persistenceStatus == .iCloudAvailable && !iCloudDataIsStale {
-            loadTripsFromiCloud()
+            loadTripsFromiCloud(completionHandler: completionHandler)
         } else {
-            loadTripsFromDevice()
+            loadTripsFromDevice(completionHandler: completionHandler)
         }
     }
     
-    func saveTrips() {
+    func save(_ trips: [Trip]) {
         guard persistenceStatus != .unknown else {
             logger.warning("Persistence status was unknown. Did not save trips.")
             return
@@ -110,7 +73,7 @@ class TripDataService {
 
         // If available, persist data in iCloud as source of truth across all iOS devices
         if persistenceStatus == .iCloudAvailable {
-            saveTripsToiCloud()
+            saveTripsToiCloud(trips)
         } else {
             // Toggle flag in UserDefaults to indicate iCloud data is stale
             cloudKitManager.iCloudDataIsStale = true
@@ -118,62 +81,50 @@ class TripDataService {
         }
         
         // Always persist data on-device in case CloudKit is permanently or temporarily unavailable
-        saveTripsToDevice()
+        saveTripsToDevice(trips)
     }
     
     // MARK: - Private Methods
-    private func sortByReverseChronological() {
-        trips.sort { $0.departureDate > $1.departureDate }
-    }
-    
-    private func loadTripsFromiCloud() {
-        cloudKitManager.fetchTrips { [weak self] result in
+    private func loadTripsFromiCloud(
+        completionHandler: @escaping (Result<[Trip]?, TravelJournalError>) -> Void
+    ) {
+        cloudKitManager.fetchTrips { result in
             switch result {
             case .success(let trips):
-                if let trips {
-                    self?.trips = trips
-                }
-                DispatchQueue.main.async {
-                    self?.delegate.dataServiceDidLoadTrips()
-                    self?.delegate.tripDataDidChange()
-                }
-                return
+                completionHandler(.success(trips))
             case .failure(let error):
                 let loadError = TravelJournalError.loadError(error)
-                DispatchQueue.main.async {
-                    self?.delegate.dataService(didHaveLoadError: loadError)
-                }
+                completionHandler(.failure(loadError))
             }
         }
     }
     
-    private func loadTripsFromDevice() {
+    private func loadTripsFromDevice(
+        completionHandler: @escaping (Result<[Trip]?, TravelJournalError>) -> Void
+    ) {
         let fileManager = FileManager.default
         if fileManager.tripDataFileExists() {
             logger.log("Loading trips from on-device storage.")
             let url = fileManager.getTripDataURL()
             do {
                 let tripData = try Data(contentsOf: url)
-                trips = try JSONDecoder().decode([Trip].self, from: tripData)
+                let trips = try JSONDecoder().decode([Trip].self, from: tripData)
                 logger.log("Trips successfully decoded from device storage.")
+                completionHandler(.success(trips))
             } catch {
                 logger.error("An error occured loading trips from device storage: \(error.localizedDescription)")
                 let loadError = TravelJournalError.loadError(error)
-                delegate.dataService(didHaveLoadError: loadError)
-                return
+                completionHandler(.failure(loadError))
             }
-            delegate.dataServiceDidLoadTrips()
-            delegate.tripDataDidChange()
         }
     }
     
-    private func saveTripsToiCloud() {
+    private func saveTripsToiCloud(_ trips: [Trip]) {
         cloudKitManager.postTrips(trips: trips) { [weak self] result in
             switch result {
             case .success(_):
                 logger.log("Trips successfully saved to CloudKit DB.")
                 self?.cloudKitManager.iCloudDataIsStale = false
-                self?.hasUnsavedChanges = false
             case .failure(let error):
                 logger.error("An error occurred while attempting to save trips to CloudKit DB.")
                 self?.cloudKitManager.iCloudDataIsStale = true
@@ -185,13 +136,12 @@ class TripDataService {
         }
     }
     
-    private func saveTripsToDevice() {
+    private func saveTripsToDevice(_ trips: [Trip]) {
         let url = FileManager.default.getTripDataURL()
         do {
             let jsonData = try JSONEncoder().encode(trips)
             try jsonData.write(to: url, options: [.atomic])
             logger.log("Trip data successfully saved in the app's documents directory.")
-            hasUnsavedChanges = false
         } catch {
             logger.error("An error occurred saving trip data on device: \(error.localizedDescription)")
         }
