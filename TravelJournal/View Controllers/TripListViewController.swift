@@ -185,6 +185,8 @@ class TripListViewController: UITableViewController {
                     self?.trips = trips
                     UIAccessibility.announce(message: "Loaded trips.")
                     DispatchQueue.main.async {
+                        self?.isLoading = false
+                        self?.shareButton.isEnabled = !trips.isEmpty
                         self?.tableView.reloadData()
                     }
                 }
@@ -192,20 +194,18 @@ class TripListViewController: UITableViewController {
                 if error != .unknownPersistenceStatus {
                     let (title, message) = ErrorAlertFactory.loadErrorAlert(for: error)
                     DispatchQueue.main.async {
+                        self?.isLoading = false
                         self?.displayAlert(title: title, message: message)
                     }
                 }
             }
         }
-        isLoading = false
     }
     
     private func deleteTrip(_ trip: Trip) {
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)
-            
             dataService.save(trips)
-            
             let indexPath = IndexPath(row: index, section: 0)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             shareButton.isEnabled = !trips.isEmpty
@@ -304,7 +304,6 @@ extension TripListViewController: TripDetailViewControllerDelegate {
     func tripDetailViewControllerDidAdd(_ trip: Trip) {
         trips.append(trip)
         sortByReverseChronological()
-        
         dataService.save(trips)
         
         shareButton.isEnabled = !trips.isEmpty
@@ -313,24 +312,25 @@ extension TripListViewController: TripDetailViewControllerDelegate {
     
     func tripDetailViewControllerDidUpdate(_ trip: Trip) {
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
+            dataService.save(trips)
             let indexPath = IndexPath(row: index, section: 0)
             tableView.reloadRows(at: [indexPath], with: .automatic)
             reloadFooter()
+        } else {
+            logger.error("There was a problem finding the index of the trip to update.")
         }
     }
     
     func tripDetailViewControllerDidDelete(_ trip: Trip) {
         if let index = trips.firstIndex(where: {$0.id == trip.id}) {
             trips.remove(at: index)
-            
             dataService.save(trips)
-            
             let indexPath = IndexPath(row: index, section: 0)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             shareButton.isEnabled = !trips.isEmpty
             reloadFooter()
         } else {
-            logger.error("There was a problem finding the index of the trip to delete")
+            logger.error("There was a problem finding the index of the trip to delete.")
         }
     }
 }
