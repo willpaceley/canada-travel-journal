@@ -28,12 +28,12 @@ class Trip: Codable {
         self.reason = reason
     }
     
-    // TODO: - Check business logic matches IRCC calculator
     var days: Int {
         let components = Calendar.current.dateComponents([.day], from: departureDate, to: returnDate)
         
-        if let day = components.day {
-            return day + 1
+        if let days = components.day {
+            // If returning same day, count as 1 day away from Canada
+            return days != 0 ? days : 1
         } else {
             return 0
         }
