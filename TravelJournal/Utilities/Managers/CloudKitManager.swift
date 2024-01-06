@@ -13,7 +13,7 @@ import OSLog
 fileprivate let logger = Logger(category: "CloudKitManager")
 
 protocol CloudKitManagerDelegate: AnyObject {
-    func cloudKitManager(accountStatusDidChange accountStatus: CKAccountStatus)
+    func cloudKitManager(accountStatusDidUpdate accountStatus: CKAccountStatus)
     func cloudKitManager(didHaveError error: Error)
 }
 
@@ -24,7 +24,6 @@ class CloudKitManager {
         predicate: NSPredicate(value: true)
     )
     
-    private(set) var accountStatus: CKAccountStatus?
     private(set) var tripsRecordID: CKRecord.ID?
     private(set) var checkedForExistingRecord = false
     private(set) var requestInProgress = false
@@ -78,18 +77,15 @@ class CloudKitManager {
             self.requestInProgress = false
             
             if let error {
+                logger.error("An error occurred requesting the CKAccountStatus. \(error.localizedDescription)")
                 DispatchQueue.main.async {
                     self.delegate.cloudKitManager(didHaveError: error)
                 }
                 return
             }
             
-            // Check if the account status has changed
-            if status != self.accountStatus {
-                self.accountStatus = status
-                DispatchQueue.main.async {
-                    self.delegate.cloudKitManager(accountStatusDidChange: status)
-                }
+            DispatchQueue.main.async {
+                self.delegate.cloudKitManager(accountStatusDidUpdate: status)
             }
         }
     }
