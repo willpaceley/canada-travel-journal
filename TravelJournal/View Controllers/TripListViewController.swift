@@ -75,6 +75,7 @@ class TripListViewController: UITableViewController {
     
     @objc func persistenceStatusButtonPressed() {
         var actions = [UIAlertAction]()
+        // TODO: Add force crash button for unknown persistenceStatus
         if dataService.persistenceStatus != .iCloudAvailable {
             let settingsAction = UIAlertAction(title: "Go to Settings", style: .default) { _ in
                 if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -183,6 +184,7 @@ class TripListViewController: UITableViewController {
             case .success(let trips):
                 if let trips {
                     self?.trips = trips
+                    self?.iCloudDataUpdate()
                     UIAccessibility.announce(message: "Loaded trips.")
                     DispatchQueue.main.async {
                         self?.isLoading = false
@@ -212,6 +214,15 @@ class TripListViewController: UITableViewController {
             reloadFooter()
         } else {
             logger.error("There was a problem finding the index of the trip to delete")
+        }
+    }
+    
+    private func iCloudDataUpdate() {
+        // Save the trip data if iCloud is not updated with latest data
+        let iCloudDataIsStale = dataService.cloudKitManager.iCloudDataIsStale
+        if dataService.persistenceStatus == .iCloudAvailable && iCloudDataIsStale {
+            logger.log("Saving more recent trip data from device to iCloud.")
+            dataService.save(trips)
         }
     }
 }
@@ -337,23 +348,30 @@ extension TripListViewController: TripDetailViewControllerDelegate {
 
 // MARK: - TripsDataServiceDelegate
 extension TripListViewController: TripDataServiceDelegate {
-    func dataServicePersistenceStatus(changedTo status: PersistenceStatus) {
+    func dataServicePersistenceStatusChanged(from oldStatus: PersistenceStatus, to status: PersistenceStatus) {
         logger.log("Data service persistence status changed to: \(status, privacy: .public)")
         
         let button = createPersistenceStatusButton(for: status)
         persistenceStatusButton.customView = button
         
-        // Unknown status occurs when device status changes to connected
+        // Unknown status occurs when NWPathMonitor status changes to .connected
         if status == .unknown {
             isLoading = true
             dataService.cloudKitManager.requestAccountStatus()
             return
         }
         
+        // Attempt to load trips if there are none
         if trips.isEmpty {
             isLoading = true
             loadTrips()
             return
+        }
+        
+        // Save the data if the status was offline then turned to iCloud available
+        if oldStatus == .networkUnavailable || oldStatus == .iCloudUnavailable {
+            logger.log("CloudKit has become available, saving offline changes to iCloud.")
+            iCloudDataUpdate()
         }
         
         isLoading = false

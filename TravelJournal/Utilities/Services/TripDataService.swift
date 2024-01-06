@@ -12,7 +12,10 @@ import OSLog
 fileprivate let logger = Logger(category: "TripDataService")
 
 protocol TripDataServiceDelegate: AnyObject {
-    func dataServicePersistenceStatus(changedTo status: PersistenceStatus)
+    func dataServicePersistenceStatusChanged(
+        from oldStatus: PersistenceStatus,
+        to status: PersistenceStatus
+    )
     func dataService(didHaveSaveError error: TravelJournalError)
     func dataService(didHaveCloudKitError error: CKError)
 }
@@ -24,7 +27,7 @@ class TripDataService {
     var persistenceStatus: PersistenceStatus = .unknown {
         didSet {
             DispatchQueue.main.async {
-                self.delegate.dataServicePersistenceStatus(changedTo: self.persistenceStatus)
+                self.delegate.dataServicePersistenceStatusChanged(from: oldValue, to: self.persistenceStatus)
             }
         }
     }
