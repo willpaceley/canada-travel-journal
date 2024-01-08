@@ -119,6 +119,9 @@ class TripDataService {
                 let loadError = TravelJournalError.loadError(error)
                 completionHandler(.failure(loadError))
             }
+        } else {
+            logger.log("No trip data found in on-device storage.")
+            completionHandler(.success(nil))
         }
     }
     

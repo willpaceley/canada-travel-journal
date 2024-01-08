@@ -179,6 +179,7 @@ class TripListViewController: UITableViewController {
     }
     
     private func loadTrips() {
+        logger.log("Loading trips.")
         dataService.loadTrips { [weak self] result in
             switch result {
             case .success(let trips):
@@ -187,10 +188,12 @@ class TripListViewController: UITableViewController {
                     self?.iCloudDataUpdate()
                     UIAccessibility.announce(message: "Loaded trips.")
                     DispatchQueue.main.async {
-                        self?.isLoading = false
                         self?.shareButton.isEnabled = !trips.isEmpty
                         self?.tableView.reloadData()
                     }
+                }
+                DispatchQueue.main.async {
+                    self?.isLoading = false
                 }
             case .failure(let error):
                 if error != .unknownPersistenceStatus {
