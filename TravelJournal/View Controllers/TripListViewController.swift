@@ -373,7 +373,7 @@ extension TripListViewController: TripDataServiceDelegate {
         
         // Save the data if the status was offline then turned to iCloud available
         if oldStatus == .networkUnavailable || oldStatus == .iCloudUnavailable {
-            logger.log("CloudKit has become available, saving offline changes to iCloud.")
+            logger.log("CloudKit has become available, checking if offline changes should be saved.")
             iCloudDataUpdate()
         }
         

@@ -70,7 +70,8 @@ class TripDataService {
         }
         
         guard !trips.isEmpty else {
-            logger.warning("No trips available to save. Did not create empty record.")
+            logger.warning("App has no trips, erasing all records in CK database.")
+            cloudKitManager.deleteAllTripRecords()
             return
         }
 

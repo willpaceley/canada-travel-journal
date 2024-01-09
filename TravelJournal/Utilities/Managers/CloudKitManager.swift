@@ -106,6 +106,23 @@ class CloudKitManager {
                     
                     if let tripData = record.value(forKey: tripDataKey) as? Data,
                        let trips = try? JSONDecoder().decode([Trip].self, from: tripData) {
+                        // If somehow an empty trip record is saved in CloudKit, delete it
+                        if trips.isEmpty {
+                            logger.log("Found an empty trip record saved in CloudKit.")
+                            self.cloudKitDatabase.delete(withRecordID: record.recordID) {
+                                [weak self] deletedRecordID, deleteError in
+                                if let error = deleteError {
+                                    logger.error("An error occurred deleting CKRecord. \(error.localizedDescription)")
+                                }
+                                
+                                if let recordID = deletedRecordID {
+                                    logger.log("Deleted record with ID: \(recordID.recordName)")
+                                    logger.log("Re-attempting to fetch trips from CloudKit.")
+                                    self?.fetchTrips(completionHandler: completionHandler)
+                                }
+                            }
+                        }
+                        
                         logger.log("Successfully decoded trips from CloudKit database.")
                         completionHandler(.success(trips))
                         return
@@ -152,8 +169,8 @@ class CloudKitManager {
     
     /// Deletes all trip data from the user's private iCloud Database.
     ///
-    /// > Warning: This method is for development purposes only.
-    /// Usage in production could result in an irrecoverable loss of the user's trip data.
+    /// > Warning: Invoking this method results in an irrecoverable loss of all trip data
+    /// stored in the user's CloudKit database.
     func deleteAllTripRecords() {
         cloudKitDatabase.fetch(withQuery: tripsQuery) { [weak self] result in
             guard let self else { return }
