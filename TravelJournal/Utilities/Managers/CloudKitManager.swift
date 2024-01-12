@@ -90,7 +90,7 @@ class CloudKitManager {
     
     func fetchTrips(completionHandler: @escaping (Result<[Trip]?, Error>) -> Void) {
         logger.log("Attempting to fetch trip data from CloudKit.")
-        cloudKitDatabase.fetch(withQuery: tripsQuery, resultsLimit: 1) { result in
+        cloudKitDatabase.fetch(withQuery: tripsQuery) { result in
             switch result {
             case .success((let matchResults, _)):
                 if matchResults.isEmpty {
@@ -99,17 +99,39 @@ class CloudKitManager {
                     return
                 }
                 
-                let (_, matchResult) = matchResults.first!
-                switch matchResult {
-                case .success(let record):
-                    logger.log("Found a pre-existing trips record ID: \(record.recordID.recordName)")
+                // Find the record that was most recently modified
+                var mostRecentRecord: CKRecord?
+                for (_, matchResult) in matchResults {
+                    switch matchResult {
+                    case .success(let record):
+                        // Check if the current record is the most recent thus far
+                        mostRecentRecord = self.findMostRecentRecord(
+                            previousRecord: mostRecentRecord,
+                            currentRecord: record
+                        )
+                        
+                        let id = record.recordID.recordName
+                        logger.debug("Record \(id) last modified on \(record.modificationDate!.formatted())")
+                        
+                    case .failure(let error):
+                        completionHandler(.failure(error))
+                        return
+                    }
+                }
+                
+                if let mostRecentRecord {
+                    let id = mostRecentRecord.recordID.recordName
+                    logger.debug("The trip record \(id) was the most recent record.")
+                    logger.log("Decoding the most recent trip record from CloudKit.")
                     
-                    if let tripData = record.value(forKey: tripDataKey) as? Data,
+                    if let tripData = mostRecentRecord.value(forKey: tripDataKey) as? Data,
                        let trips = try? JSONDecoder().decode([Trip].self, from: tripData) {
+                        logger.log("Successfully decoded trips from CloudKit database.")
+                        
                         // If somehow an empty trip record is saved in CloudKit, delete it
                         if trips.isEmpty {
                             logger.log("Found an empty trip record saved in CloudKit.")
-                            self.cloudKitDatabase.delete(withRecordID: record.recordID) {
+                            self.cloudKitDatabase.delete(withRecordID: mostRecentRecord.recordID) {
                                 [weak self] deletedRecordID, deleteError in
                                 if let error = deleteError {
                                     logger.error("An error occurred deleting CKRecord. \(error.localizedDescription)")
@@ -123,16 +145,14 @@ class CloudKitManager {
                             }
                         }
                         
-                        logger.log("Successfully decoded trips from CloudKit database.")
+                        // Delete any extraneous outdated trip records
+                        self.deleteAllTripRecords(excluding: mostRecentRecord.recordID)
+                        
                         completionHandler(.success(trips))
                         return
                     } else {
                         logger.error("An error occurred decoding trip data from the CloudKit record.")
                     }
-                    
-                case .failure(let error):
-                    completionHandler(.failure(error))
-                    return
                 }
                 
             case .failure(let error):
@@ -167,16 +187,26 @@ class CloudKitManager {
         }
     }
     
-    /// Deletes all trip data from the user's private iCloud Database.
+    /// Deletes trip data from the user's private iCloud Database.
     ///
-    /// > Warning: Invoking this method results in an irrecoverable loss of all trip data
+    /// - Parameters:
+    ///     - idToKeep: The ID of a trip record to skip deleting from the database.
+    ///     The most common use case is to keep the most up-to-date record.
+    ///
+    /// > Warning: Invoking this method results in an irrecoverable loss of trip data
     /// stored in the user's CloudKit database.
-    func deleteAllTripRecords() {
+    func deleteAllTripRecords(excluding idToKeep: CKRecord.ID? = nil) {
         cloudKitDatabase.fetch(withQuery: tripsQuery) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let (matchResults, _)):
                 for (recordID, _) in matchResults {
+                    // Prevent deletion of the most recent record
+                    if let idToKeep, recordID == idToKeep {
+                        logger.debug("Skipped deleting record with ID \(recordID.recordName)")
+                        continue
+                    }
+                    
                     self.cloudKitDatabase.delete(withRecordID: recordID) { deletedRecordID, deleteError in
                         if let error = deleteError {
                             logger.error("An error occurred deleting CKRecord. \(error.localizedDescription)")
@@ -260,6 +290,17 @@ class CloudKitManager {
         } catch {
             completionHandler(.failure(error))
         }
+    }
+    
+    private func findMostRecentRecord(previousRecord: CKRecord?, currentRecord: CKRecord) -> CKRecord {
+        // Only do the comparison if there is a previous record to compare against
+        if let previousRecord {
+            if let currentDate = currentRecord.modificationDate,
+               let previousDate = previousRecord.modificationDate {
+                return currentDate > previousDate ? currentRecord : previousRecord
+            }
+        }
+        return currentRecord
     }
 }
 
