@@ -50,13 +50,9 @@ class TripDataService {
             completionHandler(.failure(TravelJournalError.unknownPersistenceStatus))
             return
         }
-        
-        let iCloudDataIsStale = UserDefaults.standard.bool(forKey: iCloudDataIsStaleKey)
-        if iCloudDataIsStale {
-            logger.warning("Trip data saved on device is more recent than iCloud record.")
-        }
-        
-        if persistenceStatus == .iCloudAvailable && !iCloudDataIsStale {
+            
+        // TODO: Make sure that if the local data is behind the server data we don't override it
+        if persistenceStatus == .iCloudAvailable {
             loadTripsFromiCloud(completionHandler: completionHandler)
         } else {
             loadTripsFromDevice(completionHandler: completionHandler)
@@ -79,8 +75,6 @@ class TripDataService {
         if persistenceStatus == .iCloudAvailable {
             saveTripsToiCloud(trips)
         } else {
-            // Toggle flag in UserDefaults to indicate iCloud data is stale
-            cloudKitManager.iCloudDataIsStale = true
             logger.warning("iCloud unavailable for persistence. Saving trip data to device.")
         }
         
@@ -95,7 +89,13 @@ class TripDataService {
         cloudKitManager.fetchTrips { result in
             switch result {
             case .success(let trips):
+                guard trips != nil else {
+                    // If trips was nil, load trips from on-device storage
+                    self.loadTripsFromDevice(completionHandler: completionHandler)
+                    return
+                }
                 completionHandler(.success(trips))
+                
             case .failure(let error):
                 let loadError = TravelJournalError.loadError(error)
                 completionHandler(.failure(loadError))
@@ -131,10 +131,8 @@ class TripDataService {
             switch result {
             case .success(_):
                 logger.log("Trips successfully saved to CloudKit DB.")
-                self?.cloudKitManager.iCloudDataIsStale = false
             case .failure(let error):
                 logger.error("An error occurred while attempting to save trips to CloudKit DB.")
-                self?.cloudKitManager.iCloudDataIsStale = true
                 let saveError = TravelJournalError.saveError(error)
                 DispatchQueue.main.async {
                     self?.delegate.dataService(didHaveSaveError: saveError)
@@ -148,6 +146,8 @@ class TripDataService {
         do {
             let jsonData = try JSONEncoder().encode(trips)
             try jsonData.write(to: url, options: [.atomic])
+            // Persist the Date we last modified the trip data to UserDefaults
+            UserDefaults.standard.setValue(Date(), forKey: onDeviceDataLastModifiedKey)
             logger.log("Trip data successfully saved in the app's documents directory.")
         } catch {
             logger.error("An error occurred saving trip data on device: \(error.localizedDescription)")

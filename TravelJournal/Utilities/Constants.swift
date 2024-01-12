@@ -24,7 +24,7 @@ let departurePickerTag = 100
 let returnPickerTag = 101
 
 // MARK: UserDefaults
-let iCloudDataIsStaleKey = "iCloudDataIsStale"
+let onDeviceDataLastModifiedKey = "onDeviceTripsRecordLastModified"
 
 // MARK: CSV
 let csvFileName = "TravelJournalTrips.csv"

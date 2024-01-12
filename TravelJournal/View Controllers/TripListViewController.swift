@@ -220,13 +220,16 @@ class TripListViewController: UITableViewController {
         }
     }
     
+    // TODO: Explore how to implement this functionality again with new structure
+    // First thought is to use another UserDefaults for iCloud modified date
     private func iCloudDataUpdate() {
         // Save the trip data if iCloud is not updated with latest data
-        let iCloudDataIsStale = dataService.cloudKitManager.iCloudDataIsStale
-        if dataService.persistenceStatus == .iCloudAvailable && iCloudDataIsStale {
-            logger.log("Saving more recent trip data from device to iCloud.")
-            dataService.save(trips)
-        }
+        logger.debug("Checking if we should save on-device trips to iCloud.")
+//        let iCloudDataIsStale = dataService.cloudKitManager.iCloudDataIsStale
+//        if dataService.persistenceStatus == .iCloudAvailable && iCloudDataIsStale {
+//            logger.log("Saving more recent trip data from device to iCloud.")
+//            dataService.save(trips)
+//        }
     }
 }
 
