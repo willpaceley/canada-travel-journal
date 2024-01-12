@@ -28,6 +28,10 @@ class CloudKitManager {
     
     weak var delegate: CloudKitManagerDelegate!
     
+    // TODO: Explore saving the date of the offline record instead, less error prone I think than a flag?
+    // Scenario: I save one trip while offline on my iPhone, but never synced to iCloud. When I get on my iPad later,
+    // I notice the data isn't synced but enter the missing trip and a new one. When I log back into my phone, then
+    // The old data overwrites the more updated data because the flag is still set on device. It's better to use Date
     var iCloudDataIsStale: Bool {
         get {
             UserDefaults.standard.bool(forKey: iCloudDataIsStaleKey)
@@ -131,23 +135,13 @@ class CloudKitManager {
                         // If somehow an empty trip record is saved in CloudKit, delete it
                         if trips.isEmpty {
                             logger.log("Found an empty trip record saved in CloudKit.")
-                            self.cloudKitDatabase.delete(withRecordID: mostRecentRecord.recordID) {
-                                [weak self] deletedRecordID, deleteError in
-                                if let error = deleteError {
-                                    logger.error("An error occurred deleting CKRecord. \(error.localizedDescription)")
-                                }
-                                
-                                if let recordID = deletedRecordID {
-                                    logger.log("Deleted record with ID: \(recordID.recordName)")
-                                    logger.log("Re-attempting to fetch trips from CloudKit.")
-                                    self?.fetchTrips(completionHandler: completionHandler)
-                                }
-                            }
+                            self.deleteTripRecord(withID: mostRecentRecord.recordID)
                         }
                         
                         // Delete any extraneous outdated trip records
                         self.deleteAllTripRecords(excluding: mostRecentRecord.recordID)
                         
+                        // TODO: Analyze what will happen if trips is an empty array
                         completionHandler(.success(trips))
                         return
                     } else {
@@ -207,15 +201,7 @@ class CloudKitManager {
                         continue
                     }
                     
-                    self.cloudKitDatabase.delete(withRecordID: recordID) { deletedRecordID, deleteError in
-                        if let error = deleteError {
-                            logger.error("An error occurred deleting CKRecord. \(error.localizedDescription)")
-                        }
-                        
-                        if let recordID = deletedRecordID {
-                            logger.log("Deleted record with ID: \(recordID.recordName)")
-                        }
-                    }
+                    deleteTripRecord(withID: recordID)
                 }
                 
             case .failure(let error):
@@ -289,6 +275,18 @@ class CloudKitManager {
             }
         } catch {
             completionHandler(.failure(error))
+        }
+    }
+    
+    private func deleteTripRecord(withID id: CKRecord.ID) {
+        cloudKitDatabase.delete(withRecordID: id) { deletedRecordID, deleteError in
+            if let error = deleteError {
+                logger.error("An error occurred deleting CKRecord. \(error.localizedDescription)")
+            }
+            
+            if let recordID = deletedRecordID {
+                logger.debug("Deleted record with ID: \(recordID.recordName)")
+            }
         }
     }
     
