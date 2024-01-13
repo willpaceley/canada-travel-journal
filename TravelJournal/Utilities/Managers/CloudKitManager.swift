@@ -24,30 +24,11 @@ class CloudKitManager {
         predicate: NSPredicate(value: true)
     )
     
+//    private(set) var cloudKitTripDataLastModified = Date.distantPast
+    private(set) var cloudKitTripDataLastModified: Date?
     private(set) var requestInProgress = false
     
     weak var delegate: CloudKitManagerDelegate!
-    
-    // TODO: Explore saving the date of the offline record instead, less error prone I think than a flag?
-    // Scenario: I save one trip while offline on my iPhone, but never synced to iCloud. When I get on my iPad later,
-    // I notice the data isn't synced but enter the missing trip and a new one. When I log back into my phone, then
-    // The old data overwrites the more updated data because the flag is still set on device. It's better to use Date
-//    var iCloudDataIsStale: Bool {
-//        get {
-//            UserDefaults.standard.bool(forKey: iCloudDataIsStaleKey)
-//        }
-//        set {
-//            UserDefaults.standard.setValue(newValue, forKey: iCloudDataIsStaleKey)
-//        }
-//    }
-//    var onDeviceTripDataLastModified: Date {
-//        get {
-//            UserDefaults.standard.object(forKey: onDeviceDataLastModifiedKey) as? Date ?? Date.distantPast
-//        }
-//        set {
-//            UserDefaults.standard.setValue(newValue, forKey: onDeviceDataLastModifiedKey)
-//        }
-//    }
     
     init() {
         setupNotificationHandling()
@@ -116,6 +97,7 @@ class CloudKitManager {
                 for (_, matchResult) in matchResults {
                     switch matchResult {
                     case .success(let record):
+                        // TODO: Only perform this check if there's more than one match result
                         // Check if the current record is the most recent thus far
                         mostRecentRecord = self.findMostRecentRecord(
                             previousRecord: mostRecentRecord,
@@ -123,7 +105,7 @@ class CloudKitManager {
                         )
                         
                         let id = record.recordID.recordName
-                        logger.debug("Record \(id) last modified on \(record.modificationDate!.formatted())")
+                        logger.debug("CloudKit trip data \(id) last modified on \(record.modificationDate!.formatted())")
                         
                     case .failure(let error):
                         completionHandler(.failure(error))
@@ -136,15 +118,18 @@ class CloudKitManager {
                     logger.debug("The trip record \(id) was the most recent CKRecord.")
                     
                     if let cloudKitTripDataLastModified = mostRecentRecord.modificationDate {
+                        self.cloudKitTripDataLastModified = cloudKitTripDataLastModified
+                        
                         let onDeviceTripDataLastModified = UserDefaults.standard.object(
                             forKey: onDeviceDataLastModifiedKey
                         ) as? Date ?? Date.distantPast
+                        logger.debug("On device trip data last modified on \(onDeviceTripDataLastModified.formatted())")
                         
                         if onDeviceTripDataLastModified > cloudKitTripDataLastModified {
                             logger.log("On device trip data is more recent than the CKRecord.")
-                            logger.debug("On device trip data was saved on \(cloudKitTripDataLastModified.formatted())")
                             // Send a nil record back from completion handler to invoke loading local data
                             completionHandler(.success(nil))
+                            return
                         }
                     }
                     

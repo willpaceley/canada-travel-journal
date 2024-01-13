@@ -78,6 +78,7 @@ class TripDataService {
             logger.warning("iCloud unavailable for persistence. Saving trip data to device.")
         }
         
+        // TODO: The problem is that this date sets first before iCloud record saves (race condition, async vs. sync), so even if the data is in sync we incorrectly assume that the iCloud data is behind.
         // Always persist data on-device in case CloudKit is permanently or temporarily unavailable
         saveTripsToDevice(trips)
     }
@@ -158,7 +159,7 @@ class TripDataService {
 // MARK: - CloudKitManagerDelegate
 extension TripDataService: CloudKitManagerDelegate {
     func cloudKitManager(accountStatusDidUpdate accountStatus: CKAccountStatus) {
-        logger.debug("CloudKit account status updated to: \(accountStatus)")
+        logger.debug("CloudKit account status updated to: \(accountStatus, privacy: .public)")
         
         // networkUnavailable state has priority over iCloud status
         if persistenceStatus != .networkUnavailable {
