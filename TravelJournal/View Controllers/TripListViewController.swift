@@ -185,7 +185,7 @@ class TripListViewController: UITableViewController {
             case .success(let trips):
                 if let trips {
                     self?.trips = trips
-                    self?.iCloudDataUpdate()
+                    self?.updateiCloudData()
                     UIAccessibility.announce(message: "Loaded trips.")
                     DispatchQueue.main.async {
                         self?.shareButton.isEnabled = !trips.isEmpty
@@ -220,17 +220,23 @@ class TripListViewController: UITableViewController {
         }
     }
     
-    private func iCloudDataUpdate() {
+    private func updateiCloudData() {
         // Save the trip data if iCloud is not updated with latest data
         logger.debug("Checking if we should save on-device trips to iCloud.")
         let onDeviceTripDataLastModified = UserDefaults.standard.object(
             forKey: onDeviceDataLastModifiedKey
         ) as? Date ?? Date.distantPast
+        
         if let cloudKitTripDataLastModified = dataService.cloudKitManager.cloudKitTripDataLastModified {
             let onDeviceDataIsMoreRecent = onDeviceTripDataLastModified > cloudKitTripDataLastModified
+            logger.debug("On device data is more recent? \(onDeviceDataIsMoreRecent, privacy: .public)")
+            
             if onDeviceDataIsMoreRecent && dataService.persistenceStatus == .iCloudAvailable {
-                logger.log("Saving more recent trip data from device to iCloud.")
-                dataService.save(trips)
+                // Save trips after a short delay while internet finishes reconnecting
+                DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 3) {
+                    logger.log("Saving more recent trip data from device to iCloud.")
+                    self.dataService.save(self.trips)
+                }
             }
         }
     }
@@ -357,7 +363,7 @@ extension TripListViewController: TripDetailViewControllerDelegate {
 
 // MARK: - TripsDataServiceDelegate
 extension TripListViewController: TripDataServiceDelegate {
-    func dataServicePersistenceStatusChanged(from oldStatus: PersistenceStatus, to status: PersistenceStatus) {
+    func dataServicePersistenceStatusUpdated(to status: PersistenceStatus) {
         logger.log("Data service persistence status changed to: \(status, privacy: .public)")
         
         let button = createPersistenceStatusButton(for: status)
@@ -378,9 +384,9 @@ extension TripListViewController: TripDataServiceDelegate {
         }
         
         // Save the data if the status was offline then turned to iCloud available
-        if oldStatus == .networkUnavailable || oldStatus == .iCloudUnavailable {
+        if status == .iCloudAvailable {
             logger.log("CloudKit has become available, checking if offline changes should be saved.")
-            iCloudDataUpdate()
+            updateiCloudData()
         }
         
         isLoading = false

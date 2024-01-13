@@ -12,10 +12,7 @@ import OSLog
 fileprivate let logger = Logger(category: "TripDataService")
 
 protocol TripDataServiceDelegate: AnyObject {
-    func dataServicePersistenceStatusChanged(
-        from oldStatus: PersistenceStatus,
-        to status: PersistenceStatus
-    )
+    func dataServicePersistenceStatusUpdated(to status: PersistenceStatus)
     func dataService(didHaveSaveError error: TravelJournalError)
     func dataService(didHaveCloudKitError error: CKError)
 }
@@ -27,7 +24,7 @@ class TripDataService {
     var persistenceStatus: PersistenceStatus = .unknown {
         didSet {
             DispatchQueue.main.async {
-                self.delegate.dataServicePersistenceStatusChanged(from: oldValue, to: self.persistenceStatus)
+                self.delegate.dataServicePersistenceStatusUpdated(to: self.persistenceStatus)
             }
         }
     }
@@ -51,7 +48,6 @@ class TripDataService {
             return
         }
             
-        // TODO: Make sure that if the local data is behind the server data we don't override it
         if persistenceStatus == .iCloudAvailable {
             loadTripsFromiCloud(completionHandler: completionHandler)
         } else {
@@ -78,8 +74,6 @@ class TripDataService {
             logger.warning("iCloud unavailable for persistence. Saving trip data to device.")
         }
         
-        // TODO: The problem is that this date sets first before iCloud record saves (race condition, async vs. sync), so even if the data is in sync we incorrectly assume that the iCloud data is behind.
-        // Always persist data on-device in case CloudKit is permanently or temporarily unavailable
         saveTripsToDevice(trips)
     }
     
