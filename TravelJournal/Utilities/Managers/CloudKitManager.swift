@@ -97,15 +97,20 @@ class CloudKitManager {
                 for (_, matchResult) in matchResults {
                     switch matchResult {
                     case .success(let record):
-                        // TODO: Only perform this check if there's more than one match result
+                        let id = record.recordID.recordName
+                        logger.debug("CloudKit trip data \(id) last modified on \(record.modificationDate!.formatted())")
+                        
+                        guard matchResults.count > 1 else {
+                            logger.debug("There is only one trip record saved in CloudKit.")
+                            mostRecentRecord = record
+                            break
+                        }
+                        
                         // Check if the current record is the most recent thus far
                         mostRecentRecord = self.findMostRecentRecord(
                             previousRecord: mostRecentRecord,
                             currentRecord: record
                         )
-                        
-                        let id = record.recordID.recordName
-                        logger.debug("CloudKit trip data \(id) last modified on \(record.modificationDate!.formatted())")
                         
                     case .failure(let error):
                         completionHandler(.failure(error))
@@ -135,7 +140,6 @@ class CloudKitManager {
                     
                     
                     logger.log("Decoding the most recent trip record from CloudKit.")
-                    
                     if let tripData = mostRecentRecord.value(forKey: tripDataKey) as? Data,
                        let trips = try? JSONDecoder().decode([Trip].self, from: tripData) {
                         logger.log("Successfully decoded trips from CloudKit database.")
@@ -147,9 +151,10 @@ class CloudKitManager {
                         }
                         
                         // Delete any extraneous outdated trip records
-                        self.deleteAllTripRecords(excluding: mostRecentRecord.recordID)
+                        if matchResults.count > 1 {
+                            self.deleteAllTripRecords(excluding: mostRecentRecord.recordID)
+                        }
                         
-                        // TODO: Analyze what will happen if trips is an empty array
                         completionHandler(.success(trips))
                         return
                     } else {
