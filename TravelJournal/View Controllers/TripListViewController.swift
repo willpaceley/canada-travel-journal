@@ -75,15 +75,20 @@ class TripListViewController: UITableViewController {
     
     @objc func persistenceStatusButtonPressed() {
         var actions = [UIAlertAction]()
-        // TODO: Add force crash button for unknown persistenceStatus
-        if dataService.persistenceStatus != .iCloudAvailable {
-            let settingsAction = UIAlertAction(title: "Go to Settings", style: .default) { _ in
+        if dataService.persistenceStatus == .iCloudUnavailable {
+            let settingsAction = UIAlertAction(title: "Settings", style: .default) { _ in
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
                 }
             }
             actions.append(settingsAction)
+        } else if dataService.persistenceStatus == .unknown {
+            let crashAction = UIAlertAction(title: "Close App", style: .destructive) { _ in
+                fatalError("User-initiated crash due to unknown persistence status.")
+            }
+            actions.append(crashAction)
         }
+        
         let cancelAction = UIAlertAction(title: "OK", style: .default)
         actions.append(cancelAction)
         
