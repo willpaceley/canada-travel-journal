@@ -55,7 +55,10 @@ struct ErrorAlertFactory {
             return alert
         }
         
-        alert = (title: "Loading Error", message: error.localizedDescription)
+        alert = (
+            title: "Loading Error",
+            message: "An error occurred while loading trip data. Please try again."
+        )
         return alert
     }
     
@@ -102,7 +105,10 @@ struct ErrorAlertFactory {
             return alert
         }
         
-        alert = (title: "Save Error", message: error.localizedDescription)
+        alert = (
+            title: "Save Error",
+            message: "An error occurred while saving trip data. Please try again."
+        )
         return alert
     }
     

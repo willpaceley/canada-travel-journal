@@ -168,13 +168,17 @@ class TripListViewController: UITableViewController {
         return button
     }
     
-    func displayAlert(title: String, message: String) {
+    func displayAlert(title: String, message: String, actions: [UIAlertAction]? = nil) {
         let ac = UIAlertController(
             title: title,
             message: message,
             preferredStyle: .alert
         )
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        if let actions {
+            for action in actions { ac.addAction(action) }
+        } else {
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+        }
         present(ac, animated: true)
     }
     
@@ -203,9 +207,14 @@ class TripListViewController: UITableViewController {
             case .failure(let error):
                 if error != .unknownPersistenceStatus {
                     let (title, message) = ErrorAlertFactory.loadErrorAlert(for: error)
+                    let tryAgainAction = UIAlertAction(title: "Try Again", style: .default) { [weak self] _ in
+                        guard let self else { return }
+                        self.loadTrips()
+                    }
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
                     DispatchQueue.main.async {
                         self?.isLoading = false
-                        self?.displayAlert(title: title, message: message)
+                        self?.displayAlert(title: title, message: message, actions: [tryAgainAction, cancelAction])
                     }
                 }
             }
@@ -399,8 +408,13 @@ extension TripListViewController: TripDataServiceDelegate {
     
     func dataService(didHaveSaveError error: TravelJournalError) {
         isLoading = false
+        let tryAgainAction = UIAlertAction(title: "Try Again", style: .default) { [weak self] _ in
+            guard let self else { return }
+            self.dataService.save(self.trips)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         let (title, message) = ErrorAlertFactory.saveErrorAlert(for: error)
-        displayAlert(title: title, message: message)
+        displayAlert(title: title, message: message, actions: [tryAgainAction, cancelAction])
     }
     
     func dataService(didHaveCloudKitError error: CKError) {
