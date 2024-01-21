@@ -7,6 +7,7 @@
 
 import UIKit
 import CloudKit
+import StoreKit
 import Network
 import OSLog
 
@@ -40,7 +41,7 @@ class TripListViewController: UITableViewController {
         connectivityManager: ConnectivityManager()
     )
     
-    // MARK: - viewDidLoad
+    // MARK: - View Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,6 +55,14 @@ class TripListViewController: UITableViewController {
         self.refreshControl?.addTarget(self, action: #selector(refreshTable), for: UIControl.Event.valueChanged)
         
         setupAccessibility()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // If the user has added more than 1 trip, prompt for App Store review
+        if trips.count > 1 {
+            promptUserToReview()
+        }
     }
     
     // MARK: - @IBAction and @objc
@@ -180,6 +189,14 @@ class TripListViewController: UITableViewController {
             ac.addAction(UIAlertAction(title: "OK", style: .default))
         }
         present(ac, animated: true)
+    }
+    
+    func promptUserToReview() {
+        guard let windowScene = view.window?.windowScene else {
+            logger.error("Current UIWindowScene could not be found from TripListViewController.")
+            return
+        }
+        SKStoreReviewController.requestReview(in: windowScene)
     }
     
     // MARK: - Helper Methods
