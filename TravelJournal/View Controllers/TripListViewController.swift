@@ -78,7 +78,11 @@ class TripListViewController: UITableViewController {
         
         let csvFile = CSVUtility.getCSVFilePath()
         let vc = UIActivityViewController(activityItems: [csvFile], applicationActivities: nil)
-        vc.popoverPresentationController?.barButtonItem = shareButton
+        if #available(iOS 16.0, *) {
+            vc.popoverPresentationController?.sourceItem = shareButton
+        } else {
+            vc.popoverPresentationController?.barButtonItem = shareButton
+        }
         present(vc, animated: true)
     }
     
@@ -107,7 +111,13 @@ class TripListViewController: UITableViewController {
         for action in actions {
             alertController.addAction(action)
         }
-       
+        
+        // popover presentation is necessary to prevent crashes on iPad
+        if #available(iOS 16.0, *) {
+            alertController.popoverPresentationController?.sourceItem = persistenceStatusButton
+        } else {
+            alertController.popoverPresentationController?.barButtonItem = persistenceStatusButton
+        }
         present(alertController, animated: true)
     }
     
