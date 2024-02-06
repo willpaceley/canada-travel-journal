@@ -206,7 +206,10 @@ class TripListViewController: UITableViewController {
             logger.error("Current UIWindowScene could not be found from TripListViewController.")
             return
         }
+        #if !targetEnvironment(simulator)
+        logger.log("Requesting App Store review from user.")
         SKStoreReviewController.requestReview(in: windowScene)
+        #endif
     }
     
     // MARK: - Helper Methods
