@@ -30,11 +30,15 @@ class Trip: Codable {
     
     var days: Int {
         let components = Calendar.current.dateComponents([.day], from: departureDate, to: returnDate)
+        guard let days = components.day else {
+            return 0
+        }
         
-        if let days = components.day {
+        if days >= 0 {
             // If returning same day, count as 1 day away from Canada
             return days != 0 ? days : 1
         } else {
+            // There can't be a non-negative number of days
             return 0
         }
     }

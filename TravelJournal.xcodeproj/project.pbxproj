@@ -22,11 +22,11 @@
 		BE5A2E692AAA47BA0064CDDC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E682AAA47BA0064CDDC /* Constants.swift */; };
 		BE5A2E6E2AAEA1990064CDDC /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */; };
 		BE66D7F72AE3011B00986235 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */; };
-		BE81DAE12BD1A669003B075B /* TravelJournalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAE02BD1A669003B075B /* TravelJournalTests.swift */; };
 		BE81DAE82BD1A758003B075B /* TestingAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAE72BD1A758003B075B /* TestingAppDelegate.swift */; };
 		BE81DAEA2BD1A839003B075B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAE92BD1A839003B075B /* main.swift */; };
 		BE81DAEC2BD298DF003B075B /* TestingSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAEB2BD298DF003B075B /* TestingSceneDelegate.swift */; };
 		BE81DAEE2BD29964003B075B /* TestingRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAED2BD29964003B075B /* TestingRootViewController.swift */; };
+		BE81DAF12BD29D0C003B075B /* TripTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAF02BD29D0C003B075B /* TripTests.swift */; };
 		BE90DA242AB347AC005D3450 /* CountrySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */; };
 		BE90DA262AB3490D005D3450 /* CountriesUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA252AB3490D005D3450 /* CountriesUtility.swift */; };
 		BE90DA282AB4A11A005D3450 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA272AB4A11A005D3450 /* String+Ext.swift */; };
@@ -82,11 +82,11 @@
 		BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
 		BE81DADE2BD1A669003B075B /* TravelJournalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelJournalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BE81DAE02BD1A669003B075B /* TravelJournalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelJournalTests.swift; sourceTree = "<group>"; };
 		BE81DAE72BD1A758003B075B /* TestingAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingAppDelegate.swift; sourceTree = "<group>"; };
 		BE81DAE92BD1A839003B075B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BE81DAEB2BD298DF003B075B /* TestingSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingSceneDelegate.swift; sourceTree = "<group>"; };
 		BE81DAED2BD29964003B075B /* TestingRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingRootViewController.swift; sourceTree = "<group>"; };
+		BE81DAF02BD29D0C003B075B /* TripTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripTests.swift; sourceTree = "<group>"; };
 		BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountrySearchViewController.swift; sourceTree = "<group>"; };
 		BE90DA252AB3490D005D3450 /* CountriesUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesUtility.swift; sourceTree = "<group>"; };
 		BE90DA272AB4A11A005D3450 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
@@ -227,7 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				BE81DAEF2BD29B59003B075B /* App */,
-				BE81DAE02BD1A669003B075B /* TravelJournalTests.swift */,
+				BE81DAF02BD29D0C003B075B /* TripTests.swift */,
 			);
 			path = TravelJournalTests;
 			sourceTree = "<group>";
@@ -400,7 +400,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE81DAEC2BD298DF003B075B /* TestingSceneDelegate.swift in Sources */,
-				BE81DAE12BD1A669003B075B /* TravelJournalTests.swift in Sources */,
+				BE81DAF12BD29D0C003B075B /* TripTests.swift in Sources */,
 				BE81DAE82BD1A758003B075B /* TestingAppDelegate.swift in Sources */,
 				BE81DAEE2BD29964003B075B /* TestingRootViewController.swift in Sources */,
 			);
