@@ -1,0 +1,23 @@
+//
+//  TripDetailViewControllerTests.swift
+//  TravelJournalTests
+//
+//  Created by Will Paceley on 2024-04-22.
+//
+
+@testable import TravelJournal
+import XCTest
+
+final class TripDetailViewControllerTests: XCTestCase {
+
+    func test_loading() {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let sut: TripDetailViewController = sb.instantiateViewController(
+            identifier: String(describing: TripDetailViewController.self)
+        )
+        sut.loadViewIfNeeded()
+        
+        XCTAssertNotNil(sut.addTripButton)
+    }
+
+}

@@ -23,6 +23,7 @@
 		BE5A2E6E2AAEA1990064CDDC /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */; };
 		BE66D7F72AE3011B00986235 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */; };
 		BE7FE0692BD6A6F20006C7D5 /* CountrySearchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7FE0682BD6A6F20006C7D5 /* CountrySearchViewControllerTests.swift */; };
+		BE7FE06D2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7FE06C2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift */; };
 		BE81DAE82BD1A758003B075B /* TestingAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAE72BD1A758003B075B /* TestingAppDelegate.swift */; };
 		BE81DAEA2BD1A839003B075B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAE92BD1A839003B075B /* main.swift */; };
 		BE81DAEC2BD298DF003B075B /* TestingSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAEB2BD298DF003B075B /* TestingSceneDelegate.swift */; };
@@ -83,6 +84,7 @@
 		BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityManager.swift; sourceTree = "<group>"; };
 		BE7FE0682BD6A6F20006C7D5 /* CountrySearchViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountrySearchViewControllerTests.swift; sourceTree = "<group>"; };
+		BE7FE06C2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailViewControllerTests.swift; sourceTree = "<group>"; };
 		BE81DADE2BD1A669003B075B /* TravelJournalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelJournalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE81DAE72BD1A758003B075B /* TestingAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingAppDelegate.swift; sourceTree = "<group>"; };
 		BE81DAE92BD1A839003B075B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				BE81DAEF2BD29B59003B075B /* App */,
 				BE81DAF02BD29D0C003B075B /* TripTests.swift */,
 				BE7FE0682BD6A6F20006C7D5 /* CountrySearchViewControllerTests.swift */,
+				BE7FE06C2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift */,
 			);
 			path = TravelJournalTests;
 			sourceTree = "<group>";
@@ -404,6 +407,7 @@
 			files = (
 				BE81DAEC2BD298DF003B075B /* TestingSceneDelegate.swift in Sources */,
 				BE81DAF12BD29D0C003B075B /* TripTests.swift in Sources */,
+				BE7FE06D2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift in Sources */,
 				BE81DAE82BD1A758003B075B /* TestingAppDelegate.swift in Sources */,
 				BE81DAEE2BD29964003B075B /* TestingRootViewController.swift in Sources */,
 				BE7FE0692BD6A6F20006C7D5 /* CountrySearchViewControllerTests.swift in Sources */,

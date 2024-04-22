@@ -17,7 +17,7 @@ final class CountrySearchViewControllerTests: XCTestCase {
         )
         sut.loadViewIfNeeded()
         
-        XCTAssertNotNil(sut.searchString)
+        XCTAssertNotNil(sut.tableView)
     }
 
 }
