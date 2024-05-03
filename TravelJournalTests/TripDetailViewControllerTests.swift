@@ -19,5 +19,20 @@ final class TripDetailViewControllerTests: XCTestCase {
         
         XCTAssertNotNil(sut.addTripButton)
     }
-
+    
+    func test_outlets_shouldBeConnected() {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let sut: TripDetailViewController = sb.instantiateViewController(
+            identifier: String(describing: TripDetailViewController.self)
+        )
+        sut.loadViewIfNeeded()
+        
+        XCTAssertNotNil(sut.addTripButton, "add trip button")
+        XCTAssertNotNil(sut.countryLabel, "country label")
+        XCTAssertNotNil(sut.reasonField, "reason field")
+        XCTAssertNotNil(sut.returnPicker, "return picker")
+        XCTAssertNotNil(sut.departurePicker, "departure picker")
+        XCTAssertNotNil(sut.doneButton, "done button")
+    }
+    
 }

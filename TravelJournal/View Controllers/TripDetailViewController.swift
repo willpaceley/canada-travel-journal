@@ -14,12 +14,12 @@ protocol TripDetailViewControllerDelegate: AnyObject {
 }
 
 class TripDetailViewController: UITableViewController {
-    @IBOutlet var addTripButton: UIButton!
-    @IBOutlet var countryLabel: UILabel!
-    @IBOutlet var reasonField: UITextField!
-    @IBOutlet var returnPicker: UIDatePicker!
-    @IBOutlet var departurePicker: UIDatePicker!
-    @IBOutlet var doneButton: UIBarButtonItem!
+    @IBOutlet private(set) var addTripButton: UIButton!
+    @IBOutlet private(set) var countryLabel: UILabel!
+    @IBOutlet private(set) var reasonField: UITextField!
+    @IBOutlet private(set) var returnPicker: UIDatePicker!
+    @IBOutlet private(set) var departurePicker: UIDatePicker!
+    @IBOutlet private(set) var doneButton: UIBarButtonItem!
     
     weak var delegate: TripDetailViewControllerDelegate!
     

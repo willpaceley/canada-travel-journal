@@ -10,7 +10,7 @@ import XCTest
 
 final class CountrySearchViewControllerTests: XCTestCase {
 
-    func test_load() {
+    func test_loading() {
         let sb = UIStoryboard(name: "Main", bundle: nil)
         let sut: CountrySearchViewController = sb.instantiateViewController(
             identifier: String(describing: CountrySearchViewController.self)
