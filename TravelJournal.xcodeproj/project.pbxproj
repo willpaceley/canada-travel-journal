@@ -29,6 +29,7 @@
 		BE81DAEC2BD298DF003B075B /* TestingSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAEB2BD298DF003B075B /* TestingSceneDelegate.swift */; };
 		BE81DAEE2BD29964003B075B /* TestingRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAED2BD29964003B075B /* TestingRootViewController.swift */; };
 		BE81DAF12BD29D0C003B075B /* TripTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAF02BD29D0C003B075B /* TripTests.swift */; };
+		BE90759B2BEAB9710049869D /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90759A2BEAB9700049869D /* TestHelpers.swift */; };
 		BE90DA242AB347AC005D3450 /* CountrySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */; };
 		BE90DA262AB3490D005D3450 /* CountriesUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA252AB3490D005D3450 /* CountriesUtility.swift */; };
 		BE90DA282AB4A11A005D3450 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE90DA272AB4A11A005D3450 /* String+Ext.swift */; };
@@ -91,6 +92,7 @@
 		BE81DAEB2BD298DF003B075B /* TestingSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingSceneDelegate.swift; sourceTree = "<group>"; };
 		BE81DAED2BD29964003B075B /* TestingRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingRootViewController.swift; sourceTree = "<group>"; };
 		BE81DAF02BD29D0C003B075B /* TripTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripTests.swift; sourceTree = "<group>"; };
+		BE90759A2BEAB9700049869D /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		BE90DA232AB347AC005D3450 /* CountrySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountrySearchViewController.swift; sourceTree = "<group>"; };
 		BE90DA252AB3490D005D3450 /* CountriesUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesUtility.swift; sourceTree = "<group>"; };
 		BE90DA272AB4A11A005D3450 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				BE81DAEF2BD29B59003B075B /* App */,
+				BE90759A2BEAB9700049869D /* TestHelpers.swift */,
 				BE81DAF02BD29D0C003B075B /* TripTests.swift */,
 				BE7FE0682BD6A6F20006C7D5 /* CountrySearchViewControllerTests.swift */,
 				BE7FE06C2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift */,
@@ -407,6 +410,7 @@
 			files = (
 				BE81DAEC2BD298DF003B075B /* TestingSceneDelegate.swift in Sources */,
 				BE81DAF12BD29D0C003B075B /* TripTests.swift in Sources */,
+				BE90759B2BEAB9710049869D /* TestHelpers.swift in Sources */,
 				BE7FE06D2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift in Sources */,
 				BE81DAE82BD1A758003B075B /* TestingAppDelegate.swift in Sources */,
 				BE81DAEE2BD29964003B075B /* TestingRootViewController.swift in Sources */,
