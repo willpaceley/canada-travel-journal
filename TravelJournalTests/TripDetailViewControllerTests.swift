@@ -46,4 +46,16 @@ final class TripDetailViewControllerTests: XCTestCase {
         
         XCTAssertTrue(sut.addTripButton.isHidden)
     }
+    
+    func test_addTripButton_whileAddingTrip_shouldNotBeHidden() {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let sut: TripDetailViewController = sb.instantiateViewController(
+            identifier: String(describing: TripDetailViewController.self)
+        )
+        
+        sut.tripToEdit = nil
+        sut.loadViewIfNeeded()
+        
+        XCTAssertFalse(sut.addTripButton.isHidden)
+    }
 }
