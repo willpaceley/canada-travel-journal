@@ -27,7 +27,7 @@ class ConnectivityManager {
         monitor.start(queue: queue)
     }
     
-    private func pathUpdateHandler(_ path: NWPath) {
+    func pathUpdateHandler(_ path: NWPath) {
         // If the status has changed, call the delegated method
         if path.status != status {
             delegate.connectivityManagerStatusChanged(to: path.status)

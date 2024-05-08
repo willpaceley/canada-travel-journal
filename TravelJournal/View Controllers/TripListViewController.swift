@@ -20,7 +20,6 @@ class TripListViewController: UITableViewController {
     @IBOutlet var shareButton: UIBarButtonItem!
     
     private var trips = [Trip]()
-    
     private var isLoading = false {
         didSet {
             if isLoading {
@@ -36,11 +35,11 @@ class TripListViewController: UITableViewController {
         trips.reduce(0) { $0 + $1.days }
     }
     
-    let dataService = TripDataService(
+    lazy var dataService = TripDataService(
         cloudKitManager: CloudKitManager(),
         connectivityManager: ConnectivityManager()
     )
-    
+        
     // MARK: - View Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -9,16 +9,6 @@
 import XCTest
 
 final class TripDetailViewControllerTests: XCTestCase {
-
-    func test_loading() {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let sut: TripDetailViewController = sb.instantiateViewController(
-            identifier: String(describing: TripDetailViewController.self)
-        )
-        sut.loadViewIfNeeded()
-        
-        XCTAssertNotNil(sut.addTripButton)
-    }
     
     func test_outlets_shouldBeConnected() {
         let sb = UIStoryboard(name: "Main", bundle: nil)

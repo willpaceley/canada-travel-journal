@@ -24,7 +24,6 @@ class CloudKitManager {
         predicate: NSPredicate(value: true)
     )
     
-//    private(set) var cloudKitTripDataLastModified = Date.distantPast
     private(set) var cloudKitTripDataLastModified: Date?
     private(set) var requestInProgress = false
     
