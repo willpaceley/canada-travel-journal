@@ -9,12 +9,22 @@
 import XCTest
 
 final class TripDetailViewControllerTests: XCTestCase {
+    private var sut: TripDetailViewController!
     
-    func test_outlets_shouldBeConnected() {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let sut: TripDetailViewController = sb.instantiateViewController(
+    override func setUp() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        sut = storyboard.instantiateViewController(
             identifier: String(describing: TripDetailViewController.self)
         )
+        super.setUp()
+    }
+    
+    override func tearDown() {
+        sut = nil
+        super.tearDown()
+    }
+    
+    func test_outlets_shouldBeConnected() {
         sut.loadViewIfNeeded()
         
         XCTAssertNotNil(sut.addTripButton, "add trip button")
@@ -26,11 +36,6 @@ final class TripDetailViewControllerTests: XCTestCase {
     }
         
     func test_addTripButton_whileEditingTrip_shouldBeHidden() {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let sut: TripDetailViewController = sb.instantiateViewController(
-            identifier: String(describing: TripDetailViewController.self)
-        )
-        
         sut.tripToEdit = Trip(departureDate: .now, returnDate: .now, destination: "", reason: "")
         sut.loadViewIfNeeded()
         
@@ -38,11 +43,6 @@ final class TripDetailViewControllerTests: XCTestCase {
     }
     
     func test_addTripButton_whileAddingTrip_shouldNotBeHidden() {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let sut: TripDetailViewController = sb.instantiateViewController(
-            identifier: String(describing: TripDetailViewController.self)
-        )
-        
         sut.tripToEdit = nil
         sut.loadViewIfNeeded()
         
