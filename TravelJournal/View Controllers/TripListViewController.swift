@@ -53,6 +53,7 @@ class TripListViewController: UITableViewController {
         // Fetch most recent data when user pulls down on UITableView
         self.refreshControl?.addTarget(self, action: #selector(refreshTable), for: UIControl.Event.valueChanged)
         
+        setupUI()
         setupAccessibility()
     }
     
@@ -86,6 +87,7 @@ class TripListViewController: UITableViewController {
     }
     
     @objc func persistenceStatusButtonPressed() {
+        print("persistence status button tapped")
         var actions = [UIAlertAction]()
         if dataService.persistenceStatus == .iCloudUnavailable {
             let settingsAction = UIAlertAction(title: "Settings", style: .default) { _ in
@@ -147,6 +149,11 @@ class TripListViewController: UITableViewController {
     }
     
     // MARK: - UI Updates
+    func setupUI() {
+        let button = createPersistenceStatusButton(for: dataService.persistenceStatus)
+        persistenceStatusButton.customView = button
+    }
+    
     func reloadFooter() {
         tableView.beginUpdates()
         

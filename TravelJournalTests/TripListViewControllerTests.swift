@@ -8,42 +8,76 @@
 @testable import TravelJournal
 import XCTest
 import Network
+import ViewControllerPresentationSpy
 
 final class TripListViewControllerTests: XCTestCase {
-
-    func test_outlets_shouldBeConnected() {
+    private var alertVerifier: AlertVerifier!
+    private var sut: TripListViewController!
+    
+    // MARK: - setUp and tearDown
+    @MainActor
+    override func setUp() {
+        super.setUp()
+        alertVerifier = AlertVerifier()
+        
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-        let sut: TripListViewController = storyboard.instantiateViewController(
+        sut = storyboard.instantiateViewController(
             identifier: String(describing: TripListViewController.self)
         )
-        
         sut.dataService = TripDataService(
             cloudKitManager: TestableCloudKitManager(),
             connectivityManager: TestableConnectivityManager()
         )
         sut.loadViewIfNeeded()
-        
+    }
+    
+    override func tearDown() {
+        alertVerifier = nil
+        sut = nil
+        super.tearDown()
+    }
+    
+    // MARK: - Tests
+    func test_outlets_shouldBeConnected() {
         XCTAssertNotNil(sut.activityIndicator, "activity indicator")
         XCTAssertNotNil(sut.persistenceStatusButton, "persistence status button")
         XCTAssertNotNil(sut.addTripButton, "add trip button")
         XCTAssertNotNil(sut.shareButton, "share button")
     }
-
+    
+    @MainActor
+    func test_tappingStatusButton_shouldShowAlert() {
+        let statusButton = sut.persistenceStatusButton.customView as! UIButton
+        statusButton.tap()
+        let alert = PersistenceAlertFactory.alert(for: .unknown)
+        
+        alertVerifier.verify(
+            title: alert.title,
+            message: alert.message,
+            animated: true,
+            actions: [
+                .destructive("Close App"),
+                .default("OK"),
+            ],
+            preferredStyle: .actionSheet,
+            presentingViewController: sut
+        )
+    }
 }
 
 // MARK: Testable Dependencies
 class TestableCloudKitManager: CloudKitManager {
     override init() {
-        print("TestableCloudKitManager init() did not set up notification observation")
+        // Override init to avoid setting up notification observation
     }
 }
 
 class TestableConnectivityManager: ConnectivityManager {
     override init() {
-        print("TestableConnectivityManager init() did not set up path update handler")
+        // Override init to avoid setting up path update handler
     }
     
     override func pathUpdateHandler(_ path: NWPath) {
-        print("Mocked pathUpdateHandler fired")
+        // Do mock work in here
     }
 }

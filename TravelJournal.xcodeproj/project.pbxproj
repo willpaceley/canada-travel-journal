@@ -22,6 +22,7 @@
 		BE5A2E692AAA47BA0064CDDC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E682AAA47BA0064CDDC /* Constants.swift */; };
 		BE5A2E6E2AAEA1990064CDDC /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5A2E6D2AAEA1990064CDDC /* Date+Ext.swift */; };
 		BE66D7F72AE3011B00986235 /* ConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE66D7F62AE3011B00986235 /* ConnectivityManager.swift */; };
+		BE6E22142BECF9FA0011082E /* ViewControllerPresentationSpy in Frameworks */ = {isa = PBXBuildFile; productRef = BE6E22132BECF9FA0011082E /* ViewControllerPresentationSpy */; };
 		BE7FE0692BD6A6F20006C7D5 /* CountrySearchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7FE0682BD6A6F20006C7D5 /* CountrySearchViewControllerTests.swift */; };
 		BE7FE06D2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7FE06C2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift */; };
 		BE81DAE82BD1A758003B075B /* TestingAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE81DAE72BD1A758003B075B /* TestingAppDelegate.swift */; };
@@ -118,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE6E22142BECF9FA0011082E /* ViewControllerPresentationSpy in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +317,9 @@
 				BE81DAE32BD1A669003B075B /* PBXTargetDependency */,
 			);
 			name = TravelJournalTests;
+			packageProductDependencies = (
+				BE6E22132BECF9FA0011082E /* ViewControllerPresentationSpy */,
+			);
 			productName = TravelJournalTests;
 			productReference = BE81DADE2BD1A669003B075B /* TravelJournalTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -347,6 +352,9 @@
 				Base,
 			);
 			mainGroup = 075E21042968829200899FC1;
+			packageReferences = (
+				BE6E22122BECF9FA0011082E /* XCRemoteSwiftPackageReference "ViewControllerPresentationSpy" */,
+			);
 			productRefGroup = 075E210E2968829200899FC1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -708,6 +716,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BE6E22122BECF9FA0011082E /* XCRemoteSwiftPackageReference "ViewControllerPresentationSpy" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jonreid/ViewControllerPresentationSpy";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BE6E22132BECF9FA0011082E /* ViewControllerPresentationSpy */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE6E22122BECF9FA0011082E /* XCRemoteSwiftPackageReference "ViewControllerPresentationSpy" */;
+			productName = ViewControllerPresentationSpy;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 075E21052968829200899FC1 /* Project object */;
 }
