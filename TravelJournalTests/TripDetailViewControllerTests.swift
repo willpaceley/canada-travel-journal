@@ -11,6 +11,7 @@ import XCTest
 final class TripDetailViewControllerTests: XCTestCase {
     private var sut: TripDetailViewController!
     
+    // MARK: - setUp and tearDown
     override func setUp() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         sut = storyboard.instantiateViewController(
@@ -24,6 +25,7 @@ final class TripDetailViewControllerTests: XCTestCase {
         super.tearDown()
     }
     
+    // MARK: - Tests
     func test_outlets_shouldBeConnected() {
         sut.loadViewIfNeeded()
         

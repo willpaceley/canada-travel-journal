@@ -1,0 +1,28 @@
+{
+  "configurations" : [
+    {
+      "id" : "52FB5CBF-2A4B-44BD-B1CB-CC0C3423DD27",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:TravelJournal.xcodeproj",
+      "identifier" : "075E210C2968829200899FC1",
+      "name" : "TravelJournal"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:TravelJournal.xcodeproj",
+        "identifier" : "BE81DADD2BD1A669003B075B",
+        "name" : "TravelJournalTests"
+      }
+    }
+  ],
+  "version" : 1
+}
