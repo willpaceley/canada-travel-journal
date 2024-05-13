@@ -20,6 +20,7 @@ class TripDetailViewController: UITableViewController {
     @IBOutlet private(set) var returnPicker: UIDatePicker!
     @IBOutlet private(set) var departurePicker: UIDatePicker!
     @IBOutlet private(set) var doneButton: UIBarButtonItem!
+    @IBOutlet private(set) var trashButton: UIBarButtonItem!
     
     weak var delegate: TripDetailViewControllerDelegate!
     

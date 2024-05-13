@@ -323,6 +323,7 @@
                         <outlet property="doneButton" destination="ggf-fH-Rvi" id="qFI-bZ-E4z"/>
                         <outlet property="reasonField" destination="Eh9-je-tzA" id="2Pt-1u-lyb"/>
                         <outlet property="returnPicker" destination="iFV-Ze-C0X" id="Jn0-L4-6pY"/>
+                        <outlet property="trashButton" destination="0Wa-yq-wju" id="rs2-w6-EWR"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fWa-zB-uZD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

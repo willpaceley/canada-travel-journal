@@ -35,6 +35,7 @@ final class TripDetailViewControllerTests: XCTestCase {
         XCTAssertNotNil(sut.returnPicker, "return picker")
         XCTAssertNotNil(sut.departurePicker, "departure picker")
         XCTAssertNotNil(sut.doneButton, "done button")
+        XCTAssertNotNil(sut.trashButton, "trash button")
     }
         
     func test_addTripButton_whileEditingTrip_shouldBeHidden() {
