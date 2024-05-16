@@ -11,15 +11,12 @@ import Network
 import ViewControllerPresentationSpy
 
 final class TripListViewControllerTests: XCTestCase {
-    private var alertVerifier: AlertVerifier!
     private var sut: TripListViewController!
     
     // MARK: - setUp and tearDown
     @MainActor
     override func setUp() {
         super.setUp()
-        alertVerifier = AlertVerifier()
-        
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
         sut = storyboard.instantiateViewController(
             identifier: String(describing: TripListViewController.self)
@@ -32,7 +29,6 @@ final class TripListViewControllerTests: XCTestCase {
     }
     
     override func tearDown() {
-        alertVerifier = nil
         sut = nil
         super.tearDown()
     }
@@ -47,6 +43,7 @@ final class TripListViewControllerTests: XCTestCase {
     
     @MainActor
     func test_tappingStatusButton_shouldShowAlert() {
+        let alertVerifier = AlertVerifier()
         let statusButton = sut.persistenceStatusButton.customView as! UIButton
         statusButton.tap()
         let alert = PersistenceAlertFactory.alert(for: .unknown)
@@ -62,6 +59,21 @@ final class TripListViewControllerTests: XCTestCase {
             preferredStyle: .actionSheet,
             presentingViewController: sut
         )
+    }
+    
+    @MainActor
+    func test_tappingAddTripButton_shouldShowTripDetailViewController() {
+        let presentationVerifier = PresentationVerifier()
+        putInWindow(sut)
+        
+        sut.addTripButton.tap()
+        
+        let tripDetailVC: TripDetailViewController? = presentationVerifier.verify(
+            animated: true,
+            presentingViewController: sut
+        )
+        XCTAssertNotNil(tripDetailVC, "presented view controller was nil")
+        XCTAssertEqual(tripDetailVC?.title, "Add New Trip")
     }
 }
 

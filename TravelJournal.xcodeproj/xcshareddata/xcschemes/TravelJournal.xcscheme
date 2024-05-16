@@ -30,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:TravelJournal/TravelJournal.xctestplan"
+            reference = "container:TravelJournal.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
