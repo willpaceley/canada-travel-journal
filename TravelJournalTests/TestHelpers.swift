@@ -7,6 +7,18 @@
 
 import UIKit
 
+// MARK: Global Methods
+func executeRunLoop() {
+    RunLoop.current.run(until: .now)
+}
+
+func putInWindow(_ vc: UIViewController) {
+    let window = UIWindow()
+    window.rootViewController = vc
+    window.isHidden = false
+}
+
+// MARK: UIButton
 extension UIButton {
     /// Taps on a button with the `.touchUpInside` action
     func tap() {
@@ -14,6 +26,7 @@ extension UIButton {
     }
 }
 
+// MARK: UIBarButtonItem
 extension UIBarButtonItem {
     /// Taps on a bar button item
     func tap() {
