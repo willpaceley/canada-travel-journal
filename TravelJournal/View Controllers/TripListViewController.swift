@@ -39,6 +39,8 @@ class TripListViewController: UITableViewController {
         cloudKitManager: CloudKitManager(),
         connectivityManager: ConnectivityManager()
     )
+    
+    lazy var localStorage: LocalStorage = UserDefaults.standard
         
     // MARK: - View Lifecycle Methods
     override func viewDidLoad() {
@@ -273,7 +275,7 @@ class TripListViewController: UITableViewController {
     private func updateiCloudData() {
         // Save the trip data if iCloud is not updated with latest data
         logger.debug("Checking if we should save on-device trips to iCloud.")
-        let onDeviceTripDataLastModified = UserDefaults.standard.object(
+        let onDeviceTripDataLastModified = localStorage.object(
             forKey: onDeviceDataLastModifiedKey
         ) as? Date ?? Date.distantPast
         

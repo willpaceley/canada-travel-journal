@@ -20,6 +20,7 @@ protocol TripDataServiceDelegate: AnyObject {
 class TripDataService {
     let connectivityManager: ConnectivityManager
     let cloudKitManager: CloudKitManager
+    let localStorage: LocalStorage
     
     var persistenceStatus: PersistenceStatus = .unknown {
         didSet {
@@ -32,9 +33,14 @@ class TripDataService {
     weak var delegate: TripDataServiceDelegate!
     
     // MARK: - Initializer
-    init(cloudKitManager: CloudKitManager, connectivityManager: ConnectivityManager) {
+    init(
+        cloudKitManager: CloudKitManager,
+        connectivityManager: ConnectivityManager,
+        localStorage: LocalStorage = UserDefaults.standard
+    ) {
         self.connectivityManager = connectivityManager
         self.cloudKitManager = cloudKitManager
+        self.localStorage = localStorage
         
         self.cloudKitManager.delegate = self
         self.connectivityManager.delegate = self
@@ -142,9 +148,9 @@ class TripDataService {
         do {
             let jsonData = try JSONEncoder().encode(trips)
             try jsonData.write(to: url, options: [.atomic])
-            // Persist the Date we last modified the trip data to UserDefaults
-            UserDefaults.standard.setValue(Date(), forKey: onDeviceDataLastModifiedKey)
             logger.log("Trip data successfully saved in the app's documents directory.")
+            // Persist the Date we last modified the trip data to LocalStorage
+            localStorage.setValue(Date(), forKey: onDeviceDataLastModifiedKey)
         } catch {
             logger.error("An error occurred saving trip data on device: \(error.localizedDescription)")
         }

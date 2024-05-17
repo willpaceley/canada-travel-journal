@@ -18,7 +18,8 @@ protocol CloudKitManagerDelegate: AnyObject {
 }
 
 class CloudKitManager {
-    private let cloudKitDatabase = CKContainer.default().privateCloudDatabase
+    private let cloudKitDatabase: CKDatabase
+    private let localStorage: LocalStorage
     private let tripsQuery = CKQuery(
         recordType: tripsRecordType,
         predicate: NSPredicate(value: true)
@@ -29,7 +30,12 @@ class CloudKitManager {
     
     weak var delegate: CloudKitManagerDelegate!
     
-    init() {
+    init(
+        cloudKitDataBase: CKDatabase = CKContainer.default().privateCloudDatabase,
+        localStorage: LocalStorage = UserDefaults.standard
+    ) {
+        self.cloudKitDatabase = cloudKitDataBase
+        self.localStorage = localStorage
         setupNotificationHandling()
     }
     
@@ -82,7 +88,7 @@ class CloudKitManager {
     
     func fetchTrips(completionHandler: @escaping (Result<[Trip]?, Error>) -> Void) {
         logger.log("Attempting to fetch trip data from CloudKit.")
-        cloudKitDatabase.fetch(withQuery: tripsQuery) { result in
+        cloudKitDatabase.fetch(withQuery: tripsQuery) { [unowned self] result in
             switch result {
             case .success((let matchResults, _)):
                 if matchResults.isEmpty {
@@ -124,7 +130,7 @@ class CloudKitManager {
                     if let cloudKitTripDataLastModified = mostRecentRecord.modificationDate {
                         self.cloudKitTripDataLastModified = cloudKitTripDataLastModified
                         
-                        let onDeviceTripDataLastModified = UserDefaults.standard.object(
+                        let onDeviceTripDataLastModified = localStorage.object(
                             forKey: onDeviceDataLastModifiedKey
                         ) as? Date ?? Date.distantPast
                         logger.debug("On device trip data last modified on \(onDeviceTripDataLastModified.formatted())")
