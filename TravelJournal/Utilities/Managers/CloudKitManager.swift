@@ -17,8 +17,11 @@ protocol CloudKitManagerDelegate: AnyObject {
     func cloudKitManager(didHaveError error: Error)
 }
 
+// TODO: CloudKitManager violates SRP. Possible solution:
+// - TripProvider: Handles all database/localstorage persistence operations
+// - CloudKitStatusManager: Handles the status notifications
 class CloudKitManager {
-    private let cloudKitDatabase: CKDatabase
+    private let cloudKitDatabase: TripDatabase
     private let localStorage: LocalStorage
     private let notificationCenter: NotificationCenter
     private let tripsQuery = CKQuery(
@@ -90,7 +93,12 @@ class CloudKitManager {
     
     func fetchTrips(completionHandler: @escaping (Result<[Trip]?, Error>) -> Void) {
         logger.log("Attempting to fetch trip data from CloudKit.")
-        cloudKitDatabase.fetch(withQuery: tripsQuery) { [unowned self] result in
+        cloudKitDatabase.fetch(
+            withQuery: tripsQuery,
+            inZoneWith: nil,
+            desiredKeys: nil,
+            resultsLimit: CKQueryOperation.maximumResults
+        ) { [unowned self] result in
             switch result {
             case .success((let matchResults, _)):
                 if matchResults.isEmpty {
@@ -177,7 +185,12 @@ class CloudKitManager {
     
     func postTrips(trips: [Trip], completionHandler: @escaping (Result<CKRecord, Error>) -> Void) {
         logger.log("Checking for a pre-existing trips record ID in CloudKit DB.")
-        cloudKitDatabase.fetch(withQuery: tripsQuery, resultsLimit: 1) { [weak self] result in
+        cloudKitDatabase.fetch(
+            withQuery: tripsQuery,
+            inZoneWith: nil,
+            desiredKeys: nil,
+            resultsLimit: 1
+        ) { [weak self] result in
             guard let self else { return }
 
             switch result {
@@ -210,7 +223,12 @@ class CloudKitManager {
     /// > Warning: Invoking this method results in an irrecoverable loss of trip data
     /// stored in the user's CloudKit database.
     func deleteAllTripRecords(excluding idToKeep: CKRecord.ID? = nil) {
-        cloudKitDatabase.fetch(withQuery: tripsQuery) { [weak self] result in
+        cloudKitDatabase.fetch(
+            withQuery: tripsQuery,
+            inZoneWith: nil,
+            desiredKeys: nil,
+            resultsLimit: CKQueryOperation.maximumResults
+        ) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let (matchResults, _)):
@@ -265,7 +283,12 @@ class CloudKitManager {
             let tripData = try JSONEncoder().encode(trips)
             tripsRecord[tripDataKey] = tripData
             
-            cloudKitDatabase.modifyRecords(saving: [tripsRecord], deleting: [tripsRecordID]) { result in
+            cloudKitDatabase.modifyRecords(
+                saving: [tripsRecord],
+                deleting: [tripsRecordID],
+                savePolicy: .ifServerRecordUnchanged,
+                atomically: true
+            ) { result in
                 switch result {
                 case .success((let saveResults, let deleteResults)):
                     // Confirm that the updated record was successfully saved to CloudKit
