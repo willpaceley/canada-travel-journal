@@ -20,6 +20,7 @@ protocol CloudKitManagerDelegate: AnyObject {
 class CloudKitManager {
     private let cloudKitDatabase: CKDatabase
     private let localStorage: LocalStorage
+    private let notificationCenter: NotificationCenter
     private let tripsQuery = CKQuery(
         recordType: tripsRecordType,
         predicate: NSPredicate(value: true)
@@ -32,16 +33,17 @@ class CloudKitManager {
     
     init(
         cloudKitDataBase: CKDatabase = CKContainer.default().privateCloudDatabase,
-        localStorage: LocalStorage = UserDefaults.standard
+        localStorage: LocalStorage = UserDefaults.standard,
+        notificationCenter: NotificationCenter = NotificationCenter.default
     ) {
         self.cloudKitDatabase = cloudKitDataBase
         self.localStorage = localStorage
+        self.notificationCenter = notificationCenter
         setupNotificationHandling()
     }
     
     // MARK: - Notification Handling
     private func setupNotificationHandling() {
-        let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(
             self,
             selector: #selector(accountDidChange(_:)),

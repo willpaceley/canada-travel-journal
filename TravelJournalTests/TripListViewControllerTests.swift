@@ -22,7 +22,7 @@ final class TripListViewControllerTests: XCTestCase {
             identifier: String(describing: TripListViewController.self)
         )
         sut.dataService = TripDataService(
-            cloudKitManager: TestableCloudKitManager(),
+            cloudKitManager: CloudKitManager(),
             connectivityManager: TestableConnectivityManager()
         )
         sut.loadViewIfNeeded()
@@ -78,11 +78,11 @@ final class TripListViewControllerTests: XCTestCase {
 }
 
 // MARK: Testable Dependencies
-class TestableCloudKitManager: CloudKitManager {
-    override init() {
-        // Override init to avoid setting up notification observation
-    }
-}
+//class TestableCloudKitManager: CloudKitManager {
+//    override init() {
+//        // Override init to avoid setting up notification observation
+//    }
+//}
 
 class TestableConnectivityManager: ConnectivityManager {
     override init() {
