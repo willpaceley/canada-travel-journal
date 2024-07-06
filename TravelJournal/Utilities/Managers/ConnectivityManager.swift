@@ -12,13 +12,15 @@ protocol ConnectivityManagerDelegate: AnyObject {
 }
 
 class ConnectivityManager {
-    private let monitor = NWPathMonitor()
-    private var status: NWPath.Status?
+    
+    private var monitor: PathMonitor
+    private(set) var status: NWPath.Status?
     
     weak var delegate: ConnectivityManagerDelegate!
     
-    init() {
-        monitor.pathUpdateHandler = pathUpdateHandler(_:)
+    init(monitor: PathMonitor = NWPathMonitor()) {
+        self.monitor = monitor
+        self.monitor.pathUpdateHandler = pathUpdateHandler(_:)
     }
     
     // Call startMonitor() after the TripDataService delegate has been set
@@ -27,11 +29,13 @@ class ConnectivityManager {
         monitor.start(queue: queue)
     }
     
-    func pathUpdateHandler(_ path: NWPath) {
+    @Sendable
+    private func pathUpdateHandler(_ path: NWPath) {
         // If the status has changed, call the delegated method
         if path.status != status {
             delegate.connectivityManagerStatusChanged(to: path.status)
         }
         status = path.status
     }
+    
 }

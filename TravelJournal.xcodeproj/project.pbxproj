@@ -15,6 +15,8 @@
 		075E2125296886E000899FC1 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075E2124296886E000899FC1 /* Trip.swift */; };
 		075E212B296A1F3C00899FC1 /* TripDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075E212A296A1F3C00899FC1 /* TripDetailViewController.swift */; };
 		07E828F3296DFDDD0092BF3C /* TripViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E828F2296DFDDD0092BF3C /* TripViewCell.swift */; };
+		BE0CBE3E2C39E8B900C8924A /* ConnectivityManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0CBE3D2C39E8B900C8924A /* ConnectivityManagerTests.swift */; };
+		BE0CBE402C39EA9300C8924A /* PathMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0CBE3F2C39EA9300C8924A /* PathMonitor.swift */; };
 		BE1104782B02B57800E11193 /* CSVUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1104772B02B57800E11193 /* CSVUtility.swift */; };
 		BE13D8CC2B1E127D008FEDDD /* UIAccessibility+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE13D8CB2B1E127D008FEDDD /* UIAccessibility+Ext.swift */; };
 		BE1729912A828CAA00D6DBD7 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1729902A828CAA00D6DBD7 /* CloudKitManager.swift */; };
@@ -80,6 +82,8 @@
 		075E2124296886E000899FC1 /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		075E212A296A1F3C00899FC1 /* TripDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailViewController.swift; sourceTree = "<group>"; };
 		07E828F2296DFDDD0092BF3C /* TripViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewCell.swift; sourceTree = "<group>"; };
+		BE0CBE3D2C39E8B900C8924A /* ConnectivityManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityManagerTests.swift; sourceTree = "<group>"; };
+		BE0CBE3F2C39EA9300C8924A /* PathMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMonitor.swift; sourceTree = "<group>"; };
 		BE1104772B02B57800E11193 /* CSVUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVUtility.swift; sourceTree = "<group>"; };
 		BE13D8CB2B1E127D008FEDDD /* UIAccessibility+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAccessibility+Ext.swift"; sourceTree = "<group>"; };
 		BE1729902A828CAA00D6DBD7 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
@@ -171,7 +175,6 @@
 		BE17298F2A828C9D00D6DBD7 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				BE5DBBF92BF7DF2900698B28 /* Protocols */,
 				BEC1032D2B029F7A00536A80 /* Services */,
 				BE5A2E6F2AAEA5F80064CDDC /* Managers */,
 				BE5A2E6C2AAEA1850064CDDC /* Extensions */,
@@ -188,6 +191,8 @@
 			children = (
 				075E2124296886E000899FC1 /* Trip.swift */,
 				BEA935232C28AB70003C84B7 /* TripDatabase.swift */,
+				BE5DBBFA2BF7DF5E00698B28 /* LocalStorage.swift */,
+				BE0CBE3F2C39EA9300C8924A /* PathMonitor.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -241,14 +246,6 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
-		BE5DBBF92BF7DF2900698B28 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				BE5DBBFA2BF7DF5E00698B28 /* LocalStorage.swift */,
-			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
 		BE81DADF2BD1A669003B075B /* TravelJournalTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,6 +255,7 @@
 				BE90759C2BEBB2810049869D /* TripListViewControllerTests.swift */,
 				BE7FE06C2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift */,
 				BE7FE0682BD6A6F20006C7D5 /* CountrySearchViewControllerTests.swift */,
+				BE0CBE3D2C39E8B900C8924A /* ConnectivityManagerTests.swift */,
 			);
 			path = TravelJournalTests;
 			sourceTree = "<group>";
@@ -420,6 +418,7 @@
 				075E212B296A1F3C00899FC1 /* TripDetailViewController.swift in Sources */,
 				BE90DA242AB347AC005D3450 /* CountrySearchViewController.swift in Sources */,
 				BEBE93BE2B07B76C00FA5396 /* Logger+Ext.swift in Sources */,
+				BE0CBE402C39EA9300C8924A /* PathMonitor.swift in Sources */,
 				BEC1032C2AFD6B9100536A80 /* ErrorAlertFactory.swift in Sources */,
 				BE13D8CC2B1E127D008FEDDD /* UIAccessibility+Ext.swift in Sources */,
 				07E828F3296DFDDD0092BF3C /* TripViewCell.swift in Sources */,
@@ -439,6 +438,7 @@
 			files = (
 				BE81DAEC2BD298DF003B075B /* TestingSceneDelegate.swift in Sources */,
 				BE81DAF12BD29D0C003B075B /* TripTests.swift in Sources */,
+				BE0CBE3E2C39E8B900C8924A /* ConnectivityManagerTests.swift in Sources */,
 				BE90759B2BEAB9710049869D /* TestHelpers.swift in Sources */,
 				BE90759D2BEBB2810049869D /* TripListViewControllerTests.swift in Sources */,
 				BE7FE06D2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift in Sources */,
