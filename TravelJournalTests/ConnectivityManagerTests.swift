@@ -12,21 +12,21 @@ import Network
 final class ConnectivityManagerTests: XCTestCase {
     private var monitor: TestablePathMonitor!
     private var sut: ConnectivityManager!
-    private var delegate: ConnectivityManagerDelegateSpy!
+    private var mockDelegate: MockConnectivityManagerDelegate!
     
     // MARK: - setUp and tearDown
     override func setUp() {
         super.setUp()
         monitor = TestablePathMonitor()
         sut = ConnectivityManager(monitor: monitor)
-        delegate = ConnectivityManagerDelegateSpy()
-        sut.delegate = delegate
+        mockDelegate = MockConnectivityManagerDelegate()
+        sut.delegate = mockDelegate
     }
     
     override func tearDown() {
         monitor = nil
         sut = nil
-        delegate = nil
+        mockDelegate = nil
         super.tearDown()
     }
     
@@ -56,6 +56,8 @@ final class ConnectivityManagerTests: XCTestCase {
         
         let newStatus: NWPath.Status = .requiresConnection
         sut.connectivityUpdated(to: newStatus)
+        
+        mockDelegate.verifyStatusChangedCalled(numberOfTimes: 1, with: [initialStatus])
         XCTAssertEqual(sut.status, initialStatus)
     }
 }
@@ -68,12 +70,22 @@ class TestablePathMonitor: PathMonitor {
     var pathUpdateHandler: (@Sendable (NWPath) -> Void)?
 }
 
-class ConnectivityManagerDelegateSpy: ConnectivityManagerDelegate {
+class MockConnectivityManagerDelegate: ConnectivityManagerDelegate {
     var statusChangedCallCount = 0
     var statusChangedArgs: [NWPath.Status] = []
     
     func connectivityManagerStatusChanged(to status: NWPath.Status) {
         statusChangedCallCount += 1
         statusChangedArgs.append(status)
+    }
+    
+    func verifyStatusChangedCalled(
+        numberOfTimes: Int,
+        with statuses: [NWPath.Status],
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        XCTAssertEqual(statusChangedCallCount, numberOfTimes, "call count", file: file, line: line)
+        XCTAssertEqual(statusChangedArgs, statuses, "status arguments", file: file, line: line)
     }
 }
