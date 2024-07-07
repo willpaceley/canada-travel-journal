@@ -23,7 +23,7 @@ final class TripListViewControllerTests: XCTestCase {
         )
         sut.dataService = TripDataService(
             cloudKitManager: CloudKitManager(),
-            connectivityManager: TestableConnectivityManager()
+            connectivityManager: ConnectivityManager(monitor: TestablePathMonitor())
         )
         sut.loadViewIfNeeded()
     }
@@ -74,22 +74,5 @@ final class TripListViewControllerTests: XCTestCase {
         )
         XCTAssertNotNil(tripDetailVC, "presented view controller was nil")
         XCTAssertEqual(tripDetailVC?.title, "Add New Trip")
-    }
-}
-
-// MARK: Testable Dependencies
-//class TestableCloudKitManager: CloudKitManager {
-//    override init() {
-//        // Override init to avoid setting up notification observation
-//    }
-//}
-
-class TestableConnectivityManager: ConnectivityManager {
-    override init() {
-        // Override init to avoid setting up path update handler
-    }
-    
-    override func pathUpdateHandler(_ path: NWPath) {
-        // Do mock work in here
     }
 }
