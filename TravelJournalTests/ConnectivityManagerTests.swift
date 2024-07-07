@@ -34,12 +34,30 @@ final class ConnectivityManagerTests: XCTestCase {
     func test_connectivityUpdated_withNilStatus_shouldChangeToNewStatus() {
         XCTAssertNil(sut.status, "precondition")
         let newStatus: NWPath.Status = .satisfied
+        
         sut.connectivityUpdated(to: newStatus)
         XCTAssertEqual(sut.status, newStatus)
     }
     
-    // TODO: Test status is changed when different status is received from connectivityUpdated
-    // TODO: Test status doesn't change when same status is called
+    func test_connectivityUpdated_withExistingStatus_shouldChangeToNewStatus() {
+        let initialStatus: NWPath.Status = .satisfied
+        sut.connectivityUpdated(to: initialStatus)
+        XCTAssertEqual(sut.status, initialStatus, "precondition")
+        
+        let newStatus: NWPath.Status = .unsatisfied
+        sut.connectivityUpdated(to: newStatus)
+        XCTAssertNotEqual(sut.status, initialStatus)
+    }
+    
+    func test_connectivityUpdated_withSameStatus_shouldNotChangeStatus() {
+        let initialStatus: NWPath.Status = .requiresConnection
+        sut.connectivityUpdated(to: initialStatus)
+        XCTAssertEqual(sut.status, initialStatus, "precondition")
+        
+        let newStatus: NWPath.Status = .requiresConnection
+        sut.connectivityUpdated(to: newStatus)
+        XCTAssertEqual(sut.status, initialStatus)
+    }
 }
 
 class TestablePathMonitor: PathMonitor {
