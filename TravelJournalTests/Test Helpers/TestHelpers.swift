@@ -18,18 +18,3 @@ func putInWindow(_ vc: UIViewController) {
     window.isHidden = false
 }
 
-// MARK: UIButton
-extension UIButton {
-    /// Taps on a button with the `.touchUpInside` action
-    func tap() {
-        self.sendActions(for: .touchUpInside)
-    }
-}
-
-// MARK: UIBarButtonItem
-extension UIBarButtonItem {
-    /// Taps on a bar button item
-    func tap() {
-        _ = self.target?.perform(self.action, with: nil)
-    }
-}

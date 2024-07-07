@@ -18,6 +18,8 @@
 		BE0CBE3E2C39E8B900C8924A /* ConnectivityManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0CBE3D2C39E8B900C8924A /* ConnectivityManagerTests.swift */; };
 		BE0CBE402C39EA9300C8924A /* PathMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0CBE3F2C39EA9300C8924A /* PathMonitor.swift */; };
 		BE0CBE492C3B2E5300C8924A /* MockConnectivityManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0CBE482C3B2E5300C8924A /* MockConnectivityManagerDelegate.swift */; };
+		BE0CBE4D2C3B2FE100C8924A /* UIButton+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0CBE4C2C3B2FE100C8924A /* UIButton+Ext.swift */; };
+		BE0CBE4F2C3B30D200C8924A /* UIBarButtonItem+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0CBE4E2C3B30D200C8924A /* UIBarButtonItem+Ext.swift */; };
 		BE1104782B02B57800E11193 /* CSVUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1104772B02B57800E11193 /* CSVUtility.swift */; };
 		BE13D8CC2B1E127D008FEDDD /* UIAccessibility+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE13D8CB2B1E127D008FEDDD /* UIAccessibility+Ext.swift */; };
 		BE1729912A828CAA00D6DBD7 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1729902A828CAA00D6DBD7 /* CloudKitManager.swift */; };
@@ -86,6 +88,8 @@
 		BE0CBE3D2C39E8B900C8924A /* ConnectivityManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityManagerTests.swift; sourceTree = "<group>"; };
 		BE0CBE3F2C39EA9300C8924A /* PathMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMonitor.swift; sourceTree = "<group>"; };
 		BE0CBE482C3B2E5300C8924A /* MockConnectivityManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConnectivityManagerDelegate.swift; sourceTree = "<group>"; };
+		BE0CBE4C2C3B2FE100C8924A /* UIButton+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ext.swift"; sourceTree = "<group>"; };
+		BE0CBE4E2C3B30D200C8924A /* UIBarButtonItem+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Ext.swift"; sourceTree = "<group>"; };
 		BE1104772B02B57800E11193 /* CSVUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVUtility.swift; sourceTree = "<group>"; };
 		BE13D8CB2B1E127D008FEDDD /* UIAccessibility+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAccessibility+Ext.swift"; sourceTree = "<group>"; };
 		BE1729902A828CAA00D6DBD7 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
@@ -177,6 +181,7 @@
 		BE0CBE472C3B2E3600C8924A /* Test Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				BE0CBE4B2C3B2FC800C8924A /* Extensions */,
 				BE0CBE4A2C3B2EEE00C8924A /* Mocks */,
 				BE90759A2BEAB9700049869D /* TestHelpers.swift */,
 			);
@@ -189,6 +194,15 @@
 				BE0CBE482C3B2E5300C8924A /* MockConnectivityManagerDelegate.swift */,
 			);
 			path = Mocks;
+			sourceTree = "<group>";
+		};
+		BE0CBE4B2C3B2FC800C8924A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BE0CBE4C2C3B2FE100C8924A /* UIButton+Ext.swift */,
+				BE0CBE4E2C3B30D200C8924A /* UIBarButtonItem+Ext.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		BE17298F2A828C9D00D6DBD7 /* Utilities */ = {
@@ -457,6 +471,7 @@
 			files = (
 				BE81DAEC2BD298DF003B075B /* TestingSceneDelegate.swift in Sources */,
 				BE81DAF12BD29D0C003B075B /* TripTests.swift in Sources */,
+				BE0CBE4F2C3B30D200C8924A /* UIBarButtonItem+Ext.swift in Sources */,
 				BE0CBE3E2C39E8B900C8924A /* ConnectivityManagerTests.swift in Sources */,
 				BE90759B2BEAB9710049869D /* TestHelpers.swift in Sources */,
 				BE90759D2BEBB2810049869D /* TripListViewControllerTests.swift in Sources */,
@@ -464,6 +479,7 @@
 				BE7FE06D2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift in Sources */,
 				BE81DAE82BD1A758003B075B /* TestingAppDelegate.swift in Sources */,
 				BE81DAEE2BD29964003B075B /* TestingRootViewController.swift in Sources */,
+				BE0CBE4D2C3B2FE100C8924A /* UIButton+Ext.swift in Sources */,
 				BE7FE0692BD6A6F20006C7D5 /* CountrySearchViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
