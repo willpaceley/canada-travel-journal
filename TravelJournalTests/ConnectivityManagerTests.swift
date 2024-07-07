@@ -34,8 +34,9 @@ final class ConnectivityManagerTests: XCTestCase {
     func test_connectivityUpdated_withNilStatus_shouldChangeToNewStatus() {
         XCTAssertNil(sut.status, "precondition")
         let newStatus: NWPath.Status = .satisfied
-        
         sut.connectivityUpdated(to: newStatus)
+        
+        mockDelegate.verifyStatusChangedCalled(numberOfTimes: 1, with: [newStatus])
         XCTAssertEqual(sut.status, newStatus)
     }
     
@@ -46,6 +47,8 @@ final class ConnectivityManagerTests: XCTestCase {
         
         let newStatus: NWPath.Status = .unsatisfied
         sut.connectivityUpdated(to: newStatus)
+        
+        mockDelegate.verifyStatusChangedCalled(numberOfTimes: 2, with: [initialStatus, newStatus])
         XCTAssertNotEqual(sut.status, initialStatus)
     }
     
