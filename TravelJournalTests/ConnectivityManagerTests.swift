@@ -10,23 +10,36 @@ import Network
 @testable import TravelJournal
 
 final class ConnectivityManagerTests: XCTestCase {
-    // What do we want to test?
-    // That the status is changed properly when pathUpdateHandler is called
-    // That the status doesn't change when same status is called
-    func test_connectivityUpdated_withNilStatus_shouldChangeToNewStatus() {
-        let monitor = TestablePathMonitor()
-        let sut = ConnectivityManager(monitor: monitor)
-        let delegate = ConnectivityManagerDelegateSpy()
+    private var monitor: TestablePathMonitor!
+    private var sut: ConnectivityManager!
+    private var delegate: ConnectivityManagerDelegateSpy!
+    
+    // MARK: - setUp and tearDown
+    override func setUp() {
+        super.setUp()
+        monitor = TestablePathMonitor()
+        sut = ConnectivityManager(monitor: monitor)
+        delegate = ConnectivityManagerDelegateSpy()
         sut.delegate = delegate
+    }
+    
+    override func tearDown() {
+        monitor = nil
+        sut = nil
+        delegate = nil
+        super.tearDown()
+    }
+    
+    // MARK: - Tests
+    func test_connectivityUpdated_withNilStatus_shouldChangeToNewStatus() {
         XCTAssertNil(sut.status, "precondition")
-        
-        // Act: Need to somehow fake calling the pathUpdateHandler
-        // The problem is we can't init an NWPath
         let newStatus: NWPath.Status = .satisfied
         sut.connectivityUpdated(to: newStatus)
-        
         XCTAssertEqual(sut.status, newStatus)
     }
+    
+    // TODO: Test status is changed when different status is received from connectivityUpdated
+    // TODO: Test status doesn't change when same status is called
 }
 
 class TestablePathMonitor: PathMonitor {
