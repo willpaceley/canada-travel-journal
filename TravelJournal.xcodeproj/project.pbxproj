@@ -17,6 +17,7 @@
 		07E828F3296DFDDD0092BF3C /* TripViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E828F2296DFDDD0092BF3C /* TripViewCell.swift */; };
 		BE0CBE3E2C39E8B900C8924A /* ConnectivityManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0CBE3D2C39E8B900C8924A /* ConnectivityManagerTests.swift */; };
 		BE0CBE402C39EA9300C8924A /* PathMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0CBE3F2C39EA9300C8924A /* PathMonitor.swift */; };
+		BE0CBE492C3B2E5300C8924A /* MockConnectivityManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0CBE482C3B2E5300C8924A /* MockConnectivityManagerDelegate.swift */; };
 		BE1104782B02B57800E11193 /* CSVUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1104772B02B57800E11193 /* CSVUtility.swift */; };
 		BE13D8CC2B1E127D008FEDDD /* UIAccessibility+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE13D8CB2B1E127D008FEDDD /* UIAccessibility+Ext.swift */; };
 		BE1729912A828CAA00D6DBD7 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1729902A828CAA00D6DBD7 /* CloudKitManager.swift */; };
@@ -84,6 +85,7 @@
 		07E828F2296DFDDD0092BF3C /* TripViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewCell.swift; sourceTree = "<group>"; };
 		BE0CBE3D2C39E8B900C8924A /* ConnectivityManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityManagerTests.swift; sourceTree = "<group>"; };
 		BE0CBE3F2C39EA9300C8924A /* PathMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMonitor.swift; sourceTree = "<group>"; };
+		BE0CBE482C3B2E5300C8924A /* MockConnectivityManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConnectivityManagerDelegate.swift; sourceTree = "<group>"; };
 		BE1104772B02B57800E11193 /* CSVUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVUtility.swift; sourceTree = "<group>"; };
 		BE13D8CB2B1E127D008FEDDD /* UIAccessibility+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAccessibility+Ext.swift"; sourceTree = "<group>"; };
 		BE1729902A828CAA00D6DBD7 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
@@ -172,6 +174,23 @@
 			path = TravelJournal;
 			sourceTree = "<group>";
 		};
+		BE0CBE472C3B2E3600C8924A /* Test Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				BE0CBE4A2C3B2EEE00C8924A /* Mocks */,
+				BE90759A2BEAB9700049869D /* TestHelpers.swift */,
+			);
+			path = "Test Helpers";
+			sourceTree = "<group>";
+		};
+		BE0CBE4A2C3B2EEE00C8924A /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				BE0CBE482C3B2E5300C8924A /* MockConnectivityManagerDelegate.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		BE17298F2A828C9D00D6DBD7 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -250,7 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				BE81DAEF2BD29B59003B075B /* App */,
-				BE90759A2BEAB9700049869D /* TestHelpers.swift */,
+				BE0CBE472C3B2E3600C8924A /* Test Helpers */,
 				BE81DAF02BD29D0C003B075B /* TripTests.swift */,
 				BE90759C2BEBB2810049869D /* TripListViewControllerTests.swift */,
 				BE7FE06C2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift */,
@@ -441,6 +460,7 @@
 				BE0CBE3E2C39E8B900C8924A /* ConnectivityManagerTests.swift in Sources */,
 				BE90759B2BEAB9710049869D /* TestHelpers.swift in Sources */,
 				BE90759D2BEBB2810049869D /* TripListViewControllerTests.swift in Sources */,
+				BE0CBE492C3B2E5300C8924A /* MockConnectivityManagerDelegate.swift in Sources */,
 				BE7FE06D2BD6A9C40006C7D5 /* TripDetailViewControllerTests.swift in Sources */,
 				BE81DAE82BD1A758003B075B /* TestingAppDelegate.swift in Sources */,
 				BE81DAEE2BD29964003B075B /* TestingRootViewController.swift in Sources */,
