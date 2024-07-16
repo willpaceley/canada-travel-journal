@@ -9,15 +9,31 @@
 import XCTest
 
 final class CountrySearchViewControllerTests: XCTestCase {
-
-    func test_loading() {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let sut: CountrySearchViewController = sb.instantiateViewController(
+    
+    private var sut: CountrySearchViewController!
+    
+    override func setUp() {
+        super.setUp()
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        sut = storyboard.instantiateViewController(
             identifier: String(describing: CountrySearchViewController.self)
         )
         sut.loadViewIfNeeded()
-        
-        XCTAssertNotNil(sut.tableView)
     }
-
+    
+    override func tearDown() {
+        sut = nil
+        super.tearDown()
+    }
+    
+    // MARK: - Tests
+    
+    func test_tableViewDelegates_shouldBeSet() {
+        XCTAssertNotNil(sut.tableView.delegate, "delegate")
+        XCTAssertNotNil(sut.tableView.dataSource, "dataSource")
+    }
+    
+    func test_searchBarDelegate_shouldBeSet() {
+        XCTAssertNotNil(sut.navigationItem.searchController?.searchBar.delegate)
+    }
 }
