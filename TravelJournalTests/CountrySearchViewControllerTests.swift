@@ -11,6 +11,7 @@ import XCTest
 final class CountrySearchViewControllerTests: XCTestCase {
     
     private var sut: CountrySearchViewController!
+    private var delegateSpy: CountrySearchViewControllerDelegateSpy!
     
     override func setUp() {
         super.setUp()
@@ -18,6 +19,8 @@ final class CountrySearchViewControllerTests: XCTestCase {
         sut = storyboard.instantiateViewController(
             identifier: String(describing: CountrySearchViewController.self)
         )
+        delegateSpy = CountrySearchViewControllerDelegateSpy()
+        sut.delegate = delegateSpy
         sut.loadViewIfNeeded()
     }
     
@@ -35,5 +38,19 @@ final class CountrySearchViewControllerTests: XCTestCase {
     
     func test_searchBarDelegate_shouldBeSet() {
         XCTAssertNotNil(sut.navigationItem.searchController?.searchBar.delegate)
+    }
+    
+    func test_countrySearchViewControllerDelegate_shouldBeSet() {
+        XCTAssertNotNil(sut.delegate)
+    }
+}
+
+class CountrySearchViewControllerDelegateSpy: CountrySearchViewControllerDelegate {
+    var didPickCountryCalledCount = 0
+    var didPickCountryArgs: [String] = []
+    
+    func countrySearchViewController(didPick country: String) {
+        didPickCountryArgs.append(country)
+        didPickCountryCalledCount += 1
     }
 }
